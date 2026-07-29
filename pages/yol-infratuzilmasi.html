@@ -306,8 +306,9 @@ p.yi-p b{color:var(--yi-gold-l);font-weight:400}
 /* ================= BO'LIM MENYUSI ================= */
 .yi-menu{padding:80px 60px 0;text-align:center}
 .yi-menu .k{font-size:16px;letter-spacing:.42em;color:var(--yi-gold);text-transform:uppercase;margin-bottom:34px}
-.yi-mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.yi-mgrid{display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:22px}
 .yi-mcard{
+  flex:0 1 380px;
   appearance:none;font-family:var(--yi-serif);cursor:pointer;text-align:center;
   border:1px solid var(--yi-line-s);border-radius:16px;padding:34px 22px 30px;
   background:linear-gradient(165deg,rgba(22,34,72,.92),rgba(11,19,46,.92));transition:.25s;
@@ -456,12 +457,7 @@ p.yi-p b{color:var(--yi-gold-l);font-weight:400}
       <div class="rn">II</div><h3>Inshootlar</h3>
       <p>Karvonsaroy, rabot, sardoba, mayoq va koʻprik — tizimning tosh va gʻishtdagi qismi.</p>
     </button>
-    <button class="yi-mcard" data-ch="3">
-      <svg class="yi-arch" viewBox="0 0 96 112"><path class="fr" d="M6 108V44a42 42 0 0 1 84 0v64"/>
-        <g class="gl"><path d="M26 52h44v38H26z"/><path d="M48 52v38M32 62h10M32 72h10M54 62h10M54 72h10"/></g></svg>
-      <div class="rn">III</div><h3>Hisob va meros</h3>
-      <p>Yoʻlnomalar, karvonboshining hisobi, xabar tezligi va tasvirlar.</p>
-    </button>
+
   </div>
 </section>
 
@@ -470,7 +466,6 @@ p.yi-p b{color:var(--yi-gold-l);font-weight:400}
   <button class="yi-back" id="yiBack">☰ Boʻlimlar</button>
   <button class="yi-tab" data-tab="1">I · Yoʻl nega tizim</button>
   <button class="yi-tab" data-tab="2">II · Inshootlar</button>
-  <button class="yi-tab" data-tab="3">III · Hisob va meros</button>
 </div>
 
 <div id="yiChaps"></div>
@@ -1630,8 +1625,6 @@ var CHAPTERS=[
   d:"Suv, manzil va bir kunlik yurish. Karvon yoʻlni izlamagan — u tayyor tizim boʻylab yurgan. Bu boʻlimda tizimning mantigʻi va uning oʻlchov birliklari."},
  {n:"II", t:"Inshootlar", ids:["s3","s4","s5","s7","s8"],
   d:"Karvonsaroy, rabot, sardoba, mayoq va koʻprik. Tizimning gʻisht va toshdagi qismi — nima uchun shunday qurilgani va qanday ishlagani."},
- {n:"III",t:"Hisob va meros", ids:["s9","s10","s11","s12","s13"],
-  d:"Yoʻlnomalar va xaritalar, karvonboshining hisobi, xabar tezligi, tarixiy tasvirlar va xulosa."}
 ];
 (function(){
   var app=document.getElementById("yi-app"), host=$("#yiChaps"), menu=$("#yiMenu"), bar=$("#yiChapBar");
