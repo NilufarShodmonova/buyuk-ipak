@@ -1,0 +1,2670 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyuk Ipak yo‘li — interaktiv taqdimot</title>
+
+<!-- Asosiy faylda ishlatilgan aynan o‘sha shriftlar (Google Fonts) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================================
+   BUYUK IPAK YO‘LI — INTERAKTIV VIZITKA-TAQDIMOT
+   Barcha class nomlari  silk-road-  prefiksi bilan.
+   Umumiy selektorlar (button, section, p, h1, *) ishlatilmagan.
+   ========================================================================= */
+
+/* --- faqat shu fayl standalone ochilganda kerak bo‘ladigan minimal reset --- */
+html.silk-road-host,
+body.silk-road-host{
+  margin:0; padding:0; width:100%;
+  background:#0c1728;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+}
+
+/* =======================  DIZAYN O‘ZGARUVCHILARI  =======================
+   Qiymatlar asosiy infokiosk HTML faylining :root blokidan olingan.       */
+.silk-road-page{
+  --silk-road-primary:#c9973f;          /* --gold  */
+  --silk-road-primary-light:#e3b25e;    /* --goldl */
+  --silk-road-primary-pale:#f0d9a8;     /* --goldp */
+  --silk-road-secondary:#d8c29a;        /* --sand  */
+  --silk-road-background:#0c1728;       /* --navy  */
+  --silk-road-background-2:#14243c;     /* --navy2 */
+  --silk-road-surface:#16283f;          /* --card  */
+  --silk-road-surface-2:#1d3352;        /* --card2 */
+  --silk-road-text:#f5eedf;             /* --text  */
+  --silk-road-muted:#9fb0c8;            /* --dim   */
+  --silk-road-border:#2a4265;           /* --line  */
+
+  --silk-road-radius:18px;              /* .card / .tile radiusi   */
+  --silk-road-radius-lg:22px;           /* .langcard radiusi       */
+  --silk-road-radius-btn:14px;          /* .btn / .chip radiusi    */
+  --silk-road-radius-pill:999px;        /* .fchip radiusi          */
+  --silk-road-shadow:0 6px 18px rgba(201,151,63,.25);   /* .btn.primary */
+  --silk-road-shadow-card:0 12px 36px rgba(201,151,63,.16); /* .tile:hover */
+  --silk-road-container-width:1460px;   /* map svg viewBox kengligi */
+  --silk-road-transition:.45s cubic-bezier(.22,.9,.3,1); /* @keyframes in */
+  --silk-road-transition-fast:.12s;     /* .btn transform */
+
+  --silk-road-serif:'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --silk-road-sans:'Manrope', 'Segoe UI', Tahoma, sans-serif;
+
+  --silk-road-btn-h:64px;               /* .btn min-height */
+  --silk-road-gap:1.1vw;
+
+  position:relative;
+  width:100%;
+  max-width:100%;
+  margin:0;
+  box-sizing:border-box;
+  font-family:var(--silk-road-sans);
+  font-size:17px;
+  line-height:1.45;
+  color:var(--silk-road-text);
+  background:
+    radial-gradient(120% 90% at 50% -10%, var(--silk-road-background-2) 0%, transparent 60%),
+    linear-gradient(180deg, var(--silk-road-background-2) 0%, var(--silk-road-background) 55%, #0a1322 100%);
+  overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.silk-road-page *,
+.silk-road-page *::before,
+.silk-road-page *::after{ box-sizing:border-box; }
+
+/* fon dekoratsiyasi — asosiy fayldagi .stage::before arka naqshi */
+.silk-road-page::before{
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0; opacity:.55;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="520" height="900" viewBox="0 0 520 900"><path d="M60 900 L60 420 A 300 300 0 0 1 260 120 A 300 300 0 0 1 460 420 L460 900" fill="none" stroke="%23e3b25e" stroke-opacity="0.05" stroke-width="2.5"/></svg>');
+  background-repeat:no-repeat;
+  background-position:right -60px top 240px;
+}
+
+/* =========================  TIPOGRAFIKA  ========================= */
+.silk-road-container{
+  position:relative; z-index:1;
+  width:100%; max-width:var(--silk-road-container-width);
+  margin:0 auto;
+  padding:0 clamp(14px, 3vw, 40px);
+}
+.silk-road-section{
+  position:relative; z-index:1;
+  padding:clamp(34px, 5.2vw, 70px) 0;
+}
+.silk-road-section-head{ margin-bottom:clamp(18px, 2.6vw, 30px); }
+.silk-road-eyebrow{
+  display:block; margin:0 0 .5em;
+  letter-spacing:.32em; font-size:.66rem; font-weight:700;
+  color:var(--silk-road-primary-pale); text-transform:uppercase;
+}
+.silk-road-heading{
+  margin:0; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-primary-light);
+  font-size:clamp(1.8rem, 3.4vw, 2.6rem); line-height:1.05;
+}
+.silk-road-lead{
+  margin:.9em 0 0; max-width:78ch;
+  font-size:clamp(.95rem, 1.15vw, 1.06rem); line-height:1.5;
+  color:var(--silk-road-text);
+}
+.silk-road-lead-strong{ color:var(--silk-road-primary-light); font-weight:800; }
+.silk-road-muted{ color:var(--silk-road-muted); }
+
+/* yo‘l chizig‘i — asosiy fayldagi .roadline */
+.silk-road-roadline{
+  height:8px; margin:0 auto; border-radius:4px; opacity:.35;
+  width:calc(100% - 2 * clamp(14px, 3vw, 40px));
+  max-width:var(--silk-road-container-width);
+  background-image:repeating-linear-gradient(90deg, var(--silk-road-primary-light) 0 46px, transparent 46px 110px);
+}
+
+/* =========================  SARLAVHA (asosiy fayldagi header)  ========================= */
+.silk-road-header{
+  position:relative; z-index:2;
+  display:flex; align-items:center; gap:1.2vw;
+  width:100%; max-width:var(--silk-road-container-width);
+  margin:0 auto; padding:clamp(14px,2vw,22px) clamp(14px,3vw,40px) 0;
+}
+.silk-road-header-emblem{ width:3.1vw; min-width:44px; height:auto; flex:0 0 auto; }
+.silk-road-header-brand small{
+  display:block; letter-spacing:.32em; font-size:.62rem; font-weight:700;
+  color:var(--silk-road-primary-pale); text-transform:uppercase;
+}
+.silk-road-header-brand h1{
+  margin:.2em 0 0; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-primary-light);
+  font-size:clamp(1.5rem,2.6vw,2.3rem); line-height:1.05;
+}
+.silk-road-header-space{ flex:1; }
+.silk-road-header-note{
+  font-size:.8rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--silk-road-muted);
+}
+
+/* =========================  TUGMALAR  =========================
+   Asosiy fayldagi .btn bilan bir xil: 64px balandlik, 14px radius,
+   1.5px oltin ramka, ikonka CHAPDA, gap .6em, :active scale(.96).      */
+.silk-road-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.6em;
+  min-height:var(--silk-road-btn-h); padding:0 2.2em;
+  border-radius:var(--silk-road-radius-btn);
+  border:1.5px solid var(--silk-road-primary);
+  background:var(--silk-road-surface-2); color:var(--silk-road-text);
+  font-family:var(--silk-road-sans); font-weight:800; font-size:1.05rem;
+  line-height:1; cursor:pointer; text-align:center;
+  transition:transform var(--silk-road-transition-fast), box-shadow .18s, background .18s;
+}
+.silk-road-btn:hover{ box-shadow:var(--silk-road-shadow-card); }
+.silk-road-btn:active{ transform:scale(.96); }
+.silk-road-btn:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-btn[disabled]{ opacity:.32; cursor:default; pointer-events:none; }
+.silk-road-btn .silk-road-btn-icon{ width:1.25em; height:1.25em; flex:0 0 auto; }
+.silk-road-btn-primary{
+  background:linear-gradient(180deg,#ebbe6a,#d6a24b 55%,#b9873a);
+  color:var(--silk-road-background); border-color:#f3d592;
+  box-shadow:var(--silk-road-shadow);
+}
+.silk-road-btn-primary:hover{ box-shadow:0 10px 26px rgba(201,151,63,.38); }
+.silk-road-btn-sm{ min-height:48px; padding:0 1.4em; font-size:.95rem; }
+.silk-road-btn-icon-only{ padding:0; width:var(--silk-road-btn-h); min-width:var(--silk-road-btn-h); }
+.silk-road-btn-icon-only.silk-road-btn-sm{ width:48px; min-width:48px; }
+
+/* boshqaruv paneli — asosiy fayldagi nav.bar (tugmalar chapda, hint o‘ngda) */
+.silk-road-bar{
+  position:relative; display:flex; align-items:center; gap:clamp(8px, 1vw, 14px);
+  margin-top:clamp(18px, 2.4vw, 28px); padding-top:1.6em; flex-wrap:wrap;
+}
+.silk-road-bar::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:7px; border-radius:4px; opacity:.4;
+  background-image:repeating-linear-gradient(90deg, var(--silk-road-primary-light) 0 42px, transparent 42px 100px);
+}
+.silk-road-hint{
+  margin-left:auto; display:flex; align-items:center; gap:.5em;
+  color:var(--silk-road-muted); font-size:.85rem;
+}
+.silk-road-hint svg{ width:18px; height:18px; flex:0 0 auto; }
+
+/* chip / filtr tugmasi — .fchip */
+.silk-road-chip{
+  display:inline-flex; align-items:center; gap:.5em;
+  border:1.5px solid var(--silk-road-primary); border-radius:var(--silk-road-radius-pill);
+  padding:.55em 1.3em; background:var(--silk-road-surface-2); color:var(--silk-road-text);
+  font-family:var(--silk-road-sans); font-weight:700; font-size:.9rem; cursor:pointer;
+  transition:transform var(--silk-road-transition-fast), background .2s, color .2s;
+}
+.silk-road-chip:active{ transform:scale(.96); }
+.silk-road-chip:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-chip.silk-road-is-active{
+  background:linear-gradient(180deg,#ebbe6a,#b9873a); color:var(--silk-road-background);
+  border-color:#f3d592;
+}
+
+/* kartochka — .card */
+.silk-road-card{
+  background:var(--silk-road-surface);
+  border:1.5px solid var(--silk-road-primary);
+  border-radius:var(--silk-road-radius);
+}
+
+/* =========================  1-BLOK — KIRISH  ========================= */
+.silk-road-hero{ position:relative; padding-top:clamp(30px, 4vw, 56px); }
+.silk-road-hero-grid{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);
+  gap:clamp(20px, 2.4vw, 40px); align-items:center;
+}
+.silk-road-hero-title{
+  margin:.15em 0 0; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-primary-light); letter-spacing:.02em; line-height:1.02;
+  font-size:clamp(2.3rem, 5.4vw, 4.6rem);
+}
+.silk-road-hero-sub{
+  margin:.7em 0 0; letter-spacing:.2em; font-weight:700; font-size:clamp(.72rem,1.05vw,.95rem);
+  color:var(--silk-road-primary-pale); text-transform:uppercase;
+}
+.silk-road-hero-text{ margin:1.1em 0 0; max-width:58ch; font-size:clamp(.95rem,1.15vw,1.06rem); line-height:1.5; }
+.silk-road-hero-actions{ display:flex; flex-wrap:wrap; gap:clamp(8px,1vw,14px); margin-top:clamp(18px,2.2vw,28px); }
+
+/* qadimiy qog‘oz / xarita teksturasi — juda yengil */
+.silk-road-hero-canvas{
+  position:relative; border-radius:var(--silk-road-radius-lg);
+  border:1.5px solid var(--silk-road-primary);
+  background:
+    radial-gradient(120% 120% at 78% 18%, rgba(227,178,94,.10), transparent 58%),
+    linear-gradient(180deg, var(--silk-road-surface) 0%, var(--silk-road-surface-2) 100%);
+  overflow:hidden; padding:clamp(10px,1.4vw,18px);
+}
+.silk-road-hero-canvas::after{
+  content:''; position:absolute; inset:0; pointer-events:none; opacity:.16;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><g fill="none" stroke="%23d8c29a" stroke-width="1" stroke-opacity="0.5"><path d="M0 40h160M0 80h160M0 120h160M40 0v160M80 0v160M120 0v160"/></g></svg>');
+}
+.silk-road-hero-svg{ display:block; width:100%; height:auto; }
+
+/* marshrut chizig‘i — stroke-dasharray animatsiyasi */
+.silk-road-route-draw{
+  stroke-dasharray:var(--silk-road-route-len, 4000);
+  stroke-dashoffset:var(--silk-road-route-len, 4000);
+  transition:stroke-dashoffset 3.2s cubic-bezier(.35,.1,.2,1);
+}
+.silk-road-is-drawn .silk-road-route-draw{ stroke-dashoffset:0; }
+.silk-road-hero-dot{ opacity:0; transform-box:fill-box; transform-origin:center; transition:opacity .5s ease; }
+.silk-road-is-drawn .silk-road-hero-dot{ opacity:1; }
+.silk-road-hero-caravan{ opacity:0; transition:opacity .8s ease .4s; }
+.silk-road-is-drawn .silk-road-hero-caravan{ opacity:1; }
+
+@keyframes silk-road-pulse{ 0%,100%{ transform:scale(1); opacity:.55 } 50%{ transform:scale(1.9); opacity:0 } }
+@keyframes silk-road-fadeup{ from{ opacity:0; transform:translateY(18px) } to{ opacity:1; transform:none } }
+@keyframes silk-road-glow{
+  0%,100%{ filter:drop-shadow(0 0 6px rgba(227,178,94,.35)) }
+  50%{ filter:drop-shadow(0 0 18px rgba(227,178,94,.85)) }
+}
+@keyframes silk-road-dash{ to{ stroke-dashoffset:-120 } }
+.silk-road-reveal{ opacity:0; }
+.silk-road-reveal.silk-road-in{ animation:silk-road-fadeup var(--silk-road-transition) both; }
+
+/* =========================  2-BLOK — XARITA  ========================= */
+.silk-road-map-wrap{
+  position:relative; padding:clamp(10px,1.4vw,18px);
+  background:
+    radial-gradient(100% 120% at 20% 0%, rgba(216,194,154,.08), transparent 60%),
+    var(--silk-road-surface);
+  border:1.5px solid var(--silk-road-primary); border-radius:var(--silk-road-radius);
+  overflow:hidden;
+}
+.silk-road-map-scroll{ overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
+.silk-road-map-svg{ display:block; width:100%; min-width:760px; height:auto; }
+.silk-road-city{ cursor:pointer; }
+.silk-road-city:focus{ outline:none; }
+.silk-road-city:focus-visible .silk-road-city-hit{ stroke:var(--silk-road-primary-pale); stroke-width:3; }
+.silk-road-city-dot{ transition:r .18s ease, fill .2s ease; }
+.silk-road-city:hover .silk-road-city-dot{ r:17; }
+.silk-road-city-label{
+  font-family:var(--silk-road-sans); font-weight:800; font-size:20px;
+  fill:var(--silk-road-primary-pale); text-anchor:middle; pointer-events:none;
+  transition:fill .2s ease;
+}
+.silk-road-city.silk-road-is-active .silk-road-city-label{ fill:#fff; }
+.silk-road-city.silk-road-is-active .silk-road-city-dot{ fill:#f3d592; }
+.silk-road-city-ring{ transform-box:fill-box; transform-origin:center; opacity:0; }
+.silk-road-city.silk-road-is-active .silk-road-city-ring{
+  opacity:1; animation:silk-road-pulse 2.2s ease-in-out infinite;
+}
+.silk-road-city-key .silk-road-city-dot{ fill:#f3d592; }
+.silk-road-city-star{ pointer-events:none; }
+
+.silk-road-map-layout{ display:grid; grid-template-columns:minmax(0,1.85fr) minmax(0,1fr); gap:clamp(14px,1.6vw,24px); align-items:start; }
+.silk-road-city-card{
+  padding:clamp(16px,1.7vw,24px); min-height:100%;
+  display:flex; flex-direction:column; gap:.7em;
+}
+.silk-road-city-card-num{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:2.2em; height:2.2em; border-radius:50%;
+  background:linear-gradient(180deg,#ebbe6a,#b9873a); color:var(--silk-road-background);
+  font-weight:800; font-size:.95rem;
+}
+.silk-road-city-card-name{
+  margin:0; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-primary-light); font-size:clamp(1.6rem,2.6vw,2.1rem); line-height:1.1;
+}
+.silk-road-city-card-region{ color:var(--silk-road-primary-pale); font-weight:700; font-size:.88rem; letter-spacing:.06em; }
+.silk-road-city-card-text{ margin:0; font-size:.98rem; line-height:1.5; }
+.silk-road-city-card-tags{ display:flex; flex-wrap:wrap; gap:.5em; margin-top:auto; padding-top:.6em; }
+.silk-road-tag{
+  border:1px solid var(--silk-road-border); border-radius:var(--silk-road-radius-pill);
+  padding:.35em .9em; font-size:.78rem; font-weight:700; color:var(--silk-road-primary-pale);
+  background:var(--silk-road-surface-2);
+}
+.silk-road-city-card.silk-road-is-key{ border-color:#f3d592; box-shadow:0 0 0 1px rgba(243,213,146,.35), var(--silk-road-shadow); }
+.silk-road-fade{ animation:silk-road-fadeup .35s cubic-bezier(.22,.9,.3,1) both; }
+
+/* shaharlar timeline (mobil + desktop) */
+.silk-road-city-strip{
+  display:flex; gap:.6em; overflow-x:auto; padding:.6em 0 .2em;
+  scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+}
+.silk-road-city-strip .silk-road-chip{ flex:0 0 auto; scroll-snap-align:center; }
+
+/* =========================  3-BLOK — VAZIFALAR  ========================= */
+.silk-road-feature-row{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--silk-road-gap); }
+.silk-road-feature{
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:1em;
+  padding:clamp(16px,1.8vw,26px) 1em; cursor:pointer;
+  background:var(--silk-road-surface); border:1.5px solid var(--silk-road-primary);
+  border-radius:var(--silk-road-radius); color:var(--silk-road-text);
+  font-family:var(--silk-road-sans);
+  transition:transform .22s ease, opacity .3s ease, box-shadow .22s ease;
+}
+.silk-road-feature:hover{ box-shadow:var(--silk-road-shadow-card); }
+.silk-road-feature:active{ transform:scale(.965); }
+.silk-road-feature:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-feature-arch{ width:76px; height:95px; flex:0 0 auto; transition:transform .28s ease; }
+.silk-road-feature-name{ font-weight:800; font-size:1.12rem; text-align:center; }
+.silk-road-feature-tagline{ font-size:.86rem; color:var(--silk-road-muted); text-align:center; line-height:1.35; }
+.silk-road-features-dim .silk-road-feature{ opacity:.42; }
+.silk-road-features-dim .silk-road-feature.silk-road-is-active{
+  opacity:1; transform:scale(1.05); box-shadow:0 14px 40px rgba(201,151,63,.28);
+}
+.silk-road-features-dim .silk-road-feature.silk-road-is-active .silk-road-feature-arch{ transform:scale(1.08); }
+.silk-road-feature-panel{
+  margin-top:var(--silk-road-gap); padding:clamp(18px,2vw,28px);
+  display:grid; grid-template-columns:auto minmax(0,1fr); gap:clamp(14px,1.6vw,24px); align-items:center;
+}
+.silk-road-feature-panel[hidden]{ display:none; }
+.silk-road-feature-panel-icon{ width:56px; height:56px; color:var(--silk-road-primary-light); }
+.silk-road-feature-panel-title{
+  margin:0 0 .35em; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-primary-light); font-size:clamp(1.4rem,2.2vw,1.9rem); line-height:1.1;
+}
+.silk-road-feature-panel-text{ margin:0; font-size:1rem; line-height:1.5; }
+
+/* =========================  4-BLOK — KO‘RSATKICHLAR  ========================= */
+.silk-road-metrics{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--silk-road-gap); }
+.silk-road-metric{ display:flex; gap:1em; padding:clamp(16px,1.7vw,24px); align-items:flex-start; }
+.silk-road-metric-icon{ width:2.4em; height:2.4em; color:var(--silk-road-primary-light); flex:0 0 auto; }
+.silk-road-metric-label{ display:block; color:var(--silk-road-primary-light); font-weight:700; font-size:.92rem; }
+.silk-road-metric-value{
+  display:block; margin:.25em 0 .1em; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-text); font-size:clamp(1.6rem,2.6vw,2.2rem); line-height:1.05;
+  font-variant-numeric:tabular-nums;
+}
+.silk-road-metric-unit{ font-size:.6em; color:var(--silk-road-primary-pale); font-family:var(--silk-road-sans); font-weight:800; margin-left:.3em; }
+.silk-road-metric-note{ display:block; font-size:.84rem; color:var(--silk-road-muted); line-height:1.35; }
+
+/* =========================  5-BLOK — YO‘L QOPLAMASI  ========================= */
+.silk-road-surface-layout{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.25fr); gap:clamp(14px,1.6vw,24px); align-items:start; }
+.silk-road-surface-list{ display:flex; flex-direction:column; gap:.6em; }
+.silk-road-surface-btn{
+  display:flex; align-items:center; gap:.9em; width:100%; text-align:left;
+  padding:.9em 1.1em; border-radius:var(--silk-road-radius-btn);
+  border:1.5px solid var(--silk-road-border); background:var(--silk-road-surface);
+  color:var(--silk-road-text); font-family:var(--silk-road-sans); font-weight:700; font-size:.98rem;
+  cursor:pointer; transition:transform var(--silk-road-transition-fast), border-color .2s, background .2s;
+}
+.silk-road-surface-btn:active{ transform:scale(.985); }
+.silk-road-surface-btn:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-surface-btn.silk-road-is-active{ border-color:var(--silk-road-primary); background:var(--silk-road-surface-2); }
+.silk-road-surface-swatch{ width:2.6em; height:2.6em; border-radius:10px; flex:0 0 auto; border:1px solid rgba(0,0,0,.35); }
+.silk-road-surface-stage{ padding:clamp(14px,1.6vw,22px); }
+.silk-road-surface-view{
+  position:relative; height:clamp(170px,20vw,240px); border-radius:var(--silk-road-radius-btn);
+  overflow:hidden; border:1px solid var(--silk-road-border);
+  background:linear-gradient(180deg,#233a5c 0%, #16283f 42%, #0f1e33 100%);
+}
+.silk-road-surface-band{
+  position:absolute; left:0; right:0; bottom:0; height:62%;
+  transition:opacity .45s ease, transform .45s ease; opacity:0; transform:translateY(14px);
+}
+.silk-road-surface-band.silk-road-is-active{ opacity:1; transform:none; }
+.silk-road-surface-title{ margin:1em 0 .3em; font-family:var(--silk-road-serif); color:var(--silk-road-primary-light); font-size:1.5rem; font-weight:700; }
+.silk-road-surface-text{ margin:0 0 .6em; font-size:.98rem; line-height:1.5; }
+.silk-road-surface-effect{
+  display:flex; gap:.6em; align-items:flex-start; padding:.8em 1em;
+  border-left:3px solid var(--silk-road-primary); background:var(--silk-road-surface-2);
+  border-radius:0 var(--silk-road-radius-btn) var(--silk-road-radius-btn) 0; font-size:.92rem;
+}
+.silk-road-surface-effect svg{ width:1.3em; height:1.3em; color:var(--silk-road-primary-light); flex:0 0 auto; margin-top:.15em; }
+
+/* =========================  6-BLOK — KARVONNING BIR KUNI  ========================= */
+.silk-road-day{ padding:clamp(16px,1.8vw,26px); }
+.silk-road-day-scene{
+  position:relative; height:clamp(190px,22vw,270px); border-radius:var(--silk-road-radius-btn);
+  overflow:hidden; border:1px solid var(--silk-road-border);
+  background:linear-gradient(180deg,#2b4a74 0%, #3d5f86 45%, #6b7f93 100%);
+  transition:background .8s ease;
+}
+.silk-road-day.silk-road-is-night .silk-road-day-scene{
+  background:linear-gradient(180deg,#070f1e 0%, #10203a 50%, #1b2c47 100%);
+}
+.silk-road-day-scene-svg{ position:absolute; inset:0; width:100%; height:100%; }
+.silk-road-day-sun{ transition:transform .9s ease, opacity .6s ease; }
+.silk-road-day.silk-road-is-night .silk-road-day-sun{ opacity:0; transform:translateY(70px); }
+.silk-road-day-moon{ opacity:0; transition:opacity .6s ease .2s; }
+.silk-road-day.silk-road-is-night .silk-road-day-moon{ opacity:1; }
+.silk-road-day-caravan{ transition:transform .9s cubic-bezier(.22,.9,.3,1); }
+.silk-road-day-body{ display:grid; grid-template-columns:auto minmax(0,1fr); gap:clamp(12px,1.4vw,22px); align-items:flex-start; margin-top:clamp(14px,1.6vw,22px); }
+.silk-road-day-badge{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.2em;
+  width:4.6em; height:4.6em; border-radius:50%;
+  background:linear-gradient(180deg,#ebbe6a,#b9873a); color:var(--silk-road-background);
+  font-weight:800; flex:0 0 auto;
+}
+.silk-road-day-badge-num{ font-size:1.6rem; line-height:1; }
+.silk-road-day-badge-of{ font-size:.68rem; letter-spacing:.08em; }
+.silk-road-day-step-title{ margin:0; font-family:var(--silk-road-serif); color:var(--silk-road-primary-light); font-size:clamp(1.35rem,2.2vw,1.85rem); font-weight:700; line-height:1.1; }
+.silk-road-day-step-time{ display:inline-flex; align-items:center; gap:.4em; margin-top:.3em; font-size:.84rem; font-weight:700; color:var(--silk-road-primary-pale); letter-spacing:.08em; }
+.silk-road-day-step-time svg{ width:1.1em; height:1.1em; }
+.silk-road-day-step-text{ margin:.6em 0 0; font-size:1rem; line-height:1.5; }
+.silk-road-progress{ position:relative; height:8px; border-radius:4px; background:var(--silk-road-border); overflow:hidden; margin-top:clamp(14px,1.6vw,20px); }
+.silk-road-progress-fill{ position:absolute; inset:0 auto 0 0; width:0; border-radius:4px; background:linear-gradient(90deg,#c9973f,#f0d9a8); transition:width .45s cubic-bezier(.22,.9,.3,1); }
+.silk-road-day-dots{ display:flex; flex-wrap:wrap; gap:.5em; margin-top:.9em; }
+.silk-road-day-dot{
+  width:2.4em; height:2.4em; border-radius:50%; cursor:pointer;
+  border:1.5px solid var(--silk-road-border); background:var(--silk-road-surface-2);
+  color:var(--silk-road-muted); font-family:var(--silk-road-sans); font-weight:800; font-size:.85rem;
+  transition:transform var(--silk-road-transition-fast), background .2s, color .2s, border-color .2s;
+}
+.silk-road-day-dot:active{ transform:scale(.92); }
+.silk-road-day-dot:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:2px; }
+.silk-road-day-dot.silk-road-is-active{ background:linear-gradient(180deg,#ebbe6a,#b9873a); color:var(--silk-road-background); border-color:#f3d592; }
+
+/* =========================  7-BLOK — MUHANDISLIK  ========================= */
+.silk-road-eng-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--silk-road-gap); }
+.silk-road-eng-card{
+  display:flex; flex-direction:column; gap:.7em; text-align:left; cursor:pointer;
+  padding:clamp(16px,1.7vw,24px);
+  background:var(--silk-road-surface); border:1.5px solid var(--silk-road-primary);
+  border-radius:var(--silk-road-radius); color:var(--silk-road-text); font-family:var(--silk-road-sans);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.silk-road-eng-card:hover{ box-shadow:var(--silk-road-shadow-card); transform:translateY(-3px); }
+.silk-road-eng-card:active{ transform:scale(.975); }
+.silk-road-eng-card:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-eng-card-icon{ width:2.6em; height:2.6em; color:var(--silk-road-primary-light); }
+.silk-road-eng-card-title{ font-family:var(--silk-road-serif); font-weight:700; color:var(--silk-road-primary-light); font-size:1.32rem; line-height:1.15; }
+.silk-road-eng-card-text{ font-size:.9rem; line-height:1.45; color:var(--silk-road-text); }
+.silk-road-eng-card-more{ margin-top:auto; padding-top:.4em; color:var(--silk-road-primary-pale); font-weight:800; font-size:.85rem; }
+
+/* modal (kengaytiriladigan panel) — asosiy fayldagi #lightbox uslubida */
+.silk-road-modal{
+  position:fixed; inset:0; z-index:9999; display:none;
+  align-items:center; justify-content:center; padding:clamp(14px,4vh,40px) clamp(14px,6vw,60px);
+  background:rgba(6,12,22,.94);
+}
+.silk-road-modal.silk-road-is-open{ display:flex; animation:silk-road-fadeup .3s ease both; }
+.silk-road-modal-dialog{
+  position:relative; width:min(880px,100%); max-height:88vh; overflow-y:auto;
+  padding:clamp(18px,2.4vw,32px);
+  background:var(--silk-road-surface); border:2px solid var(--silk-road-primary);
+  border-radius:var(--silk-road-radius-lg);
+}
+.silk-road-modal-head{ display:flex; align-items:flex-start; gap:1em; margin-bottom:1em; }
+.silk-road-modal-title{ margin:0; font-family:var(--silk-road-serif); font-weight:700; color:var(--silk-road-primary-light); font-size:clamp(1.5rem,2.6vw,2.1rem); line-height:1.1; flex:1; }
+.silk-road-modal-art{ width:100%; height:auto; display:block; border-radius:var(--silk-road-radius-btn); border:1px solid var(--silk-road-border); background:linear-gradient(180deg,#1b2f4c,#101f36); }
+.silk-road-modal-text{ margin:1em 0 0; font-size:1rem; line-height:1.55; }
+.silk-road-modal-foot{ display:flex; flex-wrap:wrap; gap:.7em; margin-top:1.2em; }
+
+/* =========================  8-BLOK — HARAKAT ZANJIRI  ========================= */
+.silk-road-chain{ display:flex; flex-wrap:wrap; align-items:stretch; gap:.5em; }
+.silk-road-chain-item{ display:flex; align-items:center; gap:.5em; }
+.silk-road-chain-btn{
+  display:flex; flex-direction:column; align-items:center; gap:.5em; min-width:118px;
+  padding:1em .9em; cursor:pointer;
+  border:1.5px solid var(--silk-road-border); border-radius:var(--silk-road-radius);
+  background:var(--silk-road-surface); color:var(--silk-road-text); font-family:var(--silk-road-sans);
+  font-weight:800; font-size:.88rem; letter-spacing:.04em;
+  transition:transform var(--silk-road-transition-fast), border-color .25s, background .25s, box-shadow .25s;
+}
+.silk-road-chain-btn svg{ width:2em; height:2em; color:var(--silk-road-primary-light); transition:color .25s; }
+.silk-road-chain-btn:active{ transform:scale(.96); }
+.silk-road-chain-btn:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-chain-btn.silk-road-is-active{
+  border-color:#f3d592; background:var(--silk-road-surface-2); box-shadow:var(--silk-road-shadow);
+}
+.silk-road-chain-arrow{ width:44px; height:14px; flex:0 0 auto; color:var(--silk-road-border); }
+.silk-road-chain-arrow.silk-road-is-lit{ color:var(--silk-road-primary-light); }
+.silk-road-chain-arrow-path{ stroke-dasharray:6 6; }
+.silk-road-chain-arrow.silk-road-is-lit .silk-road-chain-arrow-path{ animation:silk-road-dash 1.4s linear infinite; }
+.silk-road-chain-panel{ margin-top:var(--silk-road-gap); padding:clamp(16px,1.8vw,26px); }
+.silk-road-chain-panel-title{ margin:0 0 .35em; font-family:var(--silk-road-serif); font-weight:700; color:var(--silk-road-primary-light); font-size:1.5rem; }
+.silk-road-principles{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.7em; margin-top:var(--silk-road-gap); }
+.silk-road-principle{ display:flex; gap:.7em; align-items:flex-start; padding:.9em 1.1em; font-size:.92rem; line-height:1.4; }
+.silk-road-principle svg{ width:1.3em; height:1.3em; color:var(--silk-road-primary-light); flex:0 0 auto; margin-top:.15em; }
+
+/* =========================  9-BLOK — MEROS  ========================= */
+.silk-road-legacy-grid{ display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:var(--silk-road-gap); }
+.silk-road-legacy-card{
+  display:flex; flex-direction:column; align-items:center; gap:.8em; text-align:center; cursor:pointer;
+  padding:clamp(14px,1.6vw,22px) 1em;
+  background:var(--silk-road-surface); border:1.5px solid var(--silk-road-primary);
+  border-radius:var(--silk-road-radius); color:var(--silk-road-text); font-family:var(--silk-road-sans);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.silk-road-legacy-card:hover{ box-shadow:var(--silk-road-shadow-card); }
+.silk-road-legacy-card:active{ transform:scale(.97); }
+.silk-road-legacy-card:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-legacy-card.silk-road-is-active{ border-color:#f3d592; box-shadow:var(--silk-road-shadow); }
+.silk-road-legacy-card svg{ width:2.4em; height:2.4em; color:var(--silk-road-primary-light); }
+.silk-road-legacy-name{ font-weight:800; font-size:.95rem; line-height:1.3; }
+.silk-road-legacy-panel{ margin-top:var(--silk-road-gap); padding:clamp(16px,1.8vw,26px); font-size:1rem; line-height:1.55; }
+.silk-road-final{
+  margin-top:var(--silk-road-gap); padding:clamp(18px,2.2vw,32px);
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:clamp(16px,2vw,30px); align-items:center;
+}
+.silk-road-final-text{
+  margin:0; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-primary-pale); font-size:clamp(1.25rem,2.2vw,1.85rem); line-height:1.35;
+}
+.silk-road-final-svg{ width:100%; height:auto; display:block; }
+.silk-road-morph-old{ transition:opacity .9s ease; }
+.silk-road-morph-new{ opacity:0; transition:opacity .9s ease; }
+.silk-road-final.silk-road-is-modern .silk-road-morph-old{ opacity:.12; }
+.silk-road-final.silk-road-is-modern .silk-road-morph-new{ opacity:1; }
+.silk-road-merge-line{ transition:transform 1.1s cubic-bezier(.22,.9,.3,1), opacity .8s ease; }
+.silk-road-final.silk-road-is-merged .silk-road-merge-line{ transform:translateY(0) scaleY(.02); opacity:.35; }
+.silk-road-samarkand-glow{ animation:silk-road-glow 3.2s ease-in-out infinite; }
+
+/* =========================  10-BLOK — FOTOALBOM  ========================= */
+.silk-road-album{
+  display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);
+  gap:clamp(14px,1.8vw,26px); align-items:start;
+}
+.silk-road-album-stage{ padding:clamp(10px,1.2vw,16px); }
+.silk-road-album-frame{
+  position:relative; width:100%; aspect-ratio:3 / 2; overflow:hidden;
+  border-radius:var(--silk-road-radius-btn); border:1px solid var(--silk-road-border);
+  background:linear-gradient(180deg,#1b2f4c,#101f36);
+}
+.silk-road-album-img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  opacity:0; transition:opacity .5s ease, transform .6s cubic-bezier(.22,.9,.3,1);
+  transform:scale(1.03);
+}
+.silk-road-album-img.silk-road-is-ready{ opacity:1; transform:none; }
+.silk-road-album-frame.silk-road-is-missing .silk-road-album-img{ opacity:0; }
+.silk-road-album-fallback{
+  position:absolute; inset:0; display:none; flex-direction:column;
+  align-items:center; justify-content:center; gap:.7em; padding:1.6em; text-align:center;
+}
+.silk-road-album-frame.silk-road-is-missing .silk-road-album-fallback{ display:flex; }
+.silk-road-album-fallback svg{ width:3.4em; height:3.4em; color:var(--silk-road-primary); opacity:.7; }
+.silk-road-album-fallback-text{ font-size:.88rem; color:var(--silk-road-muted); max-width:34ch; line-height:1.4; }
+.silk-road-album-year{
+  position:absolute; top:.9em; left:.9em; z-index:2;
+  display:inline-flex; align-items:center; gap:.45em;
+  padding:.45em 1em; border-radius:var(--silk-road-radius-pill);
+  background:linear-gradient(180deg,#ebbe6a,#b9873a); color:var(--silk-road-background);
+  font-family:var(--silk-road-sans); font-weight:800; font-size:.95rem; letter-spacing:.04em;
+  box-shadow:var(--silk-road-shadow);
+}
+.silk-road-album-year svg{ width:1.1em; height:1.1em; }
+.silk-road-album-counter{
+  position:absolute; right:.9em; bottom:.9em; z-index:2;
+  padding:.4em .9em; border-radius:var(--silk-road-radius-pill);
+  background:rgba(12,23,40,.82); border:1px solid var(--silk-road-primary);
+  color:var(--silk-road-primary-pale); font-weight:800; font-size:.85rem;
+  font-variant-numeric:tabular-nums;
+}
+.silk-road-album-caption{ padding:clamp(16px,1.8vw,26px); min-height:100%; display:flex; flex-direction:column; gap:.6em; }
+.silk-road-album-title{
+  margin:0; font-family:var(--silk-road-serif); font-weight:700;
+  color:var(--silk-road-primary-light); font-size:clamp(1.4rem,2.3vw,1.95rem); line-height:1.12;
+}
+.silk-road-album-text{ margin:0; font-size:.98rem; line-height:1.55; }
+.silk-road-album-meta{
+  margin-top:auto; padding-top:.9em; border-top:1px solid var(--silk-road-border);
+  font-size:.8rem; color:var(--silk-road-muted); line-height:1.45;
+}
+.silk-road-album-link{ color:var(--silk-road-primary-pale); font-weight:700; text-decoration:underline; }
+.silk-road-album-link:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:3px; }
+.silk-road-album-thumbs{
+  display:flex; gap:.5em; margin-top:.8em; overflow-x:auto; padding-bottom:.3em;
+  scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+}
+.silk-road-album-thumb{
+  flex:0 0 auto; width:92px; height:62px; padding:0; overflow:hidden; cursor:pointer;
+  border-radius:10px; border:1.5px solid var(--silk-road-border);
+  background:var(--silk-road-surface-2); scroll-snap-align:center;
+  transition:transform var(--silk-road-transition-fast), border-color .2s, opacity .2s;
+  opacity:.62;
+}
+.silk-road-album-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.silk-road-album-thumb:active{ transform:scale(.94); }
+.silk-road-album-thumb:focus-visible{ outline:3px solid var(--silk-road-primary-pale); outline-offset:2px; }
+.silk-road-album-thumb.silk-road-is-active{ border-color:#f3d592; opacity:1; }
+.silk-road-album-thumb-year{
+  display:flex; align-items:center; justify-content:center; width:100%; height:100%;
+  color:var(--silk-road-primary-pale); font-weight:800; font-size:.8rem;
+}
+
+/* =========================  OVOZ BOSHQARUVI  ========================= */
+.silk-road-audio-bar{ display:flex; flex-wrap:wrap; align-items:center; gap:.7em; margin-top:1em; }
+.silk-road-audio-note{ font-size:.82rem; color:var(--silk-road-muted); }
+.silk-road-sound-dot{ width:.6em; height:.6em; border-radius:50%; background:var(--silk-road-primary-light); flex:0 0 auto; }
+.silk-road-btn.silk-road-is-muted .silk-road-sound-dot{ background:var(--silk-road-muted); }
+
+/* skip-link va vizual yashirin matn */
+.silk-road-sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+/* =========================  RESPONSIVE  ========================= */
+@media (max-width:1200px){
+  .silk-road-feature-row{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .silk-road-metrics{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .silk-road-eng-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .silk-road-legacy-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .silk-road-principles{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:900px){
+  .silk-road-hero-grid{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-map-layout{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-surface-layout{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-final{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-album{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-eng-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .silk-road-page::before{ opacity:.3; }
+}
+@media (max-width:640px){
+  .silk-road-page{ font-size:16px; }
+  .silk-road-feature-row{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .silk-road-metrics{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-legacy-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .silk-road-principles{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-feature-panel{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-btn{ min-height:56px; padding:0 1.5em; font-size:.98rem; flex:1 1 auto; }
+  .silk-road-btn-icon-only{ width:56px; min-width:56px; flex:0 0 auto; }
+  .silk-road-bar{ gap:.5em; }
+  .silk-road-hint{ margin-left:0; width:100%; }
+  .silk-road-day-body{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-day-badge{ width:3.6em; height:3.6em; }
+  .silk-road-album-frame{ aspect-ratio:4 / 3; }
+  .silk-road-album-thumb{ width:76px; height:54px; }
+  .silk-road-modal{ padding:0; align-items:flex-end; }
+  .silk-road-modal-dialog{ width:100%; max-height:90vh; border-radius:var(--silk-road-radius-lg) var(--silk-road-radius-lg) 0 0; border-width:1.5px; }
+  .silk-road-eng-grid{ display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:.7em; padding-bottom:.4em; -webkit-overflow-scrolling:touch; }
+  .silk-road-eng-card{ flex:0 0 78%; scroll-snap-align:center; }
+  .silk-road-chain{ overflow-x:auto; flex-wrap:nowrap; padding-bottom:.4em; -webkit-overflow-scrolling:touch; }
+  .silk-road-chain-item{ flex:0 0 auto; }
+}
+@media (max-width:420px){
+  .silk-road-feature-row{ grid-template-columns:minmax(0,1fr); }
+  .silk-road-legacy-grid{ grid-template-columns:minmax(0,1fr); }
+}
+
+/* =========================  ANIMATSIYANI KAMAYTIRISH  ========================= */
+@media (prefers-reduced-motion:reduce){
+  .silk-road-page .silk-road-reveal{ opacity:1; animation:none; }
+  .silk-road-page .silk-road-route-draw{ stroke-dashoffset:0; transition:none; }
+  .silk-road-page .silk-road-city-ring{ animation:none; opacity:.4; }
+  .silk-road-page .silk-road-samarkand-glow{ animation:none; }
+  .silk-road-page .silk-road-chain-arrow-path{ animation:none; }
+  .silk-road-page .silk-road-fade{ animation:none; }
+  .silk-road-page .silk-road-hero-dot,
+  .silk-road-page .silk-road-hero-caravan{ opacity:1; transition:none; }
+}
+</style>
+</head>
+<body class="silk-road-host">
+
+<div class="silk-road-page" id="silk-road-app">
+
+  <!-- ==================== IKONKALAR (inline SVG, emoji ishlatilmagan) ==================== -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <linearGradient id="silk-road-grad-gold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f0c979"/><stop offset="1" stop-color="#c9973f"/>
+      </linearGradient>
+      <linearGradient id="silk-road-grad-sand" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#e6d3ab"/><stop offset="1" stop-color="#b99a63"/>
+      </linearGradient>
+      <linearGradient id="silk-road-grad-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1d3352"/><stop offset="1" stop-color="#16283f"/>
+      </linearGradient>
+
+      <!-- asosiy fayldagi arka shakli -->
+      <g id="silk-road-arch">
+        <path d="M20 190 L20 90 A 92 92 0 0 1 80 22 A 92 92 0 0 1 140 90 L140 190"
+              fill="none" stroke="url(#silk-road-grad-gold)" stroke-width="9" stroke-linecap="round"/>
+      </g>
+
+      <!-- 24x24 ikonkalar -->
+      <g id="silk-road-i-prev"><path fill="currentColor" d="M20 11H7.8l4.6-4.6L11 5l-7 7 7 7 1.4-1.4L7.8 13H20z"/></g>
+      <g id="silk-road-i-close"><path fill="currentColor" d="M19 6.4L17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></g>
+      <g id="silk-road-i-hand"><path fill="currentColor" d="M9 11V4a1.5 1.5 0 013 0v6h1V6a1.5 1.5 0 013 0v5h1V8a1.5 1.5 0 013 0v7a6 6 0 01-6 6h-1.6a6 6 0 01-4.6-2.2L4.3 14a1.6 1.6 0 012.4-2l1.3 1.5z"/></g>
+      <g id="silk-road-i-pin"><path fill="currentColor" d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></g>
+      <g id="silk-road-i-road"><path fill="currentColor" d="M4 22L9 2h2l-.4 2h2.8L13 2h2l5 20h-4l-.8-4h-6.4L8 22zm5.6-8h4.8l-.9-4h-3z"/></g>
+      <g id="silk-road-i-clock"><path fill="currentColor" d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 10.6l4 2.3-.9 1.6L11 13.7V6h2z"/></g>
+      <g id="silk-road-i-star"><path fill="currentColor" d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></g>
+      <g id="silk-road-i-gear"><path fill="currentColor" d="M12 8a4 4 0 100 8 4 4 0 000-8zm9.4 4a7.4 7.4 0 00-.1-1.2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 00-2-1.2L16.5 3h-4l-.4 2.6a7.6 7.6 0 00-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 000 2.4l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 002 1.2l.4 2.6h4l.4-2.6a7.6 7.6 0 002-1.2l2.4 1 2-3.4-2-1.6c.06-.4.1-.8.1-1.2z"/></g>
+      <g id="silk-road-i-globe"><path fill="currentColor" d="M12 2a10 10 0 100 20 10 10 0 000-20zm7 9h-3a15 15 0 00-1.2-5.1A8 8 0 0119 11zM12 4c.9 1.2 1.7 3.2 2 7h-4c.3-3.8 1.1-5.8 2-7zM5 13h3a15 15 0 001.2 5.1A8 8 0 015 13zm4.2-2H5a8 8 0 014.2-5.1A15 15 0 008.2 11zm1.8 2h4c-.3 3.8-1.1 5.8-2 7-.9-1.2-1.7-3.2-2-7zm4.8 5.1A15 15 0 0016 13h3a8 8 0 01-4.2 5.1z"/></g>
+      <g id="silk-road-i-sound"><path fill="currentColor" d="M3 9v6h4l5 5V4L7 9zm13.5 3a4.5 4.5 0 00-2.5-4v8a4.5 4.5 0 002.5-4zM14 3.2v2.1a7 7 0 010 13.4v2.1a9 9 0 000-17.6z"/></g>
+      <g id="silk-road-i-mute"><path fill="currentColor" d="M3 9v6h4l5 5V4L7 9zm18.4 1.6L20 9.2 17.8 11.4 15.6 9.2l-1.4 1.4 2.2 2.2-2.2 2.2 1.4 1.4 2.2-2.2 2.2 2.2 1.4-1.4-2.2-2.2z"/></g>
+      <g id="silk-road-i-trade"><path fill="currentColor" d="M6 4a3 3 0 11-2.8 4H2V6h1.2A3 3 0 016 4zm12 0a3 3 0 110 6 3 3 0 010-6zM6 14a3 3 0 110 6 3 3 0 010-6zm12 0a3 3 0 110 6 3 3 0 010-6zM7.6 7.6l8.8 8.8-1.4 1.4-8.8-8.8zm8.8 0l1.4 1.4-8.8 8.8-1.4-1.4z"/></g>
+      <g id="silk-road-i-culture"><path fill="currentColor" d="M12 2L2 7v2h20V7zM4 10v8H3v2h18v-2h-1v-8h-2v8h-2v-8h-2v8h-2v-8H9v8H7v-8z"/></g>
+      <g id="silk-road-i-people"><path fill="currentColor" d="M8 11a3 3 0 110-6 3 3 0 010 6zm8 0a3 3 0 110-6 3 3 0 010 6zM2 19v-1.2C2 15.7 4.7 14 8 14s6 1.7 6 3.8V19zm14 0v-1.2c0-1.4-.7-2.6-1.8-3.4.6-.2 1.2-.4 1.8-.4 3.3 0 6 1.7 6 3.8V19z"/></g>
+      <g id="silk-road-i-water"><path fill="currentColor" d="M12 2.5S5.5 10 5.5 14.2a6.5 6.5 0 0013 0C18.5 10 12 2.5 12 2.5zm0 16.3a4.6 4.6 0 01-4.6-4.6c0-.9.6-2.3 1.6-3.9l3-4.4 3 4.4c1 1.6 1.6 3 1.6 3.9a4.6 4.6 0 01-4.6 4.6z"/></g>
+      <g id="silk-road-i-shield"><path fill="currentColor" d="M12 2L4 5.2v6.1c0 4.7 3.4 9 8 10.7 4.6-1.7 8-6 8-10.7V5.2zm0 2.2l6 2.4v4.7c0 3.5-2.4 6.9-6 8.4-3.6-1.5-6-4.9-6-8.4V6.6z"/></g>
+      <g id="silk-road-i-tools"><path fill="currentColor" d="M20.7 6.3l-3 3-2-2 3-3a5 5 0 00-6.6 5.9L3.4 18l2.6 2.6 8.8-8.7a5 5 0 005.9-6.6zM6 19.3a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2z"/></g>
+      <g id="silk-road-i-compass"><path fill="currentColor" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm3.8-11.8l-5.6 2.3-2.3 5.6 5.6-2.3zM12 13a1 1 0 110-2 1 1 0 010 2z"/></g>
+      <g id="silk-road-i-bridge"><path fill="currentColor" d="M2 10h20v2h-2v8h-2v-8h-3.2a4 4 0 00-5.6 0H6v8H4v-8H2zm10-6c4.4 0 8 2.7 8 6h-2c0-2.2-2.7-4-6-4S6 7.8 6 10H4c0-3.3 3.6-6 8-6z"/></g>
+      <g id="silk-road-i-well"><path fill="currentColor" d="M5 8h14v2h-1.2l-1 11H7.2l-1-11H5zm2.2 2l.9 9h7.8l.9-9zM11 2h2v5h-2zM7 4.2l1.4-1.4L11 5.4 9.6 6.8zM15.6 6.8L14.2 5.4l2.6-2.6L18.2 4.2z"/></g>
+      <g id="silk-road-i-caravanserai"><path fill="currentColor" d="M3 21V9l4-3 4 3v3h2V9l4-3 4 3v12h-6v-5h-2v5zm4-9a2 2 0 00-2 2v5h4v-5a2 2 0 00-2-2zm10 0a2 2 0 00-2 2v3h4v-3a2 2 0 00-2-2z"/></g>
+      <g id="silk-road-i-network"><path fill="currentColor" d="M12 2a2.6 2.6 0 011.4 4.8v1.4l4 2.3a2.6 2.6 0 112 3.4l-1 .6.9 2.7a2.6 2.6 0 11-2 .6l-.9-2.7-3-1.7v3.1a2.6 2.6 0 11-2 0v-3.1l-3 1.7-.9 2.7a2.6 2.6 0 11-2-.6l.9-2.7-1-.6a2.6 2.6 0 112-3.4l4-2.3V6.8A2.6 2.6 0 0112 2z"/></g>
+      <g id="silk-road-i-city"><path fill="currentColor" d="M3 21V8l5-3 5 3v2h3l4 2.5V21zM7 11H5v2h2zm4 0H9v2h2zm-4 4H5v2h2zm4 0H9v2h2zm7-1h-3v2h3zm0 4h-3v2h3z"/></g>
+      <g id="silk-road-i-book"><path fill="currentColor" d="M12 5c-1.8-1.3-4.4-2-8-2v16c3.6 0 6.2.7 8 2 1.8-1.3 4.4-2 8-2V3c-3.6 0-6.2.7-8 2zm0 2.2c1.5-.9 3.5-1.4 6-1.6v11.8c-2.5.2-4.5.7-6 1.6zM6 5.6c2.5.2 4.5.7 6 1.6V19c-1.5-.9-3.5-1.4-6-1.6z"/></g>
+      <g id="silk-road-i-sun"><path fill="currentColor" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-6h0l1 3h-2zM12 23l-1-3h2zM1 12l3-1v2zm22 0l-3 1v-2zM4.2 4.2l2.8 1.4-1.4 1.4zm15.6 15.6l-2.8-1.4 1.4-1.4zm0-15.6L18.4 7 17 5.6zM4.2 19.8L5.6 17 7 18.4z"/></g>
+      <g id="silk-road-i-moon"><path fill="currentColor" d="M12.5 3a9 9 0 108.5 11.6A7.5 7.5 0 0112.5 3z"/></g>
+      <g id="silk-road-i-check"><path fill="currentColor" d="M9.5 17.5L4 12l1.4-1.4 4.1 4.1 9.1-9.1L20 7z"/></g>
+      <g id="silk-road-i-eye"><path fill="currentColor" d="M12 5c-5 0-9.3 3.1-11 7 1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 12a5 5 0 110-10 5 5 0 010 10zm0-2.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></g>
+      <g id="silk-road-i-mountain"><path fill="currentColor" d="M2 20l6.5-11 4 6.2 2.2-3.3L22 20zm7-8.9L5.6 18h6.7zm4.8 1.5l-1.2 1.8 2 3.6h5.1z"/></g>
+      <g id="silk-road-i-horse"><path fill="currentColor" d="M20 4l-2.4 1.6L15 5c-2.9 0-5.3 2-6 4.6L7 11c-1.7.5-3 2-3 3.9V21h2v-4.6c0-.9.5-1.6 1.3-1.9l.7-.2V21h2v-6.3l3.4-1.2.6 2.1-1 5.4h2l1-5.2 2.5-3.4c.6-.9 1-1.9 1-3V5.6zm-4 3.6a1 1 0 110-2 1 1 0 010 2z"/></g>
+
+      <!-- ================= TUYA (KARVON) — RANGLI RASM =================
+           Rasm faylga base64 ko‘rinishida joylashtirilgan: alohida fayl kerak emas.
+           Ramka: x1.1 y3.5 en59.8 bo‘y45 — oyoqlari y=48.5 chizig‘ida turadi. -->
+      <g id="silk-road-camel-side">
+        <image x="1.1" y="3.5" width="59.8" height="45" preserveAspectRatio="xMidYMid meet"
+               href="data:image/png;base64,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"/>
+      </g>
+
+      <!-- monoxrom variant: kichik ikonkalar va och fonlar uchun (currentColor) -->
+      <g id="silk-road-camel-mono">
+        <path fill="currentColor" d="M8.4 25.6C7.8 19 9.6 13.6 13.8 10c2.8-2.4 6-3.6 8.8-3.2 3.2.4 5.8 2.8 7.8 7 1.2 2.6 2 5.1 2.5 7.6 1.3-4.4 3.8-8.7 7.4-12.7 2.3-2.6 4.7-4.6 6.7-5.7 1.7-.9 3.3-1 4.5-.1 1.2.9 2.9 2.5 3.9 3.8.8 1 .6 2-.6 2.5-1.2.5-3 .5-4.6.4-1.5-.1-3 .4-4.5 1.6-2.3 1.9-4.7 5.2-7 9.8-1.7 3.4-2.8 6.5-3.3 9.2-.3 1.6-.4 2.7-.4 3.4-2.8 1-6.4 1.5-10.6 1.5-4.2 0-8-.5-11.2-1.7-3-1.1-4.5-3.6-4.8-7.8z"/>
+        <path fill="currentColor" d="M46.9 3.5c.2-1.9.8-2.9 1.8-3.1 1-.2 1.7.5 2.1 2.1z"/>
+        <g stroke="currentColor" fill="none" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" opacity=".5">
+          <path d="M28.8 31.2l.8 7.2-1.4 8.4"/>
+          <path d="M17.6 31l1.6 4.6-3.2 4.8 1.2 7.2"/>
+        </g>
+        <g stroke="currentColor" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M32.8 31.6l1 7.6-2.2 8.4"/>
+          <path d="M13 31.4l2 5.2-3.8 4.6 1.4 7.2"/>
+        </g>
+        <path fill="currentColor" d="M8.6 24.4c1 .2 1.5 1.2 1.4 3-.1 1.8-.6 3.8-1.5 6l-1.7-.4c.7-2 1.1-3.7 1.2-5.2.1-1.5.3-2.6.6-3.4z"/>
+        <ellipse fill="currentColor" cx="7.2" cy="35.4" rx="1.5" ry="2.4"/>
+      </g>
+
+      <!-- 24x24 ikonkalar: aynan o‘sha tuya, kichraytirilgan -->
+      <g id="silk-road-i-camel">
+        <g transform="translate(0.86,2.64) scale(0.36)"><use href="#silk-road-camel-side"/></g>
+      </g>
+      <g id="silk-road-i-camel-mono">
+        <g transform="translate(-1.4,1.9) scale(0.42)"><use href="#silk-road-camel-mono"/></g>
+      </g>
+
+    </defs>
+  </svg>
+
+  <!-- ============================ SARLAVHA — asosiy fayldagi header (menyu) ============================ -->
+  <header class="silk-road-header">
+    <svg class="silk-road-header-emblem" viewBox="0 0 160 200" aria-hidden="true"><use href="#silk-road-arch"/></svg>
+    <div class="silk-road-header-brand">
+      <small>BUYUK IPAK YO‘LI</small>
+      <h1>Interaktiv taqdimot</h1>
+    </div>
+    <div class="silk-road-header-space"></div>
+    <div class="silk-road-header-note">Ipak yo‘li tarixini yangi tomondan ko‘ring</div>
+  </header>
+
+  <!-- ============================ 1-BLOK — KIRISH EKRANI ============================ -->
+  <section class="silk-road-section silk-road-hero" id="silk-road-intro" aria-labelledby="silk-road-hero-title">
+    <div class="silk-road-container">
+      <div class="silk-road-hero-grid">
+        <div>
+          <span class="silk-road-eyebrow">Interaktiv vizitka-taqdimot</span>
+          <h2 class="silk-road-hero-title" id="silk-road-hero-title">BUYUK IPAK YO‘LI</h2>
+          <p class="silk-road-hero-sub">Birinchi xalqaro transport-savdo tarmog‘i</p>
+          <p class="silk-road-hero-text">
+            Buyuk Ipak yo‘li — tarixdagi ilk xalqaro transport-savdo tarmog‘i bo‘lib,
+            Sharq va G‘arb o‘rtasidagi savdo, iqtisodiyot, bilim, texnologiya va
+            madaniy almashinuvni ta’minlagan.
+          </p>
+
+          <div class="silk-road-hero-actions">
+            <button type="button" class="silk-road-btn silk-road-btn-primary" id="silk-road-start"
+                    aria-label="Yo‘l bo‘ylab sayohatni boshlash">
+              <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-camel-mono"/></svg>
+              <span>YO‘L BO‘YLAB SAYOHATNI BOSHLASH</span>
+            </button>
+            <button type="button" class="silk-road-btn" id="silk-road-replay" aria-label="Marshrut animatsiyasini qayta ko‘rsatish">
+              <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-road"/></svg>
+              <span>Marshrutni qayta chizish</span>
+            </button>
+          </div>
+
+          <div class="silk-road-audio-bar">
+            <button type="button" class="silk-road-btn silk-road-btn-sm" id="silk-road-audio-toggle"
+                    aria-pressed="true" aria-label="Ovozni yoqish yoki o‘chirish">
+              <span class="silk-road-sound-dot" aria-hidden="true"></span>
+              <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true" id="silk-road-audio-icon"><use href="#silk-road-i-sound"/></svg>
+              <span id="silk-road-audio-label">Ovoz: yoqilgan</span>
+            </button>
+            <span class="silk-road-audio-note">
+              Ovoz faqat siz bosganingizda eshitiladi: tuya, ot, karvon qo‘ng‘irog‘i, suv va shamol.
+            </span>
+          </div>
+        </div>
+
+        <div class="silk-road-hero-canvas" id="silk-road-hero-canvas">
+          <svg class="silk-road-hero-svg" viewBox="0 0 720 380" role="img"
+               aria-label="Buyuk Ipak yo‘li marshrutining sxematik xaritasi: Chang’andan Rimgacha">
+            <rect x="0" y="0" width="720" height="380" rx="14" fill="url(#silk-road-grad-sky)"/>
+            <g stroke="#d8c29a" stroke-opacity=".16" stroke-width="1">
+              <path d="M0 76h720M0 152h720M0 228h720M0 304h720M120 0v380M240 0v380M360 0v380M480 0v380M600 0v380"/>
+            </g>
+            <!-- sxematik quruqlik dog‘lari -->
+            <g fill="#22406a" fill-opacity=".55">
+              <path d="M40 250c60-40 130-30 180-60 40-24 100-14 140-40 40-26 120-16 170-4 40 10 100 4 130-16v210H40z"/>
+            </g>
+            <g fill="#2a4265" fill-opacity=".5">
+              <path d="M60 120c50 10 90-14 140-6 44 8 78-16 126-8 46 8 84-14 132-6 44 8 88-10 132-2l-4 40c-60-8-96 10-140 4-48-6-84 16-130 8-48-8-84 14-128 6-48-8-84 12-132 4z"/>
+            </g>
+            <!-- marshrut -->
+            <path id="silk-road-hero-path" class="silk-road-route-draw"
+                  d="M660 190 C 620 150, 590 150, 560 158 C 520 168, 500 130, 468 132 C 430 134, 412 168, 380 168 C 344 168, 330 128, 296 130 C 258 132, 246 178, 212 180 C 176 182, 166 146, 134 148 C 104 150, 92 176, 60 186"
+                  fill="none" stroke="url(#silk-road-grad-gold)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="10 8"/>
+            <g id="silk-road-hero-dots"></g>
+            <g class="silk-road-hero-caravan" id="silk-road-hero-caravan">
+              <g id="silk-road-hero-camel-group" transform="translate(660,190)">
+                <g transform="translate(-26,-42) scale(.85)" opacity=".95">
+                  <use href="#silk-road-camel-side" style="color:#f0d9a8"/>
+                </g>
+              </g>
+            </g>
+            <text x="660" y="230" fill="#f0d9a8" font-family="Manrope, sans-serif" font-size="15" font-weight="800" text-anchor="middle">CHANG’AN</text>
+            <text x="60" y="226" fill="#f0d9a8" font-family="Manrope, sans-serif" font-size="15" font-weight="800" text-anchor="middle">RIM</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 2-BLOK — INTERAKTIV XARITA ============================ -->
+  <section class="silk-road-section" id="silk-road-map-section" aria-labelledby="silk-road-map-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">2-bosqich · Marshrut</span>
+        <h2 class="silk-road-heading" id="silk-road-map-title">Yo‘l bo‘ylab shaharlar</h2>
+        <p class="silk-road-lead" id="silk-road-map-lead">
+          Chang’andan Rimgacha bo‘lgan yo‘lni bosqichma-bosqich kuzating. Nuqtani bosing yoki
+          <span class="silk-road-lead-strong">Oldingi</span> va <span class="silk-road-lead-strong">Keyingi</span> tugmalaridan foydalaning.
+        </p>
+      </div>
+
+      <div class="silk-road-map-layout">
+        <div class="silk-road-map-wrap">
+          <div class="silk-road-map-scroll" id="silk-road-map-scroll">
+            <svg class="silk-road-map-svg" id="silk-road-map-svg" viewBox="0 0 1460 520" role="group"
+                 aria-label="Buyuk Ipak yo‘li shaharlari xaritasi">
+              <rect x="0" y="0" width="1460" height="520" rx="12" fill="url(#silk-road-grad-sky)"/>
+              <g stroke="#d8c29a" stroke-opacity=".13" stroke-width="1">
+                <path d="M0 104h1460M0 208h1460M0 312h1460M0 416h1460M208 0v520M416 0v520M624 0v520M832 0v520M1040 0v520M1248 0v520"/>
+              </g>
+              <g fill="#22406a" fill-opacity=".5">
+                <path d="M40 380c120-70 240-40 340-90 90-45 190-30 280-70 90-40 210-30 300-10 80 18 220 6 300-40l160-40v300z"/>
+              </g>
+              <path id="silk-road-map-path" fill="none" stroke="#1d3352" stroke-width="34" stroke-linecap="round"/>
+              <path id="silk-road-map-path-2" fill="none" stroke="#0c1728" stroke-width="26" stroke-linecap="round"/>
+              <path id="silk-road-map-path-3" class="silk-road-route-draw" fill="none"
+                    stroke="url(#silk-road-grad-gold)" stroke-width="5" stroke-dasharray="26 20" stroke-linecap="round"/>
+              <g id="silk-road-map-cities"></g>
+              <g id="silk-road-map-caravan" opacity="0">
+                <g transform="translate(-25,-57) scale(.8)"><use href="#silk-road-camel-side" style="color:#f3d592"/></g>
+              </g>
+            </svg>
+          </div>
+
+          <div class="silk-road-city-strip" id="silk-road-city-strip" role="tablist" aria-label="Marshrut shaharlari"></div>
+
+          <div class="silk-road-bar">
+            <button type="button" class="silk-road-btn silk-road-btn-primary" id="silk-road-city-prev" aria-label="Oldingi shahar">
+              <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-prev"/></svg>
+              <span>Oldingi</span>
+            </button>
+            <button type="button" class="silk-road-btn" id="silk-road-city-next" aria-label="Keyingi shahar">
+              <span>Keyingi</span>
+              <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true" style="transform:scaleX(-1)"><use href="#silk-road-i-prev"/></svg>
+            </button>
+            <span class="silk-road-hint">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-hand"/></svg>
+              <span>Nuqtani bosing · chapga-o‘ngga suring · ← → tugmalari</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="silk-road-card silk-road-city-card" id="silk-road-city-card" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 3-BLOK — ASOSIY VAZIFALAR ============================ -->
+  <section class="silk-road-section" id="silk-road-features-section" aria-labelledby="silk-road-features-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">3-bosqich · Vazifalar</span>
+        <h2 class="silk-road-heading" id="silk-road-features-title">Yo‘l nimani bog‘lagan</h2>
+        <p class="silk-road-lead">To‘rtta yo‘nalishdan birini tanlang — quyida batafsil ma’lumot ochiladi.</p>
+      </div>
+      <div class="silk-road-feature-row" id="silk-road-features" role="tablist" aria-label="Buyuk Ipak yo‘lining asosiy vazifalari"></div>
+      <div class="silk-road-card silk-road-feature-panel" id="silk-road-feature-panel" role="region" aria-live="polite" hidden></div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 4-BLOK — TEXNIK KO‘RSATKICHLAR ============================ -->
+  <section class="silk-road-section" id="silk-road-metrics-section" aria-labelledby="silk-road-metrics-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">4-bosqich · Raqamlar</span>
+        <h2 class="silk-road-heading" id="silk-road-metrics-title">Texnik ko‘rsatkichlar</h2>
+        <p class="silk-road-lead">Kartochkalar ekranga kirganda raqamlar noldan haqiqiy qiymatgacha sanaladi.</p>
+      </div>
+      <div class="silk-road-metrics" id="silk-road-metrics"></div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 5-BLOK — YO‘L QOPLAMASI ============================ -->
+  <section class="silk-road-section" id="silk-road-surface-section" aria-labelledby="silk-road-surface-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">5-bosqich · Qoplama</span>
+        <h2 class="silk-road-heading" id="silk-road-surface-title">Yo‘l qoplamasining kesimi</h2>
+        <p class="silk-road-lead">Qoplama turini tanlang — kesim va yo‘lning transport uchun sharoiti o‘zgaradi.</p>
+      </div>
+      <div class="silk-road-surface-layout">
+        <div class="silk-road-surface-list" id="silk-road-surface-list" role="tablist" aria-label="Yo‘l qoplamasi turlari"></div>
+        <div class="silk-road-card silk-road-surface-stage">
+          <div class="silk-road-surface-view" id="silk-road-surface-view" aria-hidden="true"></div>
+          <div id="silk-road-surface-info" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 6-BLOK — KARVONNING BIR KUNI ============================ -->
+  <section class="silk-road-section" id="silk-road-day-section" aria-labelledby="silk-road-day-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">6-bosqich · Karvon</span>
+        <h2 class="silk-road-heading" id="silk-road-day-title">Karvonning bir kuni</h2>
+        <p class="silk-road-lead">Karvonning bir kunlik yo‘li o‘rtacha 25–40 km bo‘lgan. Bosqichlarni ketma-ket ko‘rib chiqing.</p>
+      </div>
+
+      <div class="silk-road-card silk-road-day" id="silk-road-day">
+        <div class="silk-road-day-scene">
+          <svg class="silk-road-day-scene-svg" viewBox="0 0 900 300" role="img" aria-label="Karvon kunining animatsion sahnasi">
+            <g class="silk-road-day-sun"><circle cx="740" cy="66" r="30" fill="#f0d9a8" opacity=".9"/></g>
+            <g class="silk-road-day-moon"><path d="M742 42a30 30 0 1028 38 24 24 0 01-28-38z" fill="#e6eefc" opacity=".9"/>
+              <g fill="#e6eefc" opacity=".8"><circle cx="120" cy="50" r="2.2"/><circle cx="260" cy="34" r="1.8"/><circle cx="410" cy="62" r="2"/><circle cx="560" cy="40" r="1.6"/><circle cx="640" cy="86" r="2"/><circle cx="180" cy="96" r="1.6"/></g>
+            </g>
+            <path d="M0 214c90-46 150-6 236-40 70-28 118 16 190-14 66-28 122 14 190-10 62-22 130 10 184-16v166H0z" fill="#0f1e33" opacity=".55"/>
+            <path d="M0 246c110-30 180 8 280-14 84-18 140 22 226 4 78-16 134 18 214 2 60-12 100 2 140-8v70H0z" fill="#1d3352"/>
+            <rect x="0" y="262" width="900" height="38" fill="#c9a86a" opacity=".22"/>
+            <g id="silk-road-day-track" stroke="#f0d9a8" stroke-opacity=".55" stroke-width="3" stroke-dasharray="18 16"><path d="M0 280h900"/></g>
+            <g class="silk-road-day-caravan" id="silk-road-day-caravan" transform="translate(120,0)">
+              <g transform="translate(0,232) scale(.95)"><use href="#silk-road-camel-side" style="color:#f0d9a8"/></g>
+              <g transform="translate(64,240) scale(.78)" opacity=".85"><use href="#silk-road-camel-side" style="color:#e3b25e"/></g>
+              <g transform="translate(118,248) scale(.62)" opacity=".7"><use href="#silk-road-camel-side" style="color:#d8c29a"/></g>
+            </g>
+          </svg>
+        </div>
+
+        <div class="silk-road-day-body">
+          <div class="silk-road-day-badge">
+            <span class="silk-road-day-badge-num" id="silk-road-day-num">1</span>
+            <span class="silk-road-day-badge-of" id="silk-road-day-of">/ 7</span>
+          </div>
+          <div>
+            <h3 class="silk-road-day-step-title" id="silk-road-day-step-title">Karvonsaroydan chiqish</h3>
+            <span class="silk-road-day-step-time" id="silk-road-day-step-time">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-sun"/></svg>
+              <span id="silk-road-day-step-time-text">Tong</span>
+            </span>
+            <p class="silk-road-day-step-text" id="silk-road-day-step-text" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="silk-road-progress" role="progressbar" aria-valuemin="1" aria-valuemax="7" aria-valuenow="1"
+             aria-label="Karvon kunining bosqichlari" id="silk-road-day-progress">
+          <span class="silk-road-progress-fill" id="silk-road-day-progress-fill"></span>
+        </div>
+        <div class="silk-road-day-dots" id="silk-road-day-dots"></div>
+
+        <div class="silk-road-bar">
+          <button type="button" class="silk-road-btn silk-road-btn-primary" id="silk-road-day-prev" aria-label="Oldingi bosqich">
+            <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-prev"/></svg>
+            <span>Oldingi bosqich</span>
+          </button>
+          <button type="button" class="silk-road-btn" id="silk-road-day-next" aria-label="Keyingi bosqich">
+            <span>Keyingi bosqich</span>
+            <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true" style="transform:scaleX(-1)"><use href="#silk-road-i-prev"/></svg>
+          </button>
+          <span class="silk-road-hint">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-clock"/></svg>
+            <span>Bir kunlik yo‘l — 25–40 km</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 7-BLOK — MUHANDISLIK-TEXNOLOGIK XUSUSIYATLAR ============================ -->
+  <section class="silk-road-section" id="silk-road-eng-section" aria-labelledby="silk-road-eng-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">7-bosqich · Muhandislik</span>
+        <h2 class="silk-road-heading" id="silk-road-eng-title">Muhandislik-texnologik xususiyatlar</h2>
+        <p class="silk-road-lead">Kartochkani bosing — kengaytirilgan panel va chizma ochiladi. Yopish uchun Escape tugmasi ham ishlaydi.</p>
+      </div>
+      <div class="silk-road-eng-grid" id="silk-road-eng-grid"></div>
+      <div class="silk-road-bar">
+        <span class="silk-road-hint" style="margin-left:0">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-hand"/></svg>
+          <span>Mobil qurilmada kartochkalarni chapga suring</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 8-BLOK — HARAKATNI TASHKIL ETISH ============================ -->
+  <section class="silk-road-section" id="silk-road-chain-section" aria-labelledby="silk-road-chain-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">8-bosqich · Tashkil etish</span>
+        <h2 class="silk-road-heading" id="silk-road-chain-title">Harakatni tashkil etish tamoyillari</h2>
+        <p class="silk-road-lead">Zanjirning har bir bo‘g‘inini bosing — tushuntirish ochiladi.</p>
+      </div>
+      <div class="silk-road-chain" id="silk-road-chain" role="tablist" aria-label="Harakat zanjiri"></div>
+      <div class="silk-road-card silk-road-chain-panel" id="silk-road-chain-panel" aria-live="polite"></div>
+      <div class="silk-road-principles" id="silk-road-principles"></div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ 9-BLOK — AHAMIYATI VA MEROSI ============================ -->
+  <section class="silk-road-section" id="silk-road-legacy-section" aria-labelledby="silk-road-legacy-title">
+    <div class="silk-road-container">
+      <div class="silk-road-section-head">
+        <span class="silk-road-eyebrow">9-bosqich · Meros</span>
+        <h2 class="silk-road-heading" id="silk-road-legacy-title">Ahamiyati va merosi</h2>
+        <p class="silk-road-lead">Beshta yo‘nalishdan birini tanlang.</p>
+      </div>
+      <div class="silk-road-legacy-grid" id="silk-road-legacy-grid" role="tablist" aria-label="Buyuk Ipak yo‘li merosi"></div>
+      <div class="silk-road-card silk-road-legacy-panel" id="silk-road-legacy-panel" aria-live="polite"></div>
+
+      <div class="silk-road-card silk-road-final" id="silk-road-final">
+        <div>
+          <p class="silk-road-final-text">
+            Buyuk Ipak yo‘li — bu faqat savdogarlar yo‘li emas. Bu taraqqiyot, bilim va
+            o‘zaro anglashuv yo‘li bo‘lib, ming yillar davomida sivilizatsiyalarni bog‘lagan.
+          </p>
+          <div class="silk-road-bar">
+            <button type="button" class="silk-road-btn silk-road-btn-primary" id="silk-road-final-btn"
+                    aria-label="Yakuniy animatsiyani ko‘rsatish: tarixiy yo‘ldan zamonaviy magistralgacha">
+              <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-road"/></svg>
+              <span>Tarixiy yo‘ldan zamonaviy magistralgacha</span>
+            </button>
+            <button type="button" class="silk-road-btn" id="silk-road-restart" aria-label="Taqdimotni boshidan boshlash">
+              <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-prev"/></svg>
+              <span>Boshiga qaytish</span>
+            </button>
+          </div>
+        </div>
+
+        <svg class="silk-road-final-svg" viewBox="0 0 640 300" role="img"
+             aria-label="Tarixiy karvon yo‘lining zamonaviy avtomobil yo‘liga aylanishi">
+          <rect x="0" y="0" width="640" height="300" rx="14" fill="url(#silk-road-grad-sky)"/>
+          <g class="silk-road-merge-line" stroke="#c9973f" stroke-opacity=".55" stroke-width="3" fill="none" style="transform-origin:320px 150px">
+            <path d="M20 92C140 60 220 118 320 96s200 26 300-16"/>
+            <path d="M20 204C140 236 220 178 320 200s200-26 300 16"/>
+            <path d="M20 148C150 126 210 172 320 150s180 18 300-4" stroke-dasharray="12 10"/>
+          </g>
+          <g class="silk-road-morph-old">
+            <path d="M20 150C150 126 210 172 320 150s180 18 300-4" fill="none" stroke="#d8c29a" stroke-width="16" stroke-linecap="round" opacity=".35"/>
+            <path d="M20 150C150 126 210 172 320 150s180 18 300-4" fill="none" stroke="#f0d9a8" stroke-width="3" stroke-dasharray="14 12" stroke-linecap="round"/>
+            <g transform="translate(120,116) scale(.7)"><use href="#silk-road-camel-side" style="color:#f0d9a8"/></g>
+          </g>
+          <g class="silk-road-morph-new">
+            <path d="M20 150C150 126 210 172 320 150s180 18 300-4" fill="none" stroke="#26364f" stroke-width="26" stroke-linecap="round"/>
+            <path d="M20 150C150 126 210 172 320 150s180 18 300-4" fill="none" stroke="#f5eedf" stroke-width="2.5" stroke-dasharray="20 18" stroke-linecap="round"/>
+            <g fill="#9fb0c8"><rect x="96" y="118" width="26" height="10" rx="3"/><rect x="360" y="146" width="30" height="11" rx="3"/><rect x="500" y="140" width="24" height="9" rx="3"/></g>
+          </g>
+          <g id="silk-road-final-samarkand" class="silk-road-samarkand-glow">
+            <circle cx="320" cy="150" r="11" fill="#f3d592" stroke="#fff" stroke-width="2.5"/>
+            <text x="320" y="128" fill="#f0d9a8" font-family="Manrope, sans-serif" font-size="16" font-weight="800" text-anchor="middle">SAMARQAND</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="silk-road-roadline" aria-hidden="true"></div>
+
+  <!-- ============================ MODAL (kengaytiriladigan panel) ============================ -->
+  <div class="silk-road-modal" id="silk-road-modal" role="dialog" aria-modal="true"
+       aria-labelledby="silk-road-modal-title" hidden>
+    <div class="silk-road-modal-dialog" id="silk-road-modal-dialog">
+      <div class="silk-road-modal-head">
+        <h3 class="silk-road-modal-title" id="silk-road-modal-title">Sarlavha</h3>
+        <button type="button" class="silk-road-btn silk-road-btn-sm silk-road-btn-icon-only" id="silk-road-modal-close" aria-label="Yopish">
+          <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-close"/></svg>
+        </button>
+      </div>
+      <div id="silk-road-modal-art"></div>
+      <p class="silk-road-modal-text" id="silk-road-modal-text"></p>
+      <div class="silk-road-modal-foot">
+        <button type="button" class="silk-road-btn silk-road-btn-primary" id="silk-road-modal-prev" aria-label="Oldingi kartochka">
+          <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-prev"/></svg>
+          <span>Oldingi</span>
+        </button>
+        <button type="button" class="silk-road-btn" id="silk-road-modal-next" aria-label="Keyingi kartochka">
+          <span>Keyingi</span>
+          <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true" style="transform:scaleX(-1)"><use href="#silk-road-i-prev"/></svg>
+        </button>
+        <button type="button" class="silk-road-btn" id="silk-road-modal-close-2" aria-label="Yopish">
+          <svg class="silk-road-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#silk-road-i-close"/></svg>
+          <span>Yopish</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript o‘chirilgan holatda ko‘rinadigan statik ma’lumot -->
+  <noscript>
+    <div class="silk-road-container" style="padding-bottom:40px">
+      <div class="silk-road-card" style="padding:24px">
+        <h3 class="silk-road-heading" style="font-size:1.6rem">Buyuk Ipak yo‘li — asosiy ma’lumotlar</h3>
+        <p class="silk-road-lead"><span class="silk-road-lead-strong">Marshrut:</span> Chang’an (Sian) — Dunxuan — Turfon — Qashqar — Samarqand — Fors — Antioxiya — Konstantinopol — Rim.</p>
+        <p class="silk-road-lead"><span class="silk-road-lead-strong">Vazifalari:</span> savdo (tovarlar va boyliklar almashinuvi), madaniyat (bilimlar, dinlar va g‘oyalar almashinuvi), texnologiyalar (innovatsiyalarning tarqalishi), insonlar (sivilizatsiyalar o‘rtasidagi muloqot).</p>
+        <p class="silk-road-lead"><span class="silk-road-lead-strong">Ko‘rsatkichlar:</span> umumiy uzunligi 8 000 km dan ortiq, tarmoqlari bilan 12 000 km dan ziyod; yo‘l kengligi 3–8 metr; karvonning o‘rtacha tezligi kuniga 25–40 km; karvonsaroylar orasidagi masofa 25–40 km; suv olish punktlari orasidagi masofa 10–20 km; Xitoydan Markaziy Osiyogacha yo‘l 6–9 oy.</p>
+        <p class="silk-road-lead"><span class="silk-road-lead-strong">Yo‘l qoplamasi:</span> tabiiy grunt, zichlangan tuproq, shag‘al, tosh yotqizilgan yo‘l, ko‘prik va dovon yo‘llari.</p>
+        <p class="silk-road-lead"><span class="silk-road-lead-strong">Karvonning bir kuni:</span> karvonsaroydan chiqish, yo‘nalishni aniqlash, yuklarni tekshirish, kunlik 25–40 km yo‘l bosish, suv olish punktida to‘xtash, qo‘riqlash postidan o‘tish, navbatdagi karvonsaroyga yetib kelish.</p>
+        <p class="silk-road-lead"><span class="silk-road-lead-strong">Muhandislik:</span> yo‘nalishlar tarmog‘i, muhandislik inshootlari, yo‘l infratuzilmasi, navigatsiya, tashish logistikasi, xavfsizlik, muhandislik ta’minoti.</p>
+        <p class="silk-road-lead"><span class="silk-road-lead-strong">Merosi:</span> savdo va iqtisodiyotning rivojlanishi, shaharlarning o‘sishi, bilimlar almashinuvi, xalqlar birligi, kelajak avlodlar uchun yo‘llar merosi.</p>
+      </div>
+    </div>
+  </noscript>
+
+</div>
+
+<script>
+/* =========================================================================
+   BUYUK IPAK YO‘LI — INTERAKTIV TAQDIMOT
+   Butun kod IIFE ichida. Global o‘zgaruvchi yaratilmaydi,
+   asosiy sayt funksiyalari bilan nom to‘qnashuvi yo‘q.
+   ========================================================================= */
+(() => {
+  'use strict';
+
+  const root = document.getElementById('silk-road-app');
+  if (!root) return;
+
+  const $  = (sel, ctx) => (ctx || root).querySelector(sel);
+  const $$ = (sel, ctx) => Array.prototype.slice.call((ctx || root).querySelectorAll(sel));
+  const reduceMotion = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+    : { matches:false, addEventListener(){} };
+
+  /* =======================================================================
+     1. MA’LUMOTLAR — matnlarni faqat shu obyektdan tahrirlash kifoya
+     ======================================================================= */
+  const silkRoadData = {
+
+    /* --- 2-BLOK: marshrut shaharlari (x,y — 1460x520 viewBox koordinatalari) --- */
+    cities: [
+      { name:'Chang’an', region:'Sian, Xitoy', x:1360, y:300, key:false,
+        text:'Buyuk Ipak yo‘lining sharqiy boshlanish nuqtasi. Bu yerdan ipak, sopol va qog‘oz ortilgan karvonlar g‘arbga yo‘l olgan.',
+        tags:['Boshlanish nuqtasi','Ipak bozorlari'] },
+      { name:'Dunxuan', region:'Xitoy', x:1180, y:250, key:false,
+        text:'Cho‘l chegarasidagi asosiy to‘xtash joyi. Karvonlar bu yerda suv, oziq-ovqat va yangi yo‘lboshchi olgan.',
+        tags:['Cho‘l darvozasi','Karvonsaroylar'] },
+      { name:'Turfon', region:'Sharqiy Turkiston', x:1010, y:210, key:false,
+        text:'Vohalar shahri. Yer osti suv inshootlari tufayli qurg‘oqchil hududda ham dehqonchilik va savdo rivojlangan.',
+        tags:['Voha','Suv inshootlari'] },
+      { name:'Qashqar', region:'Sharqiy Turkiston', x:845, y:262, key:false,
+        text:'Shimoliy va janubiy yo‘nalishlar tutashgan chorraha. Tog‘ dovonlariga chiqishdan oldingi eng muhim bozor.',
+        tags:['Chorraha','Dovon oldi'] },
+      { name:'Samarqand', region:'Markaziy Osiyo', x:680, y:226, key:true,
+        text:'Samarqand Buyuk Ipak yo‘lining Markaziy Osiyodagi eng muhim savdo, ilm-fan, hunarmandchilik va madaniyat markazlaridan biri bo‘lgan.',
+        tags:['Savdo markazi','Ilm-fan','Hunarmandchilik'] },
+      { name:'Fors', region:'Eron platosi', x:520, y:292, key:false,
+        text:'Karvon yo‘llarining g‘arbiy tarmog‘i. Yo‘l bo‘ylab sardobalar, karvonsaroylar va bojxona punktlari joylashgan.',
+        tags:['Sardobalar','Bojxona'] },
+      { name:'Antioxiya', region:'O‘rta Yer dengizi', x:372, y:244, key:false,
+        text:'Quruqlik yo‘lining dengiz savdosiga ulanish nuqtasi. Yuklar bu yerda kemalarga ortilgan.',
+        tags:['Port','Qayta yuklash'] },
+      { name:'Konstantinopol', region:'Bosfor', x:228, y:214, key:false,
+        text:'Sharq va G‘arb o‘rtasidagi asosiy darvoza. Bu yerda savdo qoidalari, bojlar va pul muomalasi tartibga solingan.',
+        tags:['Darvoza shahri','Savdo qoidalari'] },
+      { name:'Rim', region:'Yevropa', x:92, y:262, key:false,
+        text:'G‘arbiy yakuniy nuqta. Sharq tovarlari — ipak, ziravorlar va qimmatbaho buyumlar shu yerga yetib kelgan.',
+        tags:['Yakuniy nuqta','Ipak bozori'] }
+    ],
+
+    /* --- 3-BLOK: asosiy vazifalar --- */
+    features: [
+      { id:'savdo', icon:'silk-road-i-trade', name:'Savdo', tagline:'Tovarlar va boyliklar almashinuvi',
+        text:'Ipak, ziravorlar, qimmatbaho metallar, hunarmandchilik buyumlari, shisha, sopol mahsulotlar va boshqa tovarlar Sharq va G‘arb o‘rtasida tashilgan.',
+        sound:'bell' },
+      { id:'madaniyat', icon:'silk-road-i-culture', name:'Madaniyat', tagline:'Bilimlar, dinlar va g‘oyalar almashinuvi',
+        text:'Buyuk Ipak yo‘li orqali tillar, urf-odatlar, san’at, diniy ta’limotlar va madaniy qadriyatlar keng hududlarga tarqalgan.',
+        sound:'bell' },
+      { id:'texnologiya', icon:'silk-road-i-gear', name:'Texnologiyalar', tagline:'Innovatsiyalarning tarqalishi',
+        text:'Qog‘oz ishlab chiqarish, metallga ishlov berish, sug‘orish, qurilish, navigatsiya va transport texnologiyalari turli hududlarga yetib borgan.',
+        sound:'tap' },
+      { id:'insonlar', icon:'silk-road-i-people', name:'Insonlar', tagline:'Sivilizatsiyalar o‘rtasidagi muloqot va o‘zaro anglashuv',
+        text:'Savdogarlar, sayohatchilar, olimlar, elchilar va hunarmandlar xalqlar o‘rtasidagi aloqalarni mustahkamlagan.',
+        sound:'camel' }
+    ],
+
+    /* --- 4-BLOK: texnik ko‘rsatkichlar --- */
+    metrics: [
+      { icon:'silk-road-i-road',          label:'Umumiy uzunligi',        to:8000,  unit:'km', note:'8 000 km dan ortiq' },
+      { icon:'silk-road-i-network',       label:'Tarmoqlari bilan',       to:12000, unit:'km', note:'12 000 km dan ziyod' },
+      { icon:'silk-road-i-bridge',        label:'Yo‘l kengligi',          range:[3,8],   unit:'metr', note:'Hudud, harakat jadalligi va yo‘l qismining vazifasiga qarab' },
+      { icon:'silk-road-i-camel',         label:'Karvonning o‘rtacha tezligi', range:[25,40], unit:'km', note:'Kuniga' },
+      { icon:'silk-road-i-caravanserai',  label:'Karvonsaroylar orasidagi masofa', range:[25,40], unit:'km', note:'Bir kunlik yo‘l' },
+      { icon:'silk-road-i-water',         label:'Suv olish punktlari orasidagi masofa', range:[10,20], unit:'km', note:'Qurg‘oqchil hududlarda' },
+      { icon:'silk-road-i-clock',         label:'Xitoydan Markaziy Osiyogacha bo‘lgan yo‘l davomiyligi', range:[6,9], unit:'oy', note:'To‘liq karvon safari' }
+    ],
+
+    /* --- 5-BLOK: yo‘l qoplamasi (teksturalar — faqat CSS gradient va SVG pattern) --- */
+    surfaces: [
+      { id:'grunt', name:'Tabiiy grunt', swatch:'linear-gradient(180deg,#b99a63,#8a6f45)',
+        band:'linear-gradient(180deg, rgba(185,154,99,.25) 0%, #a9884f 30%, #8a6f45 100%)',
+        pattern:'dots',
+        text:'Tabiiy yer usti hech qanday qoplamasiz ishlatilgan. Yo‘nalish karvonlarning ko‘p yillik harakati natijasida shakllangan.',
+        effect:'Quruq mavsumda tez harakat, yomg‘irdan keyin esa yumshab qolgan va karvon tezligi pasaygan.' },
+      { id:'tuproq', name:'Zichlangan tuproq', swatch:'linear-gradient(180deg,#c2a370,#93764a)',
+        band:'linear-gradient(180deg, rgba(194,163,112,.3) 0%, #b0905c 32%, #93764a 100%)',
+        pattern:'lines',
+        text:'Yo‘l qismi tekislanib, ustidan yuk bilan bosib zichlangan. Chetlariga suv oqizish uchun yengil nishablik berilgan.',
+        effect:'Barqaror yuza yaratgan, g‘ildirakli aravalar va og‘ir yuklar uchun qulay bo‘lgan.' },
+      { id:'shagal', name:'Shag‘al', swatch:'linear-gradient(180deg,#cbb68f,#7f7462)',
+        band:'linear-gradient(180deg, rgba(203,182,143,.3) 0%, #a39370 34%, #7f7462 100%)',
+        pattern:'gravel',
+        text:'Tuproq ustiga mayda tosh va shag‘al qatlami yotqizilgan. Bu qatlam suvni o‘tkazib, yo‘lni loyqalanishdan saqlagan.',
+        effect:'Yomg‘irli mavsumda ham harakatni davom ettirish imkonini bergan.' },
+      { id:'tosh', name:'Tosh yotqizilgan yo‘l', swatch:'linear-gradient(180deg,#9fb0c8,#5c6b81)',
+        band:'linear-gradient(180deg, rgba(159,176,200,.25) 0%, #8494ab 32%, #5c6b81 100%)',
+        pattern:'stones',
+        text:'Shaharlarga kirish joylari, bozor maydonlari va sertez eskiradigan qismlar tosh bilan qoplangan.',
+        effect:'Eng chidamli qoplama: og‘ir yuk va zich harakatga bardosh bergan, ta’mirlash ehtiyoji kamaygan.' },
+      { id:'dovon', name:'Ko‘prik va dovon yo‘llari', swatch:'linear-gradient(180deg,#7d8ea6,#3b4a63)',
+        band:'linear-gradient(180deg, rgba(125,142,166,.28) 0%, #63748f 30%, #3b4a63 100%)',
+        pattern:'mountain',
+        text:'Daryo kechuvlarida ko‘priklar, tog‘ yonbag‘irlarida tayanch devorlari va o‘yib ishlangan so‘qmoqlar qurilgan.',
+        effect:'Eng murakkab uchastkalar: harakat sekinlashgan, ammo yo‘l butun yil davomida ochiq qolgan.' }
+    ],
+
+    /* --- 6-BLOK: karvonning bir kuni --- */
+    day: [
+      { title:'Karvonsaroydan chiqish', time:'Tong', night:false, icon:'silk-road-i-caravanserai', pos:40, sound:'bell',
+        text:'Karvon tong saharda yo‘lga chiqqan. Salqin havoda tuyalar kam charchagan va kunlik masofa oson bosib o‘tilgan.' },
+      { title:'Yo‘nalishni aniqlash', time:'Ertalab', night:false, icon:'silk-road-i-compass', pos:150, sound:'tap',
+        text:'Yo‘lboshchi minoralar, qal’alar va tabiiy mo‘ljallarga qarab yo‘nalishni belgilagan. Mavsumga qarab muqobil yo‘l tanlangan.' },
+      { title:'Yuklarni tekshirish', time:'Kunduz', night:false, icon:'silk-road-i-tools', pos:270, sound:'step',
+        text:'To‘xtash paytida yuk bog‘ichlari, egarlar va tuyalarning holati tekshirilgan. Yuk og‘irligi qayta taqsimlangan.' },
+      { title:'Kunlik 25–40 km yo‘l bosish', time:'Peshin', night:false, icon:'silk-road-i-camel', pos:400, sound:'camel',
+        text:'Karvonning bir kunlik yo‘li o‘rtacha 25–40 km bo‘lgan. Harakat sur’ati eng sekin tuyaga qarab belgilangan.' },
+      { title:'Suv olish punktida to‘xtash', time:'Asr', night:false, icon:'silk-road-i-water', pos:520, sound:'water',
+        text:'Quduq yoki sardobada suv zaxirasi to‘ldirilgan. Qurg‘oqchil hududlarda bunday punktlar har 10–20 km da joylashgan.' },
+      { title:'Qo‘riqlash postidan o‘tish', time:'Shom', night:true, icon:'silk-road-i-shield', pos:620, sound:'horse',
+        text:'Garnizon yoki bojxona punktida karvon ro‘yxatdan o‘tgan, yuk hujjatlari va soliqlar tekshirilgan.' },
+      { title:'Navbatdagi karvonsaroyga yetib kelish', time:'Kech', night:true, icon:'silk-road-i-caravanserai', pos:720, sound:'bell',
+        text:'Kun yakunida karvon navbatdagi karvonsaroyga kirgan. Bu yerda dam olish, otxona, ombor va bozor mavjud bo‘lgan.' }
+    ],
+
+    /* --- 7-BLOK: muhandislik-texnologik xususiyatlar --- */
+    engineering: [
+      { id:'yonalish', icon:'silk-road-i-network', title:'Yo‘nalishlar tarmog‘i', sound:'tap',
+        text:'Mavsum, iqlim va siyosiy vaziyatga qarab asosiy va muqobil yo‘nalishlar tanlangan.', art:'network' },
+      { id:'inshoot', icon:'silk-road-i-bridge', title:'Muhandislik inshootlari', sound:'step',
+        text:'Ko‘priklar, kechuvlar, tayanch devorlari, dovon yo‘llari va mustahkamlangan tog‘ so‘qmoqlari qurilgan.', art:'bridge' },
+      { id:'infra', icon:'silk-road-i-caravanserai', title:'Yo‘l infratuzilmasi', sound:'bell',
+        text:'Karvonsaroylar, omborlar, otxonalar, bozorlar, hunarmandchilik ustaxonalari va dam olish joylari tashkil etilgan.', art:'infra' },
+      { id:'navigatsiya', icon:'silk-road-i-compass', title:'Navigatsiya', sound:'tap',
+        text:'Minoralar, qal’alar, dovonlar, yulduzlar va tabiiy mo‘ljallar bo‘yicha yo‘nalish aniqlangan.', art:'nav' },
+      { id:'logistika', icon:'silk-road-i-camel', title:'Tashish logistikasi', sound:'camel',
+        text:'Tuya, ot va xachirlardan foydalanilgan. Karvonlar tashkil etilgan, yuklar taqsimlangan va harakat jadvali belgilangan.', art:'logistics' },
+      { id:'xavfsizlik', icon:'silk-road-i-shield', title:'Xavfsizlik', sound:'horse',
+        text:'Garnizonlar, qo‘riqlash postlari, bojxona punktlari va karvon kuzatuvi faoliyat yuritgan.', art:'security' },
+      { id:'taminot', icon:'silk-road-i-well', title:'Muhandislik ta’minoti', sound:'water',
+        text:'Quduqlar, sardobalar, suv omborlari va yo‘nalishlar bo‘ylab sug‘orish inshootlari barpo etilgan.', art:'water' }
+    ],
+
+    /* --- 8-BLOK: harakat zanjiri va tamoyillar --- */
+    chain: [
+      { id:'yol', label:'YO‘L', icon:'silk-road-i-road', sound:'step',
+        text:'Yo‘nalish relyefga moslab tanlangan: minimal yer ishlari bilan tabiiy hududlardan o‘tgan, tik ko‘tarilishlardan qochilgan.' },
+      { id:'suv', label:'SUV', icon:'silk-road-i-water', sound:'water',
+        text:'Har 10–20 km da quduq yoki sardoba joylashgan. Suv zaxirasi karvon marshrutini belgilovchi asosiy shart bo‘lgan.' },
+      { id:'dam', label:'DAM OLISH', icon:'silk-road-i-caravanserai', sound:'bell',
+        text:'Karvonsaroylar bir kunlik yo‘l — 25–40 km oralig‘ida qurilgan. Ular dam olish, ombor va bozor vazifasini bajargan.' },
+      { id:'qoriq', label:'QO‘RIQLASH', icon:'silk-road-i-shield', sound:'horse',
+        text:'Garnizonlar va qo‘riqlash postlari yo‘l xavfsizligini ta’minlagan, karvonlar kuzatib borilgan.' },
+      { id:'savdo', label:'SAVDO', icon:'silk-road-i-trade', sound:'tap',
+        text:'Bozorlar va bojxona punktlari yo‘l bo‘ylab joylashgan. Yuk qisman sotilib, yangi tovar bilan almashtirilgan.' },
+      { id:'tamir', label:'TA’MIRLASH', icon:'silk-road-i-tools', sound:'step',
+        text:'Ustaxonalarda egar, arava, taqa va yuk anjomlari ta’mirlangan. Yo‘lning yuvilgan qismlari qayta tiklangan.' }
+    ],
+    principles: [
+      'Bir kunlik yo‘l — 25–40 km',
+      'Muntazam dam olish punktlari',
+      'Asosiy va muqobil yo‘nalishlar',
+      'To‘liq siklli infratuzilma',
+      'Yo‘llarni relyefga moslashtirish',
+      'Minimal yer ishlari bilan tabiiy hududlardan o‘tish'
+    ],
+
+    /* --- 9-BLOK: ahamiyati va merosi --- */
+    legacy: [
+      { icon:'silk-road-i-trade',  name:'Savdo va iqtisodiyotning rivojlanishi',
+        text:'Doimiy savdo oqimi mintaqalar iqtisodiyotini bog‘lagan, pul muomalasi, bojxona va shartnoma amaliyoti shakllangan.' },
+      { icon:'silk-road-i-city',   name:'Shaharlarning o‘sishi va sivilizatsiyalarning shakllanishi',
+        text:'Yo‘l bo‘ylab shaharlar kengaygan: bozorlar, hunarmandchilik mahallalari, karvonsaroylar va suv inshootlari qurilgan.' },
+      { icon:'silk-road-i-book',   name:'Bilimlar, texnologiyalar va madaniyat almashinuvi',
+        text:'Qog‘oz, astronomiya, tibbiyot, me’morchilik va sug‘orish bo‘yicha bilimlar bir mintaqadan boshqasiga o‘tgan.' },
+      { icon:'silk-road-i-people', name:'Xalqlar va sivilizatsiyalar birligi',
+        text:'Turli tillar va e’tiqodlarga mansub xalqlar bir yo‘l bo‘ylab hamkorlik qilgan, o‘zaro anglashuv mustahkamlangan.' },
+      { icon:'silk-road-i-road',   name:'Kelajak avlodlar uchun yo‘llar merosi',
+        text:'Tarixiy yo‘nalishlar zamonaviy transport yo‘laklari uchun asos bo‘lgan — yo‘l tarixi bugungi magistrallarda davom etadi.' }
+    ],
+
+    /* --- 10-BLOK: fotoalbom ---------------------------------------------
+       Suratlar manbadan (asiaplus.news) URL orqali yuklanadi. O‘z nusxangizni
+       ishlatish uchun quyidagi "url" qiymatini o‘z faylingiz yo‘liga
+       (masalan 'rasmlar/magistral-1935.jpg') almashtiring.                  */
+    album: {
+      credit: 'Suratlar Tojikiston Respublikasi Markaziy davlat arxivi va muallifning shaxsiy arxividan.',
+      sourceLabel: 'Manba: Asia-Plus, muallif G‘afur Shermatov, 2020',
+      sourceUrl: 'https://asiaplus.news/2020/08/20/kak-stroilas-avtomagistral-dushanbe-tashkent-fotoletopis-nashej-istorii/',
+      photos: [
+        { year:'1935',
+          url:'https://asiaplus.news/wp-content/uploads/2020/08/Foto-4-11.jpg',
+          title:'Ikki poytaxtni bog‘lagan yo‘l',
+          text:'1935-yil 20-avgustda Dushanbe (o‘sha davrdagi nomi — Stalinobod) va O‘ratepa orasidagi yo‘ldan to‘liq harakat ochildi. Shu kuni ikki respublika poytaxti — Dushanbe bilan Toshkent birinchi marta to‘g‘ridan-to‘g‘ri avtomobil aloqasiga ega bo‘ldi.' },
+        { year:'XX asr boshi',
+          url:'https://asiaplus.news/wp-content/uploads/2026/03/Foto-1-12-9ba34186.jpg',
+          title:'Yo‘lsizlik davri',
+          text:'Tog‘lar orasidagi qishloqlarning aksariyati yilning katta qismida tashqi dunyodan uzilib qolgan. Yozda qatnov faqat qoyalarga o‘rnatilgan tor va xavfli so‘qmoqlar — ovringlar orqali saqlangan.' },
+        { year:'1929',
+          url:'https://asiaplus.news/wp-content/uploads/2026/03/Foto-2-11-a5296e5d.jpg',
+          title:'Temir yo‘l keldi, yuk qoldi',
+          text:'Termiz — Dushanbe temir yo‘lining qurilishi tugadi, ammo bu vazifaning faqat bir qismini hal qildi: yuklar poytaxtda to‘planib qolar, ayniqsa kuz va qishda tumanlarga yetkazib bo‘lmasdi. Shundan keyin shaharni butun respublika bilan avtomobil yo‘llari orqali bog‘lash qaroriga kelindi.' },
+        { year:'1933',
+          url:'https://asiaplus.news/wp-content/uploads/2026/03/Foto-3-13-840bdefa.jpg',
+          title:'Qurilishning boshlanishi',
+          text:'Yo‘l o‘tkazishga birinchi urinishlar 1929-yilga borib taqaladi, asosiy ishlar esa 1933-yil mayida boshlandi. Qurilishga yuk mashinalari, greyderlar, katoklar va boshqa yo‘l texnikasi keltirildi, mamlakatning turli burchaklaridan yuzlab ishchi, o‘nlab texnik va muhandis yig‘ildi.' },
+        { year:'1933–1935',
+          url:'https://asiaplus.news/wp-content/uploads/2026/03/Foto-5-9db36a92.jpg',
+          title:'Uch tizma va portlatish ishlari',
+          text:'Trassa Hisor, Zarafshon va Turkiston tizmalarini kesib o‘tdi. Yo‘l uchun 3,5 million kub metrgacha tog‘ jinsi olib tashlandi, shundan 2,5 milliongachasi portlatish yo‘li bilan. Faqat shimoliy uchastkada 350 000 kilogramm portlovchi modda sarflandi.' },
+        { year:'1934',
+          url:'https://asiaplus.news/wp-content/uploads/2026/03/Foto-6-12-6e5b4241.jpg',
+          title:'Daralar va qoyalar',
+          text:'Eng og‘ir ishlar dara va qoyalarda bo‘ldi: burg‘ulovchilar 100 metrgacha chuqurlikdagi jarlik ustida osilib ishlashga majbur edi. Sovuq, bo‘ron va yozgi jaziramada tojik, rus, o‘zbek, tatar, qirg‘iz va ukrain ishchilari birga mehnat qildi.' },
+        { year:'1935',
+          url:'https://asiaplus.news/wp-content/uploads/2026/03/Foto-7-10-7ac89bd5.jpg',
+          title:'Muddatdan ikki oy oldin',
+          text:'280 kilometrlik Stalinobod — O‘ratepa yo‘li rejadagi muddatdan ikki oy oldin topshirildi. U respublika markazini shimoliy tumanlar bilan bog‘lab, avvalgi aylanma yo‘lni 1000 kilometrga qisqartirdi.' }
+      ]
+    }
+  };
+
+  /* =======================================================================
+     1b. TARJIMA — sahifa tili ?lang orqali tanlanadi (uz / ru / en).
+        Uzbekcha — asosiy til; ru/en tanlansa matnlar shu jadvaldan olinadi.
+     ======================================================================= */
+  const SR_LANG = (function () {
+    var p = new URLSearchParams(location.search).get('lang');
+    return (p === 'ru' || p === 'en') ? p : 'uz';
+  })();
+
+  const SR_TR = {"hero_eyebrow":{"ru":"Интерактивная визитка-презентация","en":"Interactive presentation card"},"hero_title":{"ru":"ВЕЛИКИЙ ШЁЛКОВЫЙ ПУТЬ","en":"THE GREAT SILK ROAD"},"hero_sub":{"ru":"Первая международная транспортно-торговая сеть","en":"The first international transport and trade network"},"hero_text":{"ru":"Великий шёлковый путь — первая в истории международная транспортно-торговая сеть, обеспечивавшая обмен товарами, экономические связи, распространение знаний, технологий и культурное взаимодействие между Востоком и Западом.","en":"The Great Silk Road was the first international transport and trade network in history, enabling commerce, economic ties, and the exchange of knowledge, technology, and culture between East and West."},"btn_start":{"ru":"НАЧАТЬ ПУТЕШЕСТВИЕ ПО ДОРОГЕ","en":"BEGIN THE JOURNEY ALONG THE ROAD"},"btn_replay":{"ru":"Прорисовать маршрут заново","en":"Redraw the route"},"audio_on":{"ru":"Звук: включён","en":"Sound: on"},"audio_off":{"ru":"Звук: выключен","en":"Sound: off"},"audio_note":{"ru":"Звук воспроизводится только по вашему нажатию: верблюд, конь, караванный колокольчик, вода и ветер.","en":"Sound plays only when you tap: camel, horse, caravan bell, water, and wind."},"map_eyebrow":{"ru":"Этап 2 · Маршрут","en":"Step 2 · Route"},"map_title":{"ru":"Города вдоль пути","en":"Cities along the road"},"map_lead":{"ru":"Проследите путь от Чанъаня до Рима шаг за шагом. Нажмите на точку или используйте кнопки <span class=\"silk-road-lead-strong\">Назад</span> и <span class=\"silk-road-lead-strong\">Далее</span>.","en":"Follow the road from Chang'an to Rome step by step. Tap a point or use the <span class=\"silk-road-lead-strong\">Previous</span> and <span class=\"silk-road-lead-strong\">Next</span> buttons."},"btn_prev":{"ru":"Назад","en":"Previous"},"btn_next":{"ru":"Далее","en":"Next"},"map_hint":{"ru":"Нажмите на точку · проведите влево-вправо · клавиши ← →","en":"Tap a point · swipe left-right · ← → keys"},"feat_eyebrow":{"ru":"Этап 3 · Задачи","en":"Step 3 · Functions"},"feat_title":{"ru":"Что связывал путь","en":"What the road connected"},"feat_lead":{"ru":"Выберите одно из четырёх направлений — ниже откроется подробная информация.","en":"Choose one of the four directions — detailed information will open below."},"metr_eyebrow":{"ru":"Этап 4 · Цифры","en":"Step 4 · Figures"},"metr_title":{"ru":"Технические показатели","en":"Technical indicators"},"metr_lead":{"ru":"Когда карточки появляются на экране, числа отсчитываются от нуля до реального значения.","en":"When the cards enter the screen, the numbers count up from zero to their actual values."},"surf_eyebrow":{"ru":"Этап 5 · Покрытие","en":"Step 5 · Surface"},"surf_title":{"ru":"Разрез дорожного покрытия","en":"Cross-section of the road surface"},"surf_lead":{"ru":"Выберите тип покрытия — изменятся разрез и условия дороги для транспорта.","en":"Choose a surface type — the cross-section and the road's conditions for traffic will change."},"day_eyebrow":{"ru":"Этап 6 · Караван","en":"Step 6 · Caravan"},"day_title":{"ru":"Один день каравана","en":"A day in the life of a caravan"},"day_lead":{"ru":"Дневной переход каравана составлял в среднем 25–40 км. Последовательно просмотрите этапы.","en":"A caravan covered on average 25–40 km per day. Go through the stages one by one."},"day_prev":{"ru":"Предыдущий этап","en":"Previous stage"},"day_next":{"ru":"Следующий этап","en":"Next stage"},"day_hint":{"ru":"Дневной переход — 25–40 км","en":"A day's journey — 25–40 km"},"eng_eyebrow":{"ru":"Этап 7 · Инженерия","en":"Step 7 · Engineering"},"eng_title":{"ru":"Инженерно-технологические особенности","en":"Engineering and technological features"},"eng_lead":{"ru":"Нажмите на карточку — откроется расширенная панель с чертежом. Для закрытия также работает клавиша Escape.","en":"Tap a card — an expanded panel with a diagram will open. The Escape key also closes it."},"eng_hint":{"ru":"На мобильном устройстве проведите по карточкам влево","en":"On a mobile device, swipe the cards to the left"},"chain_eyebrow":{"ru":"Этап 8 · Организация","en":"Step 8 · Organization"},"chain_title":{"ru":"Принципы организации движения","en":"Principles of organizing traffic"},"chain_lead":{"ru":"Нажмите на каждое звено цепи — откроется пояснение.","en":"Tap each link of the chain — an explanation will open."},"legacy_eyebrow":{"ru":"Этап 9 · Наследие","en":"Step 9 · Legacy"},"legacy_title":{"ru":"Значение и наследие","en":"Significance and legacy"},"legacy_lead":{"ru":"Выберите одно из пяти направлений.","en":"Choose one of the five directions."},"final_text":{"ru":"Великий шёлковый путь — это не только дорога торговцев. Это путь прогресса, знаний и взаимопонимания, тысячелетиями связывавший цивилизации.","en":"The Great Silk Road was not merely a road of merchants. It was a path of progress, knowledge, and mutual understanding that connected civilizations for millennia."},"btn_final":{"ru":"От исторического пути к современной магистрали","en":"From a historic road to a modern highway"},"btn_restart":{"ru":"Вернуться к началу","en":"Back to the start"},"btn_close":{"ru":"Закрыть","en":"Close"},"album_auto":{"ru":"Автоматический показ","en":"Automatic slideshow"},"album_stop":{"ru":"Остановить","en":"Stop"},"cities":[{"name":{"ru":"Чанъань","en":"Chang'an"},"region":{"ru":"Сиань, Китай","en":"Xi'an, China"},"text":{"ru":"Восточная начальная точка Великого шёлкового пути. Отсюда караваны, гружённые шёлком, керамикой и бумагой, отправлялись на запад.","en":"The eastern starting point of the Great Silk Road. From here caravans loaded with silk, ceramics, and paper set out to the west."},"tags":[{"ru":"Начальная точка","en":"Starting point"},{"ru":"Шёлковые рынки","en":"Silk markets"}]},{"name":{"ru":"Дуньхуан","en":"Dunhuang"},"region":{"ru":"Китай","en":"China"},"text":{"ru":"Главная остановка на границе пустыни. Здесь караваны запасались водой, продовольствием и брали нового проводника.","en":"The main stopping point at the edge of the desert. Here caravans took on water, provisions, and a new guide."},"tags":[{"ru":"Врата пустыни","en":"Desert gateway"},{"ru":"Караван-сараи","en":"Caravanserais"}]},{"name":{"ru":"Турфан","en":"Turfan"},"region":{"ru":"Восточный Туркестан","en":"East Turkestan"},"text":{"ru":"Город оазисов. Благодаря подземным водным сооружениям земледелие и торговля процветали даже в засушливой местности.","en":"A city of oases. Thanks to underground water systems, farming and trade flourished even in this arid region."},"tags":[{"ru":"Оазис","en":"Oasis"},{"ru":"Водные сооружения","en":"Water systems"}]},{"name":{"ru":"Кашгар","en":"Kashgar"},"region":{"ru":"Восточный Туркестан","en":"East Turkestan"},"text":{"ru":"Перекрёсток, где сходились северное и южное направления. Важнейший рынок перед выходом на горные перевалы.","en":"The crossroads where the northern and southern routes met. The most important market before the climb to the mountain passes."},"tags":[{"ru":"Перекрёсток","en":"Crossroads"},{"ru":"Перед перевалом","en":"Before the pass"}]},{"name":{"ru":"Самарканд","en":"Samarkand"},"region":{"ru":"Центральная Азия","en":"Central Asia"},"text":{"ru":"Самарканд был одним из важнейших центров торговли, науки, ремёсел и культуры Центральной Азии на Великом шёлковом пути.","en":"Samarkand was one of the most important centres of trade, science, craftsmanship, and culture in Central Asia along the Great Silk Road."},"tags":[{"ru":"Торговый центр","en":"Trade centre"},{"ru":"Наука","en":"Science"},{"ru":"Ремёсла","en":"Craftsmanship"}]},{"name":{"ru":"Персия","en":"Persia"},"region":{"ru":"Иранское нагорье","en":"Iranian Plateau"},"text":{"ru":"Западная ветвь караванных путей. Вдоль дороги располагались сардобы, караван-сараи и таможенные пункты.","en":"The western branch of the caravan routes. Along the road stood covered water cisterns (sardobas), caravanserais, and customs posts."},"tags":[{"ru":"Сардобы","en":"Sardobas"},{"ru":"Таможня","en":"Customs"}]},{"name":{"ru":"Антиохия","en":"Antioch"},"region":{"ru":"Средиземноморье","en":"Mediterranean"},"text":{"ru":"Точка соединения сухопутного пути с морской торговлей. Здесь грузы перегружались на корабли.","en":"The point where the overland route connected to sea trade. Here goods were loaded onto ships."},"tags":[{"ru":"Порт","en":"Port"},{"ru":"Перегрузка","en":"Transhipment"}]},{"name":{"ru":"Константинополь","en":"Constantinople"},"region":{"ru":"Босфор","en":"Bosphorus"},"text":{"ru":"Главные врата между Востоком и Западом. Здесь регулировались торговые правила, пошлины и денежное обращение.","en":"The main gateway between East and West. Here trade rules, duties, and currency circulation were regulated."},"tags":[{"ru":"Город-врата","en":"Gateway city"},{"ru":"Торговые правила","en":"Trade rules"}]},{"name":{"ru":"Рим","en":"Rome"},"region":{"ru":"Европа","en":"Europe"},"text":{"ru":"Западная конечная точка. Сюда доходили товары Востока — шёлк, пряности и драгоценности.","en":"The western terminus. The goods of the East — silk, spices, and precious items — reached this place."},"tags":[{"ru":"Конечная точка","en":"Terminus"},{"ru":"Рынок шёлка","en":"Silk market"}]}],"features":[{"name":{"ru":"Торговля","en":"Trade"},"tagline":{"ru":"Обмен товарами и богатствами","en":"Exchange of goods and wealth"},"text":{"ru":"Шёлк, пряности, драгоценные металлы, ремесленные изделия, стекло, керамика и другие товары перевозились между Востоком и Западом.","en":"Silk, spices, precious metals, craft goods, glass, ceramics, and other wares were carried between East and West."}},{"name":{"ru":"Культура","en":"Culture"},"tagline":{"ru":"Обмен знаниями, религиями и идеями","en":"Exchange of knowledge, religions, and ideas"},"text":{"ru":"По Великому шёлковому пути языки, обычаи, искусство, религиозные учения и культурные ценности распространялись на обширных территориях.","en":"Along the Great Silk Road, languages, customs, art, religious teachings, and cultural values spread across vast territories."}},{"name":{"ru":"Технологии","en":"Technology"},"tagline":{"ru":"Распространение инноваций","en":"The spread of innovation"},"text":{"ru":"Технологии производства бумаги, обработки металла, орошения, строительства, навигации и транспорта достигали разных регионов.","en":"Technologies of papermaking, metalworking, irrigation, construction, navigation, and transport reached various regions."}},{"name":{"ru":"Люди","en":"People"},"tagline":{"ru":"Общение и взаимопонимание между цивилизациями","en":"Communication and mutual understanding between civilizations"},"text":{"ru":"Торговцы, путешественники, учёные, послы и ремесленники укрепляли связи между народами.","en":"Merchants, travellers, scholars, envoys, and artisans strengthened the ties between peoples."}}],"metrics":[{"label":{"ru":"Общая протяжённость","en":"Total length"},"unit":{"ru":"км","en":"km"},"note":{"ru":"Более 8 000 км","en":"More than 8,000 km"}},{"label":{"ru":"С учётом ответвлений","en":"Including branches"},"unit":{"ru":"км","en":"km"},"note":{"ru":"Свыше 12 000 км","en":"Over 12,000 km"}},{"label":{"ru":"Ширина дороги","en":"Road width"},"unit":{"ru":"метр","en":"metres"},"note":{"ru":"В зависимости от региона, интенсивности движения и назначения участка дороги","en":"Depending on the region, traffic intensity, and the function of the road section"}},{"label":{"ru":"Средняя скорость каравана","en":"Average caravan speed"},"unit":{"ru":"км","en":"km"},"note":{"ru":"В сутки","en":"Per day"}},{"label":{"ru":"Расстояние между караван-сараями","en":"Distance between caravanserais"},"unit":{"ru":"км","en":"km"},"note":{"ru":"Дневной переход","en":"A day's journey"}},{"label":{"ru":"Расстояние между пунктами водоснабжения","en":"Distance between water points"},"unit":{"ru":"км","en":"km"},"note":{"ru":"В засушливых районах","en":"In arid regions"}},{"label":{"ru":"Продолжительность пути от Китая до Центральной Азии","en":"Duration of the journey from China to Central Asia"},"unit":{"ru":"месяц","en":"months"},"note":{"ru":"Полное караванное путешествие","en":"A complete caravan journey"}}],"surfaces":[{"name":{"ru":"Естественный грунт","en":"Natural ground"},"text":{"ru":"Естественная поверхность земли использовалась без какого-либо покрытия. Маршрут сформировался в результате многолетнего движения караванов.","en":"The natural ground surface was used without any paving. The route took shape through many years of caravan traffic."},"effect":{"ru":"В сухой сезон — быстрое движение, а после дождя грунт размягчался, и скорость каравана падала.","en":"In the dry season, travel was fast; after rain the ground softened and the caravan's pace slowed."}},{"name":{"ru":"Уплотнённый грунт","en":"Compacted earth"},"text":{"ru":"Участок дороги выравнивался и уплотнялся под тяжестью грузов. По краям делался небольшой уклон для отвода воды.","en":"The road section was levelled and compacted under the weight of loads. A slight slope was made along the edges to drain water."},"effect":{"ru":"Создавал устойчивую поверхность, удобную для колёсных повозок и тяжёлых грузов.","en":"It created a stable surface, convenient for wheeled carts and heavy loads."}},{"name":{"ru":"Гравий","en":"Gravel"},"text":{"ru":"Поверх грунта укладывался слой мелкого камня и гравия. Этот слой пропускал воду и защищал дорогу от размокания.","en":"A layer of small stones and gravel was laid over the earth. This layer let water through and protected the road from turning to mud."},"effect":{"ru":"Позволял продолжать движение даже в дождливый сезон.","en":"It allowed traffic to continue even in the rainy season."}},{"name":{"ru":"Дорога с каменным покрытием","en":"Stone-paved road"},"text":{"ru":"Въезды в города, рыночные площади и быстро изнашивающиеся участки мостились камнем.","en":"City entrances, market squares, and rapidly wearing sections were paved with stone."},"effect":{"ru":"Самое прочное покрытие: выдерживало тяжёлые грузы и интенсивное движение, а потребность в ремонте снижалась.","en":"The most durable surface: it withstood heavy loads and dense traffic, and reduced the need for repairs."}},{"name":{"ru":"Мосты и перевальные дороги","en":"Bridge and pass roads"},"text":{"ru":"На речных переправах строились мосты, на горных склонах — подпорные стены и вырубленные в скале тропы.","en":"Bridges were built at river crossings, and retaining walls and paths carved into the rock were made on mountain slopes."},"effect":{"ru":"Самые сложные участки: движение замедлялось, но дорога оставалась открытой круглый год.","en":"The most difficult sections: traffic slowed, but the road stayed open all year round."}}],"day":[{"title":{"ru":"Выход из караван-сарая","en":"Departure from the caravanserai"},"time":{"ru":"Рассвет","en":"Dawn"},"text":{"ru":"Караван выходил в путь на рассвете. В прохладном воздухе верблюды меньше уставали, и дневное расстояние преодолевалось легче.","en":"The caravan set out at dawn. In the cool air the camels tired less, and the day's distance was covered more easily."}},{"title":{"ru":"Определение маршрута","en":"Setting the route"},"time":{"ru":"Утро","en":"Morning"},"text":{"ru":"Проводник определял направление по башням, крепостям и природным ориентирам. В зависимости от сезона выбирался запасной путь.","en":"The guide set the direction by towers, fortresses, and natural landmarks. Depending on the season, an alternative route was chosen."}},{"title":{"ru":"Проверка грузов","en":"Checking the loads"},"time":{"ru":"День","en":"Daytime"},"text":{"ru":"Во время остановки проверялись крепления груза, сёдла и состояние верблюдов. Вес груза перераспределялся.","en":"During the halt, the load fastenings, saddles, and the condition of the camels were checked. The weight of the cargo was redistributed."}},{"title":{"ru":"Дневной переход 25–40 км","en":"Covering 25–40 km for the day"},"time":{"ru":"Полдень","en":"Midday"},"text":{"ru":"Дневной переход каравана составлял в среднем 25–40 км. Темп движения задавался по самому медленному верблюду.","en":"A caravan covered on average 25–40 km per day. The pace was set by the slowest camel."}},{"title":{"ru":"Остановка у пункта водоснабжения","en":"Halt at a water point"},"time":{"ru":"Предвечерье","en":"Late afternoon"},"text":{"ru":"У колодца или сардобы пополнялся запас воды. В засушливых районах такие пункты располагались через каждые 10–20 км.","en":"The water supply was replenished at a well or sardoba. In arid regions such points were located every 10–20 km."}},{"title":{"ru":"Прохождение сторожевого поста","en":"Passing a guard post"},"time":{"ru":"Вечер","en":"Evening"},"text":{"ru":"На гарнизонном или таможенном пункте караван проходил регистрацию, проверялись грузовые документы и налоги.","en":"At a garrison or customs post, the caravan was registered, and its cargo documents and taxes were checked."}},{"title":{"ru":"Прибытие в следующий караван-сарай","en":"Arrival at the next caravanserai"},"time":{"ru":"Поздний вечер","en":"Late evening"},"text":{"ru":"В конце дня караван входил в следующий караван-сарай. Здесь были места для отдыха, конюшня, склад и рынок.","en":"At the end of the day the caravan entered the next caravanserai. Here there were places to rest, a stable, a storehouse, and a market."}}],"engineering":[{"title":{"ru":"Сеть маршрутов","en":"Network of routes"},"text":{"ru":"В зависимости от сезона, климата и политической обстановки выбирались основные и запасные маршруты.","en":"Depending on the season, climate, and political situation, main and alternative routes were chosen."}},{"title":{"ru":"Инженерные сооружения","en":"Engineering structures"},"text":{"ru":"Строились мосты, переправы, подпорные стены, перевальные дороги и укреплённые горные тропы.","en":"Bridges, crossings, retaining walls, pass roads, and reinforced mountain paths were built."}},{"title":{"ru":"Дорожная инфраструктура","en":"Road infrastructure"},"text":{"ru":"Создавались караван-сараи, склады, конюшни, рынки, ремесленные мастерские и места для отдыха.","en":"Caravanserais, storehouses, stables, markets, craft workshops, and resting places were established."}},{"title":{"ru":"Навигация","en":"Navigation"},"text":{"ru":"Направление определялось по башням, крепостям, перевалам, звёздам и природным ориентирам.","en":"Direction was determined by towers, fortresses, passes, stars, and natural landmarks."}},{"title":{"ru":"Логистика перевозок","en":"Transport logistics"},"text":{"ru":"Использовались верблюды, лошади и мулы. Организовывались караваны, распределялись грузы и определялся график движения.","en":"Camels, horses, and mules were used. Caravans were organized, loads distributed, and a movement schedule set."}},{"title":{"ru":"Безопасность","en":"Security"},"text":{"ru":"Действовали гарнизоны, сторожевые посты, таможенные пункты и сопровождение караванов.","en":"Garrisons, guard posts, customs stations, and caravan escorts were in operation."}},{"title":{"ru":"Инженерное обеспечение","en":"Engineering support"},"text":{"ru":"Вдоль маршрутов возводились колодцы, сардобы, водохранилища и ирригационные сооружения.","en":"Wells, sardobas, reservoirs, and irrigation structures were built along the routes."}}],"chain":[{"label":{"ru":"ДОРОГА","en":"THE ROAD"},"text":{"ru":"Маршрут выбирался с учётом рельефа: проходил по природным территориям с минимальными земляными работами, избегая крутых подъёмов.","en":"The route was chosen to suit the terrain: it passed through natural areas with minimal earthworks, avoiding steep climbs."}},{"label":{"ru":"ВОДА","en":"WATER"},"text":{"ru":"Через каждые 10–20 км располагался колодец или сардоба. Запас воды был главным условием, определявшим маршрут каравана.","en":"Every 10–20 km there was a well or sardoba. Water supply was the key condition that determined a caravan's route."}},{"label":{"ru":"ОТДЫХ","en":"REST"},"text":{"ru":"Караван-сараи строились на расстоянии дневного перехода — 25–40 км. Они служили местом отдыха, складом и рынком.","en":"Caravanserais were built a day's journey apart — 25–40 km. They served as places of rest, storehouses, and markets."}},{"label":{"ru":"ОХРАНА","en":"SECURITY"},"text":{"ru":"Гарнизоны и сторожевые посты обеспечивали безопасность дороги, караваны сопровождались.","en":"Garrisons and guard posts ensured the safety of the road, and caravans were escorted."}},{"label":{"ru":"ТОРГОВЛЯ","en":"TRADE"},"text":{"ru":"Вдоль дороги располагались рынки и таможенные пункты. Часть груза продавалась и заменялась новыми товарами.","en":"Markets and customs posts were located along the road. Part of the cargo was sold and replaced with new goods."}},{"label":{"ru":"РЕМОНТ","en":"REPAIR"},"text":{"ru":"В мастерских ремонтировались сёдла, повозки, подковы и грузовое снаряжение. Размытые участки дороги восстанавливались.","en":"In workshops, saddles, carts, horseshoes, and cargo gear were repaired. Washed-out sections of the road were restored."}}],"principles":[{"ru":"Дневной переход — 25–40 км","en":"A day's journey — 25–40 km"},{"ru":"Регулярные пункты отдыха","en":"Regular resting points"},{"ru":"Основные и запасные маршруты","en":"Main and alternative routes"},{"ru":"Инфраструктура полного цикла","en":"Full-cycle infrastructure"},{"ru":"Приспособление дорог к рельефу","en":"Adapting the roads to the terrain"},{"ru":"Прохождение по природным территориям с минимальными земляными работами","en":"Passing through natural areas with minimal earthworks"}],"legacy":[{"name":{"ru":"Развитие торговли и экономики","en":"The development of trade and the economy"},"text":{"ru":"Постоянный поток торговли связывал экономики регионов, формировались денежное обращение, таможенная и договорная практика.","en":"A constant flow of trade linked the economies of regions, and currency circulation, customs, and contractual practices took shape."}},{"name":{"ru":"Рост городов и становление цивилизаций","en":"The growth of cities and the formation of civilizations"},"text":{"ru":"Вдоль пути расширялись города: строились рынки, ремесленные кварталы, караван-сараи и водные сооружения.","en":"Cities expanded along the road: markets, craft quarters, caravanserais, and water systems were built."}},{"name":{"ru":"Обмен знаниями, технологиями и культурой","en":"The exchange of knowledge, technology, and culture"},"text":{"ru":"Знания в области бумаги, астрономии, медицины, архитектуры и орошения передавались из одного региона в другой.","en":"Knowledge of paper, astronomy, medicine, architecture, and irrigation passed from one region to another."}},{"name":{"ru":"Единство народов и цивилизаций","en":"The unity of peoples and civilizations"},"text":{"ru":"Народы разных языков и вероисповеданий сотрудничали вдоль одного пути, укреплялось взаимопонимание.","en":"Peoples of different languages and faiths cooperated along a single road, and mutual understanding grew stronger."}},{"name":{"ru":"Наследие дорог для будущих поколений","en":"A legacy of roads for future generations"},"text":{"ru":"Исторические маршруты стали основой для современных транспортных коридоров — история дороги продолжается в сегодняшних магистралях.","en":"The historic routes became the foundation for modern transport corridors — the road's history continues in today's highways."}}],"album":{"credit":{"ru":"Фотографии из Центрального государственного архива Республики Таджикистан и личного архива автора.","en":"Photographs from the Central State Archive of the Republic of Tajikistan and the author's personal archive."},"sourceLabel":{"ru":"Источник: Asia-Plus, автор Гафур Шерматов, 2020","en":"Source: Asia-Plus, author Gafur Shermatov, 2020"},"photos":[{"year":{"ru":"1935","en":"1935"},"title":{"ru":"Дорога, связавшая две столицы","en":"The road that linked two capitals"},"text":{"ru":"20 августа 1935 года было открыто полное движение по дороге между Душанбе (в то время носившим название Сталинабад) и Ура-Тюбе. В этот день две столицы республик — Душанбе и Ташкент — впервые получили прямое автомобильное сообщение.","en":"On 20 August 1935, full traffic opened on the road between Dushanbe (then named Stalinabad) and Ura-Tyube. On that day, the two republican capitals — Dushanbe and Tashkent — gained direct automobile connection for the first time."}},{"year":{"ru":"начало XX века","en":"early 20th century"},"title":{"ru":"Эпоха бездорожья","en":"The age of no roads"},"text":{"ru":"Большинство горных кишлаков большую часть года были отрезаны от внешнего мира. Летом сообщение поддерживалось лишь по узким и опасным тропам, устроенным на скалах, — оврингам.","en":"Most mountain villages were cut off from the outside world for much of the year. In summer, passage was maintained only along narrow and dangerous paths built onto the cliffs — the ovrings."}},{"year":{"ru":"1929","en":"1929"},"title":{"ru":"Пришла железная дорога, а груз остался","en":"The railway came, but the cargo stayed"},"text":{"ru":"Строительство железной дороги Термез — Душанбе было завершено, но это решило лишь часть задачи: грузы скапливались в столице, и особенно осенью и зимой их невозможно было доставить в районы. После этого было принято решение связать город со всей республикой автомобильными дорогами.","en":"Construction of the Termez–Dushanbe railway was completed, but it solved only part of the problem: cargo piled up in the capital, and especially in autumn and winter it could not be delivered to the districts. It was then decided to connect the city with the whole republic by roads."}},{"year":{"ru":"1933","en":"1933"},"title":{"ru":"Начало строительства","en":"The start of construction"},"text":{"ru":"Первые попытки проложить дорогу относятся к 1929 году, а основные работы начались в мае 1933 года. На строительство доставили грузовики, грейдеры, катки и другую дорожную технику, со всех уголков страны собрали сотни рабочих, десятки техников и инженеров.","en":"The first attempts to build the road date back to 1929, while the main work began in May 1933. Trucks, graders, rollers, and other road machinery were brought to the construction, and hundreds of workers and dozens of technicians and engineers were gathered from every corner of the country."}},{"year":{"ru":"1933–1935","en":"1933–1935"},"title":{"ru":"Три хребта и взрывные работы","en":"Three ranges and blasting work"},"text":{"ru":"Трасса пересекла Гиссарский, Зеравшанский и Туркестанский хребты. Для дороги было вынуто до 3,5 миллиона кубометров горной породы, из них до 2,5 миллиона — взрывным способом. Только на северном участке израсходовали 350 000 килограммов взрывчатых веществ.","en":"The route crossed the Hissar, Zeravshan, and Turkestan ranges. Up to 3.5 million cubic metres of rock were removed for the road, of which up to 2.5 million were by blasting. On the northern section alone, 350,000 kilograms of explosives were used."}},{"year":{"ru":"1934","en":"1934"},"title":{"ru":"Ущелья и скалы","en":"Gorges and cliffs"},"text":{"ru":"Самые тяжёлые работы велись в ущельях и на скалах: бурильщики были вынуждены работать, вися над обрывом глубиной до 100 метров. В холод, бурю и летний зной вместе трудились таджикские, русские, узбекские, татарские, киргизские и украинские рабочие.","en":"The hardest work took place in the gorges and on the cliffs: drillers were forced to work suspended over a precipice up to 100 metres deep. In cold, storms, and summer heat, Tajik, Russian, Uzbek, Tatar, Kyrgyz, and Ukrainian workers laboured side by side."}},{"year":{"ru":"1935","en":"1935"},"title":{"ru":"На два месяца раньше срока","en":"Two months ahead of schedule"},"text":{"ru":"280-километровая дорога Сталинабад — Ура-Тюбе была сдана на два месяца раньше запланированного срока. Она связала центр республики с северными районами и сократила прежний окружной путь на 1000 километров.","en":"The 280-kilometre Stalinabad–Ura-Tyube road was completed two months ahead of the planned schedule. It linked the republic's centre with the northern districts and shortened the previous roundabout route by 1,000 kilometres."}}]}};
+
+  function srPick(o, uzFallback) {
+    return (SR_LANG !== 'uz' && o && o[SR_LANG] != null) ? o[SR_LANG] : uzFallback;
+  }
+
+  const SR_UI = {
+    audio_on:   srPick(SR_TR.audio_on,   'Ovoz: yoqilgan'),
+    audio_off:  srPick(SR_TR.audio_off,  'Ovoz: o‘chirilgan'),
+    album_auto: srPick(SR_TR.album_auto, 'Avtomatik ko‘rsatish'),
+    album_stop: srPick(SR_TR.album_stop, 'To‘xtatish')
+  };
+
+  /* ma’lumot obyektidagi matnlarni tanlangan tilga ko‘chirish (render’dan oldin) */
+  (function applySilkRoadData() {
+    if (SR_LANG === 'uz') return;
+    var L = SR_LANG, D = silkRoadData, TR = SR_TR;
+    function ov(arr, tarr, fields) {
+      if (!arr || !tarr) return;
+      arr.forEach(function (item, i) {
+        var t = tarr[i]; if (!t) return;
+        fields.forEach(function (f) { if (t[f] && t[f][L] != null) item[f] = t[f][L]; });
+      });
+    }
+    ov(D.cities, TR.cities, ['name', 'region', 'text']);
+    D.cities.forEach(function (c, i) {
+      var t = TR.cities[i];
+      if (t && t.tags) c.tags = t.tags.map(function (tg) { return (tg && tg[L]) || ''; });
+    });
+    ov(D.features, TR.features, ['name', 'tagline', 'text']);
+    ov(D.metrics, TR.metrics, ['label', 'unit', 'note']);
+    ov(D.surfaces, TR.surfaces, ['name', 'text', 'effect']);
+    ov(D.day, TR.day, ['title', 'time', 'text']);
+    ov(D.engineering, TR.engineering, ['title', 'text']);
+    ov(D.chain, TR.chain, ['label', 'text']);
+    ov(D.legacy, TR.legacy, ['name', 'text']);
+    if (TR.principles) D.principles = D.principles.map(function (p, i) {
+      var t = TR.principles[i]; return (t && t[L]) || p;
+    });
+    if (TR.album) {
+      if (TR.album.credit && TR.album.credit[L]) D.album.credit = TR.album.credit[L];
+      if (TR.album.sourceLabel && TR.album.sourceLabel[L]) D.album.sourceLabel = TR.album.sourceLabel[L];
+      ov(D.album.photos, TR.album.photos, ['year', 'title', 'text']);
+    }
+  })();
+
+  /* statik HTML matnlarini mavjud o‘zbekcha matnga qarab almashtirish */
+  (function applySilkRoadStatic() {
+    if (SR_LANG === 'uz') return;
+    var L = SR_LANG;
+    function norm(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
+    var map = {};
+    map[norm('Interaktiv vizitka-taqdimot')] = SR_TR.hero_eyebrow;
+    map[norm('BUYUK IPAK YO‘LI')] = SR_TR.hero_title;
+    map[norm('Birinchi xalqaro transport-savdo tarmog‘i')] = SR_TR.hero_sub;
+    map[norm('Buyuk Ipak yo‘li — tarixdagi ilk xalqaro transport-savdo tarmog‘i bo‘lib, Sharq va G‘arb o‘rtasidagi savdo, iqtisodiyot, bilim, texnologiya va madaniy almashinuvni ta’minlagan.')] = SR_TR.hero_text;
+    map[norm('YO‘L BO‘YLAB SAYOHATNI BOSHLASH')] = SR_TR.btn_start;
+    map[norm('Marshrutni qayta chizish')] = SR_TR.btn_replay;
+    map[norm('Ovoz: yoqilgan')] = SR_TR.audio_on;
+    map[norm('Ovoz faqat siz bosganingizda eshitiladi: tuya, ot, karvon qo‘ng‘irog‘i, suv va shamol.')] = SR_TR.audio_note;
+    map[norm('2-bosqich · Marshrut')] = SR_TR.map_eyebrow;
+    map[norm('Yo‘l bo‘ylab shaharlar')] = SR_TR.map_title;
+    map[norm('Oldingi')] = SR_TR.btn_prev;
+    map[norm('Keyingi')] = SR_TR.btn_next;
+    map[norm('Nuqtani bosing · chapga-o‘ngga suring · ← → tugmalari')] = SR_TR.map_hint;
+    map[norm('3-bosqich · Vazifalar')] = SR_TR.feat_eyebrow;
+    map[norm('Yo‘l nimani bog‘lagan')] = SR_TR.feat_title;
+    map[norm('To‘rtta yo‘nalishdan birini tanlang — quyida batafsil ma’lumot ochiladi.')] = SR_TR.feat_lead;
+    map[norm('4-bosqich · Raqamlar')] = SR_TR.metr_eyebrow;
+    map[norm('Texnik ko‘rsatkichlar')] = SR_TR.metr_title;
+    map[norm('Kartochkalar ekranga kirganda raqamlar noldan haqiqiy qiymatgacha sanaladi.')] = SR_TR.metr_lead;
+    map[norm('5-bosqich · Qoplama')] = SR_TR.surf_eyebrow;
+    map[norm('Yo‘l qoplamasining kesimi')] = SR_TR.surf_title;
+    map[norm('Qoplama turini tanlang — kesim va yo‘lning transport uchun sharoiti o‘zgaradi.')] = SR_TR.surf_lead;
+    map[norm('6-bosqich · Karvon')] = SR_TR.day_eyebrow;
+    map[norm('Karvonning bir kuni')] = SR_TR.day_title;
+    map[norm('Karvonning bir kunlik yo‘li o‘rtacha 25–40 km bo‘lgan. Bosqichlarni ketma-ket ko‘rib chiqing.')] = SR_TR.day_lead;
+    map[norm('Oldingi bosqich')] = SR_TR.day_prev;
+    map[norm('Keyingi bosqich')] = SR_TR.day_next;
+    map[norm('Bir kunlik yo‘l — 25–40 km')] = SR_TR.day_hint;
+    map[norm('7-bosqich · Muhandislik')] = SR_TR.eng_eyebrow;
+    map[norm('Muhandislik-texnologik xususiyatlar')] = SR_TR.eng_title;
+    map[norm('Kartochkani bosing — kengaytirilgan panel va chizma ochiladi. Yopish uchun Escape tugmasi ham ishlaydi.')] = SR_TR.eng_lead;
+    map[norm('Mobil qurilmada kartochkalarni chapga suring')] = SR_TR.eng_hint;
+    map[norm('8-bosqich · Tashkil etish')] = SR_TR.chain_eyebrow;
+    map[norm('Harakatni tashkil etish tamoyillari')] = SR_TR.chain_title;
+    map[norm('Zanjirning har bir bo‘g‘inini bosing — tushuntirish ochiladi.')] = SR_TR.chain_lead;
+    map[norm('9-bosqich · Meros')] = SR_TR.legacy_eyebrow;
+    map[norm('Ahamiyati va merosi')] = SR_TR.legacy_title;
+    map[norm('Beshta yo‘nalishdan birini tanlang.')] = SR_TR.legacy_lead;
+    map[norm('Buyuk Ipak yo‘li — bu faqat savdogarlar yo‘li emas. Bu taraqqiyot, bilim va o‘zaro anglashuv yo‘li bo‘lib, ming yillar davomida sivilizatsiyalarni bog‘lagan.')] = SR_TR.final_text;
+    map[norm('Tarixiy yo‘ldan zamonaviy magistralgacha')] = SR_TR.btn_final;
+    map[norm('Boshiga qaytish')] = SR_TR.btn_restart;
+    map[norm('Yopish')] = SR_TR.btn_close;
+
+    var nodes = root.querySelectorAll('span, h1, h2, h3, p, button');
+    nodes.forEach(function (el) {
+      if (el.children.length) return;               /* faqat matnli leaf elementlar */
+      var tr = map[norm(el.textContent)];
+      if (tr && tr[L]) el.textContent = tr[L];
+    });
+
+    var ml = document.getElementById('silk-road-map-lead');
+    if (ml && SR_TR.map_lead[L]) ml.innerHTML = SR_TR.map_lead[L];
+  })();
+
+  /* =======================================================================
+     2. OVOZ — Web Audio API orqali sintez qilinadi (tashqi fayl yo‘q).
+        Audio hech qachon avtomatik ishga tushmaydi: AudioContext faqat
+        foydalanuvchining birinchi bosishidan keyin yaratiladi.
+     ======================================================================= */
+  const silkRoadAudio = (() => {
+    let ctx = null;
+    let enabled = true;
+    let master = null;
+
+    function ready() {
+      if (!enabled) return null;
+      if (!ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) { enabled = false; return null; }
+        try {
+          ctx = new AC();
+          master = ctx.createGain();
+          master.gain.value = 0.55;
+          master.connect(ctx.destination);
+        } catch (e) { enabled = false; return null; }
+      }
+      if (ctx.state === 'suspended') { ctx.resume().catch(() => {}); }
+      return ctx;
+    }
+
+    /* oq shovqin buferi — shamol, qadam va tuya nafasi uchun */
+    function noise(c, seconds) {
+      const len = Math.floor(c.sampleRate * seconds);
+      const buf = c.createBuffer(1, len, c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      return src;
+    }
+
+    function env(c, node, peak, attack, hold, release) {
+      const g = c.createGain();
+      const t = c.currentTime;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(peak, 0.0002), t + attack);
+      g.gain.setValueAtTime(Math.max(peak, 0.0002), t + attack + hold);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + attack + hold + release);
+      node.connect(g);
+      return g;
+    }
+
+    const voices = {
+      /* yengil bosish tovushi */
+      tap(c) {
+        const o = c.createOscillator(); o.type = 'sine';
+        o.frequency.setValueAtTime(760, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(380, c.currentTime + 0.09);
+        env(c, o, 0.09, 0.005, 0.01, 0.10).connect(master);
+        o.start(); o.stop(c.currentTime + 0.16);
+      },
+      /* karvon qo‘ng‘irog‘i */
+      bell(c) {
+        [1180, 1772, 2380].forEach((f, i) => {
+          const o = c.createOscillator(); o.type = i === 0 ? 'triangle' : 'sine';
+          o.frequency.value = f;
+          env(c, o, 0.12 / (i + 1), 0.004, 0.02, 0.9 - i * 0.2).connect(master);
+          o.start(); o.stop(c.currentTime + 1.1);
+        });
+      },
+      /* tuya — past bo‘g‘iq ovoz (nafas shovqini bilan) */
+      camel(c) {
+        const o = c.createOscillator(); o.type = 'sawtooth';
+        const t = c.currentTime;
+        o.frequency.setValueAtTime(150, t);
+        o.frequency.exponentialRampToValueAtTime(92, t + 0.35);
+        o.frequency.exponentialRampToValueAtTime(74, t + 0.75);
+        const lfo = c.createOscillator(); lfo.type = 'sine'; lfo.frequency.value = 13;
+        const lfoGain = c.createGain(); lfoGain.gain.value = 14;
+        lfo.connect(lfoGain); lfoGain.connect(o.frequency);
+        const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 780; lp.Q.value = 6;
+        o.connect(lp);
+        env(c, lp, 0.18, 0.06, 0.30, 0.45).connect(master);
+        const n = noise(c, 0.9);
+        const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 420; bp.Q.value = 1.2;
+        n.connect(bp);
+        env(c, bp, 0.05, 0.08, 0.25, 0.4).connect(master);
+        o.start(); lfo.start(); n.start();
+        o.stop(t + 1.0); lfo.stop(t + 1.0); n.stop(t + 1.0);
+      },
+      /* ot kishnashi */
+      horse(c) {
+        const t = c.currentTime;
+        const o = c.createOscillator(); o.type = 'sawtooth';
+        o.frequency.setValueAtTime(560, t);
+        o.frequency.exponentialRampToValueAtTime(300, t + 0.55);
+        const lfo = c.createOscillator(); lfo.type = 'sine'; lfo.frequency.value = 26;
+        const lfoGain = c.createGain(); lfoGain.gain.value = 46;
+        lfo.connect(lfoGain); lfoGain.connect(o.frequency);
+        const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1100; bp.Q.value = 2.6;
+        o.connect(bp);
+        env(c, bp, 0.13, 0.03, 0.22, 0.4).connect(master);
+        o.start(); lfo.start();
+        o.stop(t + 0.75); lfo.stop(t + 0.75);
+      },
+      /* suv tomchisi */
+      water(c) {
+        const t = c.currentTime;
+        const o = c.createOscillator(); o.type = 'sine';
+        o.frequency.setValueAtTime(1180, t);
+        o.frequency.exponentialRampToValueAtTime(320, t + 0.16);
+        env(c, o, 0.12, 0.004, 0.01, 0.22).connect(master);
+        o.start(); o.stop(t + 0.4);
+      },
+      /* qadam / tuyoq tovushi */
+      step(c) {
+        const t = c.currentTime;
+        const n = noise(c, 0.25);
+        const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 340;
+        n.connect(lp);
+        env(c, lp, 0.14, 0.004, 0.02, 0.16).connect(master);
+        n.start(); n.stop(t + 0.3);
+      },
+      /* fotoapparat zatvori */
+      shutter(c) {
+        const t = c.currentTime;
+        const n = noise(c, 0.2);
+        const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2600; bp.Q.value = 1.5;
+        n.connect(bp);
+        env(c, bp, 0.11, 0.003, 0.008, 0.07).connect(master);
+        const o = c.createOscillator(); o.type = 'square';
+        o.frequency.setValueAtTime(1500, t);
+        o.frequency.exponentialRampToValueAtTime(420, t + 0.05);
+        env(c, o, 0.05, 0.002, 0.005, 0.05).connect(master);
+        n.start(); o.start(); n.stop(t + 0.22); o.stop(t + 0.16);
+      },
+      /* plyonkaning o‘ralishi */
+      film(c) {
+        const t = c.currentTime;
+        const n = noise(c, 0.5);
+        const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 3.2;
+        bp.frequency.setValueAtTime(820, t);
+        bp.frequency.linearRampToValueAtTime(1900, t + 0.34);
+        n.connect(bp);
+        env(c, bp, 0.055, 0.04, 0.14, 0.2).connect(master);
+        n.start(); n.stop(t + 0.48);
+      },
+      /* shamol — qisqa fon tovushi */
+      wind(c) {
+        const t = c.currentTime;
+        const n = noise(c, 3.2);
+        const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 520; bp.Q.value = 0.9;
+        const lfo = c.createOscillator(); lfo.type = 'sine'; lfo.frequency.value = 0.35;
+        const lfoGain = c.createGain(); lfoGain.gain.value = 260;
+        lfo.connect(lfoGain); lfoGain.connect(bp.frequency);
+        n.connect(bp);
+        env(c, bp, 0.075, 0.9, 0.7, 1.4).connect(master);
+        n.start(); lfo.start();
+        n.stop(t + 3.1); lfo.stop(t + 3.1);
+      }
+    };
+
+    return {
+      play(name) {
+        if (!enabled) return;
+        const c = ready();
+        if (!c || !voices[name]) return;
+        try { voices[name](c); } catch (e) { /* ovoz muhim emas — xatolik jim o‘tkaziladi */ }
+      },
+      caravan() { this.play('camel'); setTimeout(() => this.play('bell'), 260); },
+      setEnabled(v) {
+        enabled = !!v;
+        if (!enabled && ctx && ctx.state === 'running') { ctx.suspend().catch(() => {}); }
+        if (enabled && ctx && ctx.state === 'suspended') { ctx.resume().catch(() => {}); }
+      },
+      isEnabled() { return enabled; }
+    };
+  })();
+
+  /* =======================================================================
+     3. UMUMIY YORDAMCHI FUNKSIYALAR
+     ======================================================================= */
+  function icon(id, cls) {
+    return '<svg class="' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#' + id + '"/></svg>';
+  }
+  function nfmt(n) {
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
+  function smoothPath(points) {
+    if (!points.length) return '';
+    let d = 'M ' + points[0][0] + ' ' + points[0][1];
+    for (let i = 1; i < points.length; i++) {
+      const p0 = points[i - 1], p1 = points[i], mx = (p0[0] + p1[0]) / 2;
+      d += ' C ' + mx + ' ' + p0[1] + ', ' + mx + ' ' + p1[1] + ', ' + p1[0] + ' ' + p1[1];
+    }
+    return d;
+  }
+  function onceVisible(el, cb, ratio) {
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { cb(); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { io.unobserve(e.target); cb(e.target); }
+      });
+    }, { threshold: ratio || 0.25 });
+    io.observe(el);
+  }
+
+  /* marshrut chizig‘ini stroke-dasharray orqali chizish;
+     chizib bo‘lgach yo‘l yana punktir ko‘rinishga qaytadi */
+  function runDraw(el, dash, dur) {
+    if (!el) return;
+    let len = 4000;
+    try { len = el.getTotalLength(); } catch (e) {}
+    if (reduceMotion.matches) {
+      el.style.transition = 'none';
+      el.style.strokeDasharray = dash;
+      el.style.strokeDashoffset = '0';
+      return;
+    }
+    el.style.transition = 'none';
+    el.style.strokeDasharray = len;
+    el.style.strokeDashoffset = len;
+    void el.getBoundingClientRect();
+    el.style.transition = 'stroke-dashoffset ' + dur + 'ms cubic-bezier(.35,.1,.2,1)';
+    el.style.strokeDashoffset = '0';
+    clearTimeout(el.silkRoadDrawTimer);
+    el.silkRoadDrawTimer = setTimeout(() => {
+      el.style.transition = 'none';
+      el.style.strokeDasharray = dash;
+      el.style.strokeDashoffset = '0';
+    }, dur + 90);
+  }
+
+  /* bo‘limlarning yumshoq paydo bo‘lishi */
+  $$('.silk-road-section').forEach((sec) => {
+    const head = sec.querySelector('.silk-road-section-head');
+    if (!head) return;
+    head.classList.add('silk-road-reveal');
+    onceVisible(head, () => head.classList.add('silk-road-in'), 0.15);
+  });
+
+  /* =======================================================================
+     4. 1-BLOK — KIRISH: marshrutning chizilishi, nuqtalar, karvon harakati
+     ======================================================================= */
+  const heroCanvas = $('#silk-road-hero-canvas');
+  const heroPath   = $('#silk-road-hero-path');
+  const heroDots   = $('#silk-road-hero-dots');
+  const heroCamel  = $('#silk-road-hero-camel-group');
+  let heroLen = 0;
+
+  function buildHero() {
+    if (!heroPath) return;
+    try { heroLen = heroPath.getTotalLength(); } catch (e) { heroLen = 1400; }
+    heroPath.style.setProperty('--silk-road-route-len', heroLen);
+
+    /* 9 ta shahar nuqtasi marshrut bo‘ylab teng taqsimlanadi */
+    try {
+      let html = '';
+      const n = silkRoadData.cities.length;
+      for (let i = 0; i < n; i++) {
+        const p = heroPath.getPointAtLength(heroLen * (i / (n - 1)));
+        const key = silkRoadData.cities[n - 1 - i].key; /* hero yo‘nalishi: o‘ngdan chapga */
+        html += '<g class="silk-road-hero-dot" style="transition-delay:' + (400 + i * 180) + 'ms">' +
+                '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (key ? 8 : 5.5) + '" ' +
+                'fill="' + (key ? '#f3d592' : '#e3b25e') + '" stroke="#0c1728" stroke-width="2"/></g>';
+      }
+      heroDots.innerHTML = html;
+    } catch (e) { /* SVG geometriyasi mavjud bo‘lmasa — asosiy kontent baribir ko‘rinadi */ }
+  }
+
+  function drawHero() {
+    if (!heroCanvas) return;
+    heroCanvas.classList.remove('silk-road-is-drawn');
+    /* reflow — animatsiyani qaytadan ishga tushirish uchun */
+    void heroCanvas.offsetWidth;
+    heroCanvas.classList.add('silk-road-is-drawn');
+    runDraw(heroPath, '10 8', 3200);
+  }
+
+  /* karvon siluetining marshrut bo‘ylab sekin harakati */
+  let heroRaf = null, heroT = 0, heroVisible = false, heroLast = 0;
+  function heroTick(ts) {
+    if (!heroVisible || reduceMotion.matches) { heroRaf = null; return; }
+    if (!heroLast) heroLast = ts;
+    const dt = Math.min(ts - heroLast, 60);
+    heroLast = ts;
+    heroT = (heroT + dt / 26000) % 1;
+    try {
+      const p = heroPath.getPointAtLength(heroLen * (1 - heroT));
+      heroCamel.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ')');
+    } catch (e) { heroRaf = null; return; }
+    heroRaf = requestAnimationFrame(heroTick);
+  }
+  function heroLoop(on) {
+    heroVisible = on;
+    if (on && !heroRaf && !reduceMotion.matches) { heroLast = 0; heroRaf = requestAnimationFrame(heroTick); }
+    if (!on && heroRaf) { cancelAnimationFrame(heroRaf); heroRaf = null; }
+  }
+
+  buildHero();
+  if ('IntersectionObserver' in window && heroCanvas) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { drawHero(); heroLoop(true); } else { heroLoop(false); }
+      });
+    }, { threshold: 0.2 });
+    io.observe(heroCanvas);
+  } else {
+    drawHero();
+  }
+
+  /* =======================================================================
+     5. 2-BLOK — INTERAKTIV XARITA
+     ======================================================================= */
+  const mapSvg     = $('#silk-road-map-svg');
+  const mapCities  = $('#silk-road-map-cities');
+  const mapStrip   = $('#silk-road-city-strip');
+  const cityCard   = $('#silk-road-city-card');
+  const mapCaravan = $('#silk-road-map-caravan');
+  const mapScroll  = $('#silk-road-map-scroll');
+  let cityIndex = 0;
+
+  function buildMap() {
+    const pts = silkRoadData.cities.map((c) => [c.x, c.y]).slice().reverse(); /* chapdan o‘ngga tekis egri */
+    const d = smoothPath(pts);
+    ['#silk-road-map-path', '#silk-road-map-path-2', '#silk-road-map-path-3'].forEach((sel) => {
+      const el = $(sel); if (el) el.setAttribute('d', d);
+    });
+    const gold = $('#silk-road-map-path-3');
+    if (gold) {
+      let len = 4000;
+      try { len = gold.getTotalLength(); } catch (e) {}
+      gold.style.setProperty('--silk-road-route-len', len);
+    }
+
+    mapCities.innerHTML = silkRoadData.cities.map((c, i) =>
+      '<g class="silk-road-city' + (c.key ? ' silk-road-city-key' : '') + '" data-index="' + i + '" ' +
+        'role="button" tabindex="0" aria-label="' + c.name + ' — ' + c.region + '">' +
+        '<circle class="silk-road-city-hit" cx="' + c.x + '" cy="' + c.y + '" r="30" fill="transparent"/>' +
+        '<circle class="silk-road-city-ring" cx="' + c.x + '" cy="' + c.y + '" r="' + (c.key ? 20 : 16) + '" fill="none" stroke="#f0d9a8" stroke-width="3"/>' +
+        '<circle class="silk-road-city-dot" cx="' + c.x + '" cy="' + c.y + '" r="' + (c.key ? 16 : 13) + '" fill="' + (c.key ? '#f3d592' : '#c9973f') + '" stroke="#0c1728" stroke-width="3"/>' +
+        (c.key
+          ? '<g class="silk-road-city-star" transform="translate(' + (c.x - 11) + ',' + (c.y - 11) + ') scale(0.92)">' +
+            '<use href="#silk-road-i-star" style="color:#0c1728"/></g>'
+          : '<text x="' + c.x + '" y="' + (c.y + 6) + '" font-family="Manrope, sans-serif" font-size="16" font-weight="800" fill="#0c1728" text-anchor="middle">' + (i + 1) + '</text>') +
+        '<text class="silk-road-city-label" x="' + c.x + '" y="' + (c.y + (c.key ? 48 : 44)) + '">' + c.name.toUpperCase() + '</text>' +
+      '</g>'
+    ).join('');
+
+    mapStrip.innerHTML = silkRoadData.cities.map((c, i) =>
+      '<button type="button" class="silk-road-chip" data-index="' + i + '" role="tab" ' +
+      'aria-selected="false" aria-label="' + (i + 1) + '-shahar: ' + c.name + '">' + (i + 1) + '. ' + c.name + '</button>'
+    ).join('');
+
+    if (mapCaravan) mapCaravan.style.transition = 'transform .85s cubic-bezier(.22,.9,.3,1), opacity .4s ease';
+  }
+
+  function renderCity(i, playSound) {
+    cityIndex = (i + silkRoadData.cities.length) % silkRoadData.cities.length;
+    const c = silkRoadData.cities[cityIndex];
+
+    $$('.silk-road-city', mapCities).forEach((g) => {
+      g.classList.toggle('silk-road-is-active', +g.dataset.index === cityIndex);
+    });
+    $$('.silk-road-chip', mapStrip).forEach((b) => {
+      const on = +b.dataset.index === cityIndex;
+      b.classList.toggle('silk-road-is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      if (on && mapStrip.scrollWidth > mapStrip.clientWidth) {
+        mapStrip.scrollTo({ left: b.offsetLeft - mapStrip.clientWidth / 2 + b.offsetWidth / 2,
+                            behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      }
+    });
+
+    if (mapCaravan) {
+      mapCaravan.style.opacity = '1';
+      mapCaravan.style.transform = 'translate(' + c.x + 'px,' + c.y + 'px)';
+    }
+
+    cityCard.classList.toggle('silk-road-is-key', !!c.key);
+    cityCard.innerHTML =
+      '<span class="silk-road-city-card-num">' + (cityIndex + 1) + '</span>' +
+      '<h3 class="silk-road-city-card-name">' + c.name + '</h3>' +
+      '<span class="silk-road-city-card-region">' + c.region.toUpperCase() + '</span>' +
+      '<p class="silk-road-city-card-text">' + c.text + '</p>' +
+      '<div class="silk-road-city-card-tags">' +
+        c.tags.map((t) => '<span class="silk-road-tag">' + t + '</span>').join('') +
+      '</div>';
+    if (!reduceMotion.matches) {
+      cityCard.classList.remove('silk-road-fade');
+      void cityCard.offsetWidth;
+      cityCard.classList.add('silk-road-fade');
+    }
+
+    /* xarita gorizontal scrollda faol shaharni ko‘rinishga olib keladi */
+    if (mapScroll && mapScroll.scrollWidth > mapScroll.clientWidth) {
+      const ratio = mapScroll.scrollWidth / 1460;
+      mapScroll.scrollTo({ left: c.x * ratio - mapScroll.clientWidth / 2,
+                           behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    }
+    if (playSound) silkRoadAudio.play(c.key ? 'camel' : 'bell');
+  }
+
+  buildMap();
+  renderCity(0, false);
+
+  /* xarita ko‘rinishga kirganda marshrut chizig‘i chiziladi */
+  onceVisible($('.silk-road-map-wrap'), () => {
+    runDraw($('#silk-road-map-path-3'), '26 20', 2600);
+  }, 0.2);
+
+  mapCities.addEventListener('click', (e) => {
+    const g = e.target.closest('.silk-road-city');
+    if (g) renderCity(+g.dataset.index, true);
+  });
+  mapCities.addEventListener('keydown', (e) => {
+    const g = e.target.closest('.silk-road-city');
+    if (!g) return;
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault(); renderCity(+g.dataset.index, true);
+    }
+  });
+  mapStrip.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-chip');
+    if (b) renderCity(+b.dataset.index, true);
+  });
+  $('#silk-road-city-prev').addEventListener('click', () => renderCity(cityIndex - 1, true));
+  $('#silk-road-city-next').addEventListener('click', () => renderCity(cityIndex + 1, true));
+
+  /* klaviatura: ← → xarita bo‘limi ichida */
+  $('#silk-road-map-section').addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); renderCity(cityIndex - 1, true); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); renderCity(cityIndex + 1, true); }
+  });
+
+  /* mobil swipe */
+  (function () {
+    let x0 = null, y0 = null;
+    const target = $('#silk-road-map-section');
+    target.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0]; x0 = t.clientX; y0 = t.clientY;
+    }, { passive: true });
+    target.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - x0, dy = t.clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+        renderCity(dx < 0 ? cityIndex + 1 : cityIndex - 1, true);
+      }
+    }, { passive: true });
+  })();
+
+  /* =======================================================================
+     6. 3-BLOK — ASOSIY VAZIFALAR
+     ======================================================================= */
+  const featureRow   = $('#silk-road-features');
+  const featurePanel = $('#silk-road-feature-panel');
+  let featureIndex = -1;
+
+  featureRow.innerHTML = silkRoadData.features.map((f, i) =>
+    '<button type="button" class="silk-road-feature" data-index="' + i + '" role="tab" aria-selected="false" ' +
+      'aria-controls="silk-road-feature-panel" aria-label="' + f.name + ' — ' + f.tagline + '">' +
+      '<svg class="silk-road-feature-arch" viewBox="0 0 160 200" aria-hidden="true">' +
+        '<use href="#silk-road-arch"/>' +
+        '<g transform="translate(56,84) scale(2)"><use href="#' + f.icon + '" style="color:#e3b25e"/></g>' +
+      '</svg>' +
+      '<span class="silk-road-feature-name">' + f.name + '</span>' +
+      '<span class="silk-road-feature-tagline">' + f.tagline + '</span>' +
+    '</button>'
+  ).join('');
+
+  function renderFeature(i) {
+    const same = featureIndex === i;
+    featureIndex = same ? -1 : i;
+
+    $$('.silk-road-feature', featureRow).forEach((b) => {
+      const on = +b.dataset.index === featureIndex;
+      b.classList.toggle('silk-road-is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    featureRow.classList.toggle('silk-road-features-dim', featureIndex >= 0);
+
+    if (featureIndex < 0) { featurePanel.hidden = true; featurePanel.innerHTML = ''; return; }
+
+    const f = silkRoadData.features[featureIndex];
+    featurePanel.hidden = false;
+    featurePanel.innerHTML =
+      icon(f.icon, 'silk-road-feature-panel-icon') +
+      '<div><h3 class="silk-road-feature-panel-title">' + f.name + '</h3>' +
+      '<p class="silk-road-feature-panel-text">' + f.text + '</p></div>';
+    if (!reduceMotion.matches) {
+      featurePanel.classList.remove('silk-road-fade');
+      void featurePanel.offsetWidth;
+      featurePanel.classList.add('silk-road-fade');
+    }
+    silkRoadAudio.play(f.sound);
+  }
+
+  featureRow.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-feature');
+    if (b) renderFeature(+b.dataset.index);
+  });
+
+  /* =======================================================================
+     7. 4-BLOK — RAQAMLARNING ANIMATSION SANALISHI (IntersectionObserver)
+     ======================================================================= */
+  const metricsWrap = $('#silk-road-metrics');
+  metricsWrap.innerHTML = silkRoadData.metrics.map((m, i) =>
+    '<div class="silk-road-card silk-road-metric" data-index="' + i + '">' +
+      icon(m.icon, 'silk-road-metric-icon') +
+      '<div>' +
+        '<span class="silk-road-metric-label">' + m.label + '</span>' +
+        '<span class="silk-road-metric-value" data-value>' +
+          '<span data-num>0</span>' +
+          '<span class="silk-road-metric-unit">' + m.unit + '</span>' +
+        '</span>' +
+        '<span class="silk-road-metric-note">' + m.note + '</span>' +
+      '</div>' +
+    '</div>'
+  ).join('');
+
+  function countUp(el, m) {
+    const numEl = el.querySelector('[data-num]');
+    const dur = reduceMotion.matches ? 0 : 1400;
+    const isRange = !!m.range;
+    const a = isRange ? m.range[0] : 0;
+    const b = isRange ? m.range[1] : m.to;
+
+    if (!dur) {
+      numEl.textContent = isRange ? nfmt(a) + '–' + nfmt(b) : nfmt(b);
+      return;
+    }
+    const start = performance.now();
+    function frame(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);           /* easeOutCubic */
+      numEl.textContent = isRange
+        ? nfmt(a * e) + '–' + nfmt(b * e)
+        : nfmt(b * e);
+      if (p < 1) requestAnimationFrame(frame);
+      else numEl.textContent = isRange ? nfmt(a) + '–' + nfmt(b) : nfmt(b);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  $$('.silk-road-metric', metricsWrap).forEach((card) => {
+    card.classList.add('silk-road-reveal');
+    onceVisible(card, () => {            /* faqat bir marta ishga tushadi */
+      card.classList.add('silk-road-in');
+      countUp(card, silkRoadData.metrics[+card.dataset.index]);
+    }, 0.35);
+  });
+
+  /* =======================================================================
+     8. 5-BLOK — YO‘L QOPLAMASI
+     ======================================================================= */
+  const surfaceList = $('#silk-road-surface-list');
+  const surfaceView = $('#silk-road-surface-view');
+  const surfaceInfo = $('#silk-road-surface-info');
+  let surfaceIndex = 0;
+
+  const surfacePatterns = {
+    dots:     'radial-gradient(circle at 12% 42%, rgba(60,42,20,.35) 0 2px, transparent 3px), radial-gradient(circle at 46% 68%, rgba(60,42,20,.3) 0 2px, transparent 3px), radial-gradient(circle at 78% 36%, rgba(60,42,20,.32) 0 2px, transparent 3px)',
+    lines:    'repeating-linear-gradient(92deg, rgba(70,50,24,.22) 0 2px, transparent 2px 26px)',
+    gravel:   'radial-gradient(circle at 18% 55%, rgba(245,238,223,.35) 0 3px, transparent 4px), radial-gradient(circle at 42% 30%, rgba(245,238,223,.28) 0 2px, transparent 3px), radial-gradient(circle at 66% 62%, rgba(245,238,223,.3) 0 3px, transparent 4px), radial-gradient(circle at 88% 40%, rgba(245,238,223,.26) 0 2px, transparent 3px)',
+    stones:   'repeating-linear-gradient(58deg, rgba(12,23,40,.3) 0 2px, transparent 2px 34px), repeating-linear-gradient(-58deg, rgba(12,23,40,.28) 0 2px, transparent 2px 34px)',
+    mountain: 'repeating-linear-gradient(115deg, rgba(12,23,40,.34) 0 3px, transparent 3px 22px)'
+  };
+
+  surfaceList.innerHTML = silkRoadData.surfaces.map((s, i) =>
+    '<button type="button" class="silk-road-surface-btn" data-index="' + i + '" role="tab" aria-selected="false" ' +
+      'aria-label="Yo‘l qoplamasi: ' + s.name + '">' +
+      '<span class="silk-road-surface-swatch" style="background:' + s.swatch + '" aria-hidden="true"></span>' +
+      '<span>' + s.name + '</span>' +
+    '</button>'
+  ).join('');
+
+  surfaceView.innerHTML = silkRoadData.surfaces.map((s, i) =>
+    '<span class="silk-road-surface-band" data-index="' + i + '" ' +
+      'style="background-image:' + surfacePatterns[s.pattern] + ',' + s.band + '"></span>'
+  ).join('') +
+  '<svg viewBox="0 0 600 200" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">' +
+    '<path d="M0 132c90-18 150 10 230-4 78-14 130 14 200 2 62-10 110 6 170-4v74H0z" fill="rgba(12,23,40,.25)"/>' +
+    '<g id="silk-road-surface-cart" transform="translate(60,0)">' +
+      '<g transform="translate(0,96) scale(.7)"><use href="#silk-road-camel-side"/></g>' +
+    '</g>' +
+  '</svg>';
+
+  function renderSurface(i, playSound) {
+    surfaceIndex = i;
+    const s = silkRoadData.surfaces[i];
+    $$('.silk-road-surface-btn', surfaceList).forEach((b) => {
+      const on = +b.dataset.index === i;
+      b.classList.toggle('silk-road-is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    $$('.silk-road-surface-band', surfaceView).forEach((b) => {
+      b.classList.toggle('silk-road-is-active', +b.dataset.index === i);
+    });
+    surfaceInfo.innerHTML =
+      '<h3 class="silk-road-surface-title">' + s.name + '</h3>' +
+      '<p class="silk-road-surface-text">' + s.text + '</p>' +
+      '<div class="silk-road-surface-effect">' + icon('silk-road-i-check') + '<span>' + s.effect + '</span></div>';
+    const cart = $('#silk-road-surface-cart');
+    if (cart) {
+      cart.style.transition = reduceMotion.matches ? 'none' : 'transform .9s cubic-bezier(.22,.9,.3,1)';
+      cart.style.transform = 'translate(' + (60 + i * 92) + 'px,0)';
+    }
+    if (playSound) silkRoadAudio.play(i === 3 ? 'step' : (i === 4 ? 'horse' : 'tap'));
+  }
+
+  surfaceList.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-surface-btn');
+    if (b) renderSurface(+b.dataset.index, true);
+  });
+  renderSurface(0, false);
+
+  /* =======================================================================
+     9. 6-BLOK — KARVONNING BIR KUNI (timeline)
+     ======================================================================= */
+  const dayWrap     = $('#silk-road-day');
+  const dayDots     = $('#silk-road-day-dots');
+  const dayCaravan  = $('#silk-road-day-caravan');
+  const dayProgress = $('#silk-road-day-progress');
+  const dayFill     = $('#silk-road-day-progress-fill');
+  let dayIndex = 0;
+
+  dayDots.innerHTML = silkRoadData.day.map((d, i) =>
+    '<button type="button" class="silk-road-day-dot" data-index="' + i + '" ' +
+      'aria-label="' + (i + 1) + '-bosqich: ' + d.title + '">' + (i + 1) + '</button>'
+  ).join('');
+  $('#silk-road-day-of').textContent = '/ ' + silkRoadData.day.length;
+
+  function renderDay(i, playSound) {
+    dayIndex = Math.max(0, Math.min(i, silkRoadData.day.length - 1));
+    const d = silkRoadData.day[dayIndex];
+
+    $('#silk-road-day-num').textContent = dayIndex + 1;
+    $('#silk-road-day-step-title').textContent = d.title;
+    $('#silk-road-day-step-text').textContent = d.text;
+    $('#silk-road-day-step-time-text').textContent = d.time;
+    $('#silk-road-day-step-time').firstElementChild.innerHTML =
+      '<use href="#' + (d.night ? 'silk-road-i-moon' : 'silk-road-i-sun') + '"/>';
+
+    dayWrap.classList.toggle('silk-road-is-night', !!d.night);
+    if (dayCaravan) {
+      dayCaravan.style.transform = 'translate(' + d.pos + 'px,0)';
+    }
+    const pct = ((dayIndex + 1) / silkRoadData.day.length) * 100;
+    dayFill.style.width = pct + '%';
+    dayProgress.setAttribute('aria-valuenow', String(dayIndex + 1));
+
+    $$('.silk-road-day-dot', dayDots).forEach((b) => {
+      b.classList.toggle('silk-road-is-active', +b.dataset.index === dayIndex);
+    });
+    $('#silk-road-day-prev').disabled = dayIndex === 0;
+    $('#silk-road-day-next').disabled = dayIndex === silkRoadData.day.length - 1;
+
+    if (playSound) silkRoadAudio.play(d.sound);
+  }
+
+  $('#silk-road-day-prev').addEventListener('click', () => renderDay(dayIndex - 1, true));
+  $('#silk-road-day-next').addEventListener('click', () => renderDay(dayIndex + 1, true));
+  dayDots.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-day-dot');
+    if (b) renderDay(+b.dataset.index, true);
+  });
+  $('#silk-road-day-section').addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); renderDay(dayIndex - 1, true); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); renderDay(dayIndex + 1, true); }
+  });
+  renderDay(0, false);
+
+  /* =======================================================================
+     10. 7-BLOK — MUHANDISLIK KARTOCHKALARI VA MODAL PANEL
+     ======================================================================= */
+  const engGrid = $('#silk-road-eng-grid');
+
+  /* har bir kartochka uchun yengil SVG illyustratsiya */
+  const engArt = {
+    network:
+      '<svg class="silk-road-modal-art" viewBox="0 0 600 260" role="img" aria-label="Asosiy va muqobil yo‘nalishlar sxemasi">' +
+      '<rect width="600" height="260" rx="12" fill="#12233c"/>' +
+      '<path d="M40 200C140 150 200 210 300 160s180 20 260-40" fill="none" stroke="#c9973f" stroke-width="6" stroke-linecap="round"/>' +
+      '<path d="M40 200C130 120 220 170 300 110s170-10 260-20" fill="none" stroke="#9fb0c8" stroke-width="4" stroke-dasharray="14 12" stroke-linecap="round"/>' +
+      '<path d="M40 200C160 200 210 240 320 210s170-30 240-60" fill="none" stroke="#6b86b0" stroke-width="4" stroke-dasharray="8 10" stroke-linecap="round"/>' +
+      '<g fill="#f3d592"><circle cx="40" cy="200" r="9"/><circle cx="300" cy="160" r="9"/><circle cx="560" cy="120" r="9"/></g>' +
+      '<text x="300" y="40" fill="#f0d9a8" font-family="Manrope,sans-serif" font-size="17" font-weight="800" text-anchor="middle">ASOSIY VA MUQOBIL YO‘NALISHLAR</text></svg>',
+    bridge:
+      '<svg class="silk-road-modal-art" viewBox="0 0 600 260" role="img" aria-label="Kamarli ko‘prik va tayanch devorlari">' +
+      '<rect width="600" height="260" rx="12" fill="#12233c"/>' +
+      '<path d="M0 210h600v14H0z" fill="#2a4265"/>' +
+      '<path d="M60 210V150h480v60" fill="none" stroke="#d8c29a" stroke-width="10"/>' +
+      '<path d="M120 210a90 60 0 01180 0z" fill="#12233c" stroke="#c9973f" stroke-width="6"/>' +
+      '<path d="M320 210a80 54 0 01160 0z" fill="#12233c" stroke="#c9973f" stroke-width="6"/>' +
+      '<path d="M60 150h480" stroke="#f0d9a8" stroke-width="6" stroke-linecap="round"/>' +
+      '<g fill="#9fb0c8" opacity=".5"><rect x="0" y="224" width="600" height="36"/></g>' +
+      '<g transform="translate(240,120) scale(.62)"><use href="#silk-road-camel-side" style="color:#f0d9a8"/></g></svg>',
+    infra:
+      '<svg class="silk-road-modal-art" viewBox="0 0 600 260" role="img" aria-label="Karvonsaroy hovlisi va omborlar">' +
+      '<rect width="600" height="260" rx="12" fill="#12233c"/>' +
+      '<rect x="60" y="90" width="480" height="130" fill="#1d3352" stroke="#c9973f" stroke-width="5"/>' +
+      '<path d="M150 220v-60a40 40 0 0180 0v60z" fill="#12233c" stroke="#f0d9a8" stroke-width="4"/>' +
+      '<path d="M330 220v-46a30 30 0 0160 0v46z" fill="#12233c" stroke="#f0d9a8" stroke-width="4"/>' +
+      '<path d="M60 90l60-40h360l60 40z" fill="#2a4265" stroke="#c9973f" stroke-width="4"/>' +
+      '<g fill="#e3b25e"><rect x="96" y="126" width="26" height="34" rx="4"/><rect x="452" y="126" width="26" height="34" rx="4"/></g>' +
+      '<g transform="translate(420,196) scale(.5)"><use href="#silk-road-camel-side" style="color:#f0d9a8"/></g></svg>',
+    nav:
+      '<svg class="silk-road-modal-art" viewBox="0 0 600 260" role="img" aria-label="Minora, yulduzlar va yo‘nalish belgilash">' +
+      '<rect width="600" height="260" rx="12" fill="#0d1a2e"/>' +
+      '<g fill="#e6eefc" opacity=".85"><circle cx="90" cy="50" r="2.4"/><circle cx="180" cy="86" r="1.8"/><circle cx="300" cy="44" r="2.6"/><circle cx="430" cy="72" r="2"/><circle cx="520" cy="40" r="2.2"/></g>' +
+      '<path d="M0 220h600v40H0z" fill="#1d3352"/>' +
+      '<path d="M250 220V96l50-46 50 46v124z" fill="#16283f" stroke="#c9973f" stroke-width="5"/>' +
+      '<rect x="286" y="140" width="28" height="42" rx="6" fill="#f0d9a8"/>' +
+      '<g stroke="#f3d592" stroke-width="3" opacity=".7"><path d="M300 50l-70-26M300 50l70-26"/></g>' +
+      '<g transform="translate(452,150) scale(2.4)"><use href="#silk-road-i-compass" style="color:#e3b25e"/></g></svg>',
+    logistics:
+      '<svg class="silk-road-modal-art" viewBox="0 0 600 260" role="img" aria-label="Tuya karvoni va yuk taqsimoti">' +
+      '<rect width="600" height="260" rx="12" fill="#12233c"/>' +
+      '<path d="M0 214h600v46H0z" fill="#c9a86a" opacity=".25"/>' +
+      '<path d="M0 214c120-24 180 12 300-8 106-18 180 16 300-6" fill="none" stroke="#f0d9a8" stroke-width="3" stroke-dasharray="16 14"/>' +
+      '<g transform="translate(70,163) scale(1.05)"><use href="#silk-road-camel-side" style="color:#f0d9a8"/></g>' +
+      '<g transform="translate(224,170) scale(.9)" opacity=".9"><use href="#silk-road-camel-side" style="color:#e3b25e"/></g>' +
+      '<g transform="translate(356,176) scale(.78)" opacity=".8"><use href="#silk-road-camel-side" style="color:#d8c29a"/></g>' +
+      '<g transform="translate(440,150) scale(2.6)"><use href="#silk-road-i-horse" style="color:#9fb0c8"/></g></svg>',
+    security:
+      '<svg class="silk-road-modal-art" viewBox="0 0 600 260" role="img" aria-label="Qal’a, qo‘riqlash posti va bojxona punkti">' +
+      '<rect width="600" height="260" rx="12" fill="#12233c"/>' +
+      '<path d="M0 218h600v42H0z" fill="#1d3352"/>' +
+      '<path d="M120 218V96h360v122z" fill="#16283f" stroke="#c9973f" stroke-width="5"/>' +
+      '<path d="M120 96h30V70h30v26h60V70h30v26h60V70h30v26h60V70h30v26h30" fill="none" stroke="#c9973f" stroke-width="5"/>' +
+      '<path d="M270 218v-58a30 30 0 0160 0v58z" fill="#0d1a2e" stroke="#f0d9a8" stroke-width="4"/>' +
+      '<g transform="translate(430,120) scale(2.4)"><use href="#silk-road-i-shield" style="color:#e3b25e"/></g>' +
+      '<g transform="translate(112,150) scale(2)"><use href="#silk-road-i-horse" style="color:#9fb0c8"/></g></svg>',
+    water:
+      '<svg class="silk-road-modal-art" viewBox="0 0 600 260" role="img" aria-label="Quduq, sardoba va suv ta’minoti">' +
+      '<rect width="600" height="260" rx="12" fill="#12233c"/>' +
+      '<path d="M0 216h600v44H0z" fill="#c9a86a" opacity=".22"/>' +
+      '<path d="M170 216a130 96 0 01260 0z" fill="#1d3352" stroke="#c9973f" stroke-width="5"/>' +
+      '<path d="M282 120h36v-28h-36z" fill="#f0d9a8"/>' +
+      '<circle cx="300" cy="216" r="10" fill="#0d1a2e"/>' +
+      '<g transform="translate(76,140) scale(2.8)"><use href="#silk-road-i-well" style="color:#e3b25e"/></g>' +
+      '<g transform="translate(440,140) scale(2.8)"><use href="#silk-road-i-water" style="color:#7fb6e8"/></g></svg>'
+  };
+
+  engGrid.innerHTML = silkRoadData.engineering.map((c, i) =>
+    '<button type="button" class="silk-road-eng-card" data-index="' + i + '" ' +
+      'aria-haspopup="dialog" aria-label="' + c.title + ' — batafsil ochish">' +
+      icon(c.icon, 'silk-road-eng-card-icon') +
+      '<span class="silk-road-eng-card-title">' + c.title + '</span>' +
+      '<span class="silk-road-eng-card-text">' + c.text + '</span>' +
+      '<span class="silk-road-eng-card-more">Batafsil ochish →</span>' +
+    '</button>'
+  ).join('');
+
+  /* ---- modal: focus trap, Escape, oldingi/keyingi ---- */
+  const modal      = $('#silk-road-modal');
+  const modalTitle = $('#silk-road-modal-title');
+  const modalArt   = $('#silk-road-modal-art');
+  const modalText  = $('#silk-road-modal-text');
+  let modalIndex = 0, lastFocused = null;
+
+  function fillModal(i) {
+    modalIndex = (i + silkRoadData.engineering.length) % silkRoadData.engineering.length;
+    const c = silkRoadData.engineering[modalIndex];
+    modalTitle.textContent = c.title;
+    modalArt.innerHTML = engArt[c.art] || '';
+    modalText.textContent = c.text;
+    silkRoadAudio.play(c.sound);
+  }
+  function openModal(i) {
+    lastFocused = document.activeElement;
+    fillModal(i);
+    modal.hidden = false;
+    modal.classList.add('silk-road-is-open');
+    $('#silk-road-modal-close').focus();
+  }
+  function closeModal() {
+    modal.classList.remove('silk-road-is-open');
+    modal.hidden = true;
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+  function focusables() {
+    return $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', modal)
+      .filter((el) => !el.disabled && el.offsetParent !== null);
+  }
+
+  engGrid.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-eng-card');
+    if (b) openModal(+b.dataset.index);
+  });
+  $('#silk-road-modal-close').addEventListener('click', closeModal);
+  $('#silk-road-modal-close-2').addEventListener('click', closeModal);
+  $('#silk-road-modal-prev').addEventListener('click', () => fillModal(modalIndex - 1));
+  $('#silk-road-modal-next').addEventListener('click', () => fillModal(modalIndex + 1));
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+  modal.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { e.preventDefault(); closeModal(); return; }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); fillModal(modalIndex - 1); return; }
+    if (e.key === 'ArrowRight') { e.preventDefault(); fillModal(modalIndex + 1); return; }
+    if (e.key !== 'Tab') return;
+    const list = focusables();
+    if (!list.length) return;
+    const first = list[0], last = list[list.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  /* =======================================================================
+     11. 8-BLOK — HARAKAT ZANJIRI
+     ======================================================================= */
+  const chainWrap  = $('#silk-road-chain');
+  const chainPanel = $('#silk-road-chain-panel');
+  let chainIndex = 0;
+
+  const arrowSvg =
+    '<svg class="silk-road-chain-arrow" viewBox="0 0 44 14" aria-hidden="true">' +
+      '<path class="silk-road-chain-arrow-path" d="M2 7h34" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<path d="M34 2l8 5-8 5z" fill="currentColor"/></svg>';
+
+  chainWrap.innerHTML = silkRoadData.chain.map((c, i) =>
+    '<span class="silk-road-chain-item">' +
+      '<button type="button" class="silk-road-chain-btn" data-index="' + i + '" role="tab" aria-selected="false" ' +
+        'aria-label="' + c.label + ' bo‘g‘ini haqida">' + icon(c.icon) + '<span>' + c.label + '</span></button>' +
+      (i < silkRoadData.chain.length - 1 ? arrowSvg : '') +
+    '</span>'
+  ).join('');
+
+  function renderChain(i, playSound) {
+    chainIndex = i;
+    const c = silkRoadData.chain[i];
+    $$('.silk-road-chain-btn', chainWrap).forEach((b) => {
+      const on = +b.dataset.index === i;
+      b.classList.toggle('silk-road-is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    $$('.silk-road-chain-arrow', chainWrap).forEach((a, ai) => {
+      a.classList.toggle('silk-road-is-lit', ai === i);   /* faol elementdan keyingi chiziq harakatlanadi */
+    });
+    chainPanel.innerHTML =
+      '<h3 class="silk-road-chain-panel-title">' + c.label + '</h3>' +
+      '<p class="silk-road-feature-panel-text">' + c.text + '</p>';
+    if (playSound) silkRoadAudio.play(c.sound);
+  }
+
+  chainWrap.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-chain-btn');
+    if (b) renderChain(+b.dataset.index, true);
+  });
+  renderChain(0, false);
+
+  $('#silk-road-principles').innerHTML = silkRoadData.principles.map((p) =>
+    '<div class="silk-road-card silk-road-principle">' + icon('silk-road-i-check') + '<span>' + p + '</span></div>'
+  ).join('');
+
+  /* =======================================================================
+     12. 9-BLOK — MEROS VA YAKUNIY ANIMATSIYA
+     ======================================================================= */
+  const legacyGrid  = $('#silk-road-legacy-grid');
+  const legacyPanel = $('#silk-road-legacy-panel');
+
+  legacyGrid.innerHTML = silkRoadData.legacy.map((l, i) =>
+    '<button type="button" class="silk-road-legacy-card" data-index="' + i + '" role="tab" aria-selected="false" ' +
+      'aria-label="' + l.name + '">' + icon(l.icon) +
+      '<span class="silk-road-legacy-name">' + (i + 1) + '. ' + l.name + '</span>' +
+    '</button>'
+  ).join('');
+
+  function renderLegacy(i, playSound) {
+    const l = silkRoadData.legacy[i];
+    $$('.silk-road-legacy-card', legacyGrid).forEach((b) => {
+      const on = +b.dataset.index === i;
+      b.classList.toggle('silk-road-is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    legacyPanel.innerHTML = '<strong style="color:var(--silk-road-primary-light)">' + l.name + '.</strong> ' + l.text;
+    if (playSound) silkRoadAudio.play('bell');
+  }
+  legacyGrid.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-legacy-card');
+    if (b) renderLegacy(+b.dataset.index, true);
+  });
+  renderLegacy(0, false);
+
+  const finalBox = $('#silk-road-final');
+  $('#silk-road-final-btn').addEventListener('click', () => {
+    const modern = finalBox.classList.toggle('silk-road-is-modern');
+    finalBox.classList.toggle('silk-road-is-merged', modern);
+    silkRoadAudio.play(modern ? 'wind' : 'bell');
+    if (modern) setTimeout(() => silkRoadAudio.play('camel'), 700);
+  });
+  $('#silk-road-restart').addEventListener('click', () => {
+    location.href = 'index.html?lang=' + SR_LANG;
+  });
+
+  /* =======================================================================
+     13. 10-BLOK — FOTOALBOM (swipe, klaviatura, avtomatik ko‘rsatish)
+     ======================================================================= */
+  const albumFrame   = $('#silk-road-album-frame');
+  const albumImg     = $('#silk-road-album-img');
+  const albumThumbs  = $('#silk-road-album-thumbs');
+  const albumAutoBtn = $('#silk-road-album-auto');
+  const albumPhotos  = silkRoadData.album.photos;
+  let albumIndex = 0, albumTimer = null;
+
+  /* Kichik suratlar tasmasi. Trafikni tejash uchun avval faqat yil ko‘rsatiladi;
+     surat bir marta yuklangach, kesh hisobiga tasmada ham paydo bo‘ladi.
+     Manbada kichraytirilgan nusxalar yo‘q — har bir fayl to‘liq o‘lchamda. */
+  albumThumbs.innerHTML = albumPhotos.map((ph, i) =>
+    '<button type="button" class="silk-road-album-thumb" data-index="' + i + '" role="tab" aria-selected="false" ' +
+      'aria-label="' + (i + 1) + '-surat, ' + ph.year + ': ' + ph.title + '">' +
+      '<span class="silk-road-album-thumb-year">' + ph.year + '</span>' +
+    '</button>'
+  ).join('');
+
+  /* yuklangan suratni tasmadagi katakchaga qo‘yish */
+  function albumUpgradeThumb(i) {
+    const btn = albumThumbs.querySelector('.silk-road-album-thumb[data-index="' + i + '"]');
+    if (!btn || btn.querySelector('img')) return;
+    const ph = albumPhotos[i];
+    btn.innerHTML = '<img src="' + ph.url + '" alt="" decoding="async">';
+  }
+
+  /* keyingi va oldingi suratni oldindan yuklab qo‘yish */
+  function albumPreload(i) {
+    [i - 1, i + 1].forEach((k) => {
+      const idx = (k + albumPhotos.length) % albumPhotos.length;
+      const im = new Image();
+      im.decoding = 'async';
+      im.addEventListener('load', () => albumUpgradeThumb(idx));
+      im.src = albumPhotos[idx].url;
+    });
+  }
+
+  function renderAlbum(i, playSound) {
+    albumIndex = (i + albumPhotos.length) % albumPhotos.length;
+    const ph = albumPhotos[albumIndex];
+
+    albumFrame.classList.remove('silk-road-is-missing');
+    albumImg.classList.remove('silk-road-is-ready');
+    albumImg.alt = ph.year + ' — ' + ph.title;
+    albumImg.src = ph.url;
+
+    $('#silk-road-album-year-text').textContent = ph.year;
+    $('#silk-road-album-counter').textContent = (albumIndex + 1) + ' / ' + albumPhotos.length;
+    $('#silk-road-album-caption-title').textContent = ph.title;
+    $('#silk-road-album-caption-text').textContent = ph.text;
+    $('#silk-road-album-meta').innerHTML =
+      silkRoadData.album.credit + '<br>' +
+      '<a class="silk-road-album-link" href="' + silkRoadData.album.sourceUrl + '" target="_blank" rel="noopener noreferrer">' +
+      silkRoadData.album.sourceLabel + '</a>';
+
+    $$('.silk-road-album-thumb', albumThumbs).forEach((b) => {
+      const on = +b.dataset.index === albumIndex;
+      b.classList.toggle('silk-road-is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      if (on && albumThumbs.scrollWidth > albumThumbs.clientWidth) {
+        albumThumbs.scrollTo({ left: b.offsetLeft - albumThumbs.clientWidth / 2 + b.offsetWidth / 2,
+                               behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      }
+    });
+
+    albumPreload(albumIndex);
+    if (playSound) silkRoadAudio.play('shutter');
+  }
+
+  albumImg.addEventListener('load', () => {
+    albumFrame.classList.remove('silk-road-is-missing');
+    albumImg.classList.add('silk-road-is-ready');
+    albumUpgradeThumb(albumIndex);
+  });
+  albumImg.addEventListener('error', () => {
+    albumFrame.classList.add('silk-road-is-missing');   /* surat yuklanmasa — kontent baribir ko‘rinadi */
+  });
+
+  function albumGo(step, playSound) { renderAlbum(albumIndex + step, playSound); }
+
+  $('#silk-road-album-prev').addEventListener('click', () => { albumStopAuto(); albumGo(-1, true); });
+  $('#silk-road-album-next').addEventListener('click', () => { albumStopAuto(); albumGo(1, true); });
+  albumThumbs.addEventListener('click', (e) => {
+    const b = e.target.closest('.silk-road-album-thumb');
+    if (b) { albumStopAuto(); renderAlbum(+b.dataset.index, true); }
+  });
+
+  /* avtomatik ko‘rsatish — faqat foydalanuvchi yoqqanda */
+  function albumStopAuto() {
+    if (!albumTimer) return;
+    clearInterval(albumTimer);
+    albumTimer = null;
+    albumAutoBtn.setAttribute('aria-pressed', 'false');
+    $('#silk-road-album-auto-label').textContent = SR_UI.album_auto;
+  }
+  function albumStartAuto() {
+    albumTimer = setInterval(() => { albumGo(1, true); }, 4200);
+    albumAutoBtn.setAttribute('aria-pressed', 'true');
+    $('#silk-road-album-auto-label').textContent = SR_UI.album_stop;
+    silkRoadAudio.play('film');
+  }
+  albumAutoBtn.addEventListener('click', () => { albumTimer ? albumStopAuto() : albumStartAuto(); });
+
+  /* klaviatura va swipe */
+  $('#silk-road-album-section').addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); albumStopAuto(); albumGo(-1, true); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); albumStopAuto(); albumGo(1, true); }
+  });
+  (function () {
+    let x0 = null, y0 = null;
+    albumFrame.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0]; x0 = t.clientX; y0 = t.clientY;
+    }, { passive: true });
+    albumFrame.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - x0, dy = t.clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+        albumStopAuto();
+        albumGo(dx < 0 ? 1 : -1, true);
+      }
+    }, { passive: true });
+  })();
+
+  /* bo‘lim ko‘rinmay qolganda avtomatik ko‘rsatish to‘xtaydi */
+  onceVisible($('#silk-road-album-section'), () => { albumPreload(0); }, 0.1);
+  if ('IntersectionObserver' in window) {
+    const albumIo = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (!e.isIntersecting) albumStopAuto(); });
+    }, { threshold: 0 });
+    albumIo.observe($('#silk-road-album-section'));
+  }
+
+  renderAlbum(0, false);
+
+  /* =======================================================================
+     14. NAVIGATSIYA, OVOZ TUGMASI VA IFRAME BILAN ISHLASH
+     ======================================================================= */
+  const inFrame = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
+
+  /* bo‘limga o‘tish: alohida sahifada — oddiy scroll, iframe ichida — parentga xabar */
+  function scrollToSection(sel) {
+    const el = $(sel);
+    if (!el) return;
+    const behavior = reduceMotion.matches ? 'auto' : 'smooth';
+    if (inFrame) {
+      try {
+        window.parent.postMessage({
+          type: 'silk-road-scroll',
+          top: Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - 12)
+        }, '*');
+      } catch (e) {}
+    }
+    try { el.scrollIntoView({ behavior: behavior, block: 'start' }); } catch (e) { el.scrollIntoView(); }
+  }
+
+  /* "Yo‘l bo‘ylab sayohatni boshlash" */
+  $('#silk-road-start').addEventListener('click', () => {
+    silkRoadAudio.play('wind');
+    setTimeout(() => silkRoadAudio.caravan(), 420);
+    drawHero();
+    renderCity(0, false);
+    setTimeout(() => scrollToSection('#silk-road-map-section'), 260);
+  });
+
+  /* "Marshrutni qayta chizish" */
+  $('#silk-road-replay').addEventListener('click', () => {
+    drawHero();
+    silkRoadAudio.play('tap');
+  });
+
+  /* ovoz tugmasi */
+  const audioBtn   = $('#silk-road-audio-toggle');
+  const audioLabel = $('#silk-road-audio-label');
+  const audioIcon  = $('#silk-road-audio-icon');
+  audioBtn.addEventListener('click', () => {
+    const next = !silkRoadAudio.isEnabled();
+    silkRoadAudio.setEnabled(next);
+    audioBtn.setAttribute('aria-pressed', next ? 'true' : 'false');
+    audioBtn.classList.toggle('silk-road-is-muted', !next);
+    audioLabel.textContent = next ? SR_UI.audio_on : SR_UI.audio_off;
+    audioIcon.innerHTML = '<use href="#' + (next ? 'silk-road-i-sound' : 'silk-road-i-mute') + '"/>';
+    if (next) silkRoadAudio.play('bell');
+  });
+
+  /* Escape — ochiq panelni yopadi */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('silk-road-is-open')) closeModal();
+  });
+
+  /* animatsiyani kamaytirish rejimi o‘zgarganda */
+  if (reduceMotion.addEventListener) {
+    reduceMotion.addEventListener('change', () => {
+      if (reduceMotion.matches) heroLoop(false);
+      else heroLoop(heroVisible);
+    });
+  }
+
+  /* ---- iframe balandligini parent sahifaga uzatish ---- */
+  function postHeight() {
+    if (!inFrame) return;
+    const h = Math.max(
+      document.documentElement.scrollHeight,
+      document.body ? document.body.scrollHeight : 0,
+      root.scrollHeight
+    );
+    try {
+      window.parent.postMessage({ type: 'silk-road-resize', height: h }, '*');
+    } catch (e) {}
+  }
+  let heightTimer = null;
+  function postHeightThrottled() {
+    if (heightTimer) return;
+    heightTimer = setTimeout(() => { heightTimer = null; postHeight(); }, 120);
+  }
+
+  if (inFrame) {
+    postHeight();
+    window.addEventListener('load', postHeight);
+    window.addEventListener('resize', postHeightThrottled, { passive: true });
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(postHeightThrottled);
+      ro.observe(root);
+      if (document.body) ro.observe(document.body);
+    } else {
+      setInterval(postHeight, 1200);
+    }
+    /* kontent ochilib-yopilganda balandlik o‘zgaradi */
+    root.addEventListener('click', () => setTimeout(postHeight, 480));
+  }
+
+  /* shriftlar yuklangach — o‘lchamlar aniqlashadi */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => { buildHero(); postHeightThrottled(); }).catch(() => {});
+  }
+  window.addEventListener('resize', () => {
+    if (mapCaravan) {
+      const c = silkRoadData.cities[cityIndex];
+      mapCaravan.style.transform = 'translate(' + c.x + 'px,' + c.y + 'px)';
+    }
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>
