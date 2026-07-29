@@ -1217,5 +1217,32 @@ document.getElementById("ti-dan").addEventListener("click",function(e){
 select("all");
 })();
 </script>
+
+<!-- ══════════ BOSH MENYUGA QAYTISH ══════════ -->
+<style>
+.bip-home{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(28px + env(safe-area-inset-bottom,0px));z-index:150;
+  display:inline-flex;align-items:center;gap:12px;
+  padding:14px 30px;border-radius:999px;
+  font-family:inherit;font-size:15px;font-weight:500;
+  letter-spacing:.26em;text-transform:uppercase;
+  color:#F0DFB4;text-decoration:none;cursor:pointer;white-space:nowrap;
+  background:rgba(11,21,38,.92);border:1px solid rgba(212,175,110,.55);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  box-shadow:0 10px 30px rgba(0,0,0,.75),0 0 24px rgba(216,178,108,.25);
+  transition:background .25s,border-color .25s,transform .25s;
+}
+.bip-home:hover{background:rgba(216,178,108,.22);border-color:#D8B26C;transform:translateX(-50%) translateY(-2px)}
+.bip-home:active{transform:translateX(-50%) scale(.97)}
+.bip-home svg{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;fill:none;
+  stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:640px){.bip-home{font-size:13px;padding:12px 22px;letter-spacing:.16em}}
+@media print{.bip-home{display:none}}
+</style>
+<a class="bip-home" href="../index.html#tp-menu" title="Bosh menyu">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+  <span>Bosh menyu</span>
+</a>
 </body>
 </html>
