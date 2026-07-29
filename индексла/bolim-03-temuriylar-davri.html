@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>III. Temuriylar Davridagi Buyuk Ipak Yo'li</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy-0: #050b16;
+  --navy-1: #0a1526;
+  --navy-2: #12203a;
+  --gold: #c9973f;
+  --gold-hi: #f2dda8;
+  --gold-lt: #e6c383;
+  --gold-dim: rgba(201,151,63,.35);
+  --sand: #e9dcc4;
+  --ink: #e8eaf0;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Manrope', system-ui, sans-serif;
+  --shadow: 0 1.2rem 3rem rgba(0,0,0,.65);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; width:100%; overflow:hidden; background:var(--navy-0); color:var(--ink); font-family:var(--sans); user-select:none; }
+
+.bg {
+  position:fixed; inset:0; z-index:0;
+  background: radial-gradient(130% 90% at 50% 10%, #1a2f52 0%, #0a1526 65%, #050b16 100%);
+}
+.bg__veil {
+  position:absolute; inset:0;
+  background: radial-gradient(90% 60% at 50% 40%, rgba(201,151,63,.12) 0%, transparent 80%),
+              linear-gradient(180deg, rgba(5,11,22,.5) 0%, rgba(5,11,22,.9) 100%);
+}
+
+/* ========== HEADER ========== */
+.header {
+  position:fixed; top:0; left:0; right:0; height:4.5rem; z-index:50;
+  display:flex; align-items:center; justify-content:space-between; padding:0 2rem;
+  background:rgba(10,21,38,.88); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--gold-dim);
+}
+.header__title { font-family:var(--serif); font-size:1.6rem; font-weight:700; color:var(--gold-hi); letter-spacing:.08em; text-transform:uppercase; }
+.btn-nav {
+  padding:.5rem 1.2rem; border:1px solid var(--gold-dim); border-radius:.6rem;
+  color:var(--sand); font-size:.9rem; text-transform:uppercase; letter-spacing:.1em;
+  background:rgba(201,151,63,.1); cursor:pointer; transition:all .3s ease;
+  display:flex; align-items:center; gap:.5rem; text-decoration:none;
+}
+.btn-nav:hover { background:var(--gold); color:var(--navy-0); border-color:var(--gold); }
+
+/* ========== PROGRESS BAR ========== */
+.progress-bar { position:fixed; top:4.5rem; left:0; right:0; height:4px; z-index:50; background:rgba(255,255,255,.1); }
+.progress-bar__fill { height:100%; width:25%; background:linear-gradient(90deg, var(--gold), var(--gold-hi)); transition:width .5s ease; }
+
+/* ========== STEPPER ========== */
+.stepper {
+  position:fixed; top:5.8rem; left:50%; transform:translateX(-50%); z-index:40;
+  display:flex; gap:1rem; background:rgba(10,21,38,.8); padding:.6rem 1.5rem;
+  border-radius:2rem; border:1px solid var(--gold-dim); backdrop-filter:blur(10px);
+}
+.step-item {
+  display:flex; align-items:center; gap:.5rem; font-size:.82rem; color:rgba(232,234,240,.6);
+  cursor:pointer; padding:.3rem .8rem; border-radius:1rem; transition:all .3s;
+}
+.step-item.active { color:var(--gold-hi); background:rgba(201,151,63,.2); border:1px solid var(--gold); }
+.step-num { width:1.3rem; height:1.3rem; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.75rem; }
+.step-item.active .step-num { background:var(--gold); color:var(--navy-0); }
+
+/* ========== STAGE & SLIDES ========== */
+.stage { position:fixed; inset:0; top:4.5rem; z-index:10; display:flex; transition:transform .6s cubic-bezier(.16,1,.3,1); }
+.slide {
+  min-width:100vw; height:calc(100vh - 4.5rem); padding:6rem 4rem 4rem;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  overflow-y:auto; position:relative;
+}
+
+/* ========== CONTENT CONTAINER ========== */
+.content-wrapper {
+  display:grid; grid-template-columns: 1.1fr 0.9fr; gap:3rem; max-width:1250px; width:100%;
+  align-items:center;
+}
+@media (max-width:950px) { .content-wrapper { grid-template-columns:1fr; } }
+
+.text-card {
+  background:rgba(18,32,58,.8); border:1px solid var(--gold-dim); border-radius:1.5rem;
+  padding:2.8rem; backdrop-filter:blur(16px); box-shadow:var(--shadow);
+  display:flex; flex-direction:column; gap:1.2rem;
+}
+.tag-badge {
+  align-self:flex-start; font-size:.8rem; letter-spacing:.25em; text-transform:uppercase;
+  color:var(--gold-hi); background:rgba(201,151,63,.18); padding:.35rem .9rem; border-radius:.4rem;
+  border:1px solid rgba(201,151,63,.35);
+}
+.slide-title { font-family:var(--serif); font-size:2.8rem; line-height:1.15; color:var(--gold-hi); }
+.slide-text { font-size:1.05rem; line-height:1.75; color:var(--sand); opacity:.92; }
+
+.timeline-list { list-style:none; display:flex; flex-direction:column; gap:1rem; margin-top:.5rem; }
+.timeline-item { position:relative; padding-left:1.8rem; border-left:2px solid var(--gold-dim); }
+.timeline-item::before {
+  content:""; position:absolute; left:-6px; top:4px; width:10px; height:10px;
+  border-radius:50%; background:var(--gold-hi); box-shadow:0 0 10px var(--gold);
+}
+.timeline-title { font-weight:700; color:var(--gold-hi); font-size:1.05rem; }
+.timeline-desc { font-size:.95rem; color:var(--ink); opacity:.85; margin-top:.2rem; }
+
+.illustration-box {
+  width:100%; height:400px; border-radius:1.5rem; overflow:hidden;
+  border:1px solid var(--gold-dim); box-shadow:var(--shadow);
+  background:linear-gradient(135deg, rgba(201,151,63,.2), rgba(10,21,38,.95));
+  display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;
+  position:relative;
+}
+.hero-svg { width:130px; height:130px; stroke:var(--gold-hi); fill:none; stroke-width:1.4; filter:drop-shadow(0 0 20px rgba(201,151,63,.5)); }
+.illust-title { margin-top:1.5rem; font-family:var(--serif); font-size:1.6rem; color:var(--gold-hi); }
+.illust-sub { font-size:.92rem; color:var(--sand); opacity:.8; margin-top:.4rem; max-width:85%; line-height:1.5; }
+
+/* ========== CONTROLS ========== */
+.controls {
+  position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); z-index:50;
+  display:flex; gap:2rem; align-items:center;
+}
+.btn-ctrl {
+  width:3.5rem; height:3.5rem; border-radius:50%; border:1px solid var(--gold-dim);
+  background:rgba(10,21,38,.85); color:var(--gold-hi); font-size:1.4rem;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:all .3s; backdrop-filter:blur(10px);
+}
+.btn-ctrl:hover { background:var(--gold); color:var(--navy-0); border-color:var(--gold); transform:scale(1.08); }
+</style>
+</head>
+<body>
+
+<div class="bg"><div class="bg__veil"></div></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header__title">III. Temuriylar Davridagi Buyuk Ipak Yo'li</div>
+  <div class="header__nav">
+    <a href="index.html" class="btn-nav">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
+      Bosh sahifa
+    </a>
+  </div>
+</header>
+
+<div class="progress-bar"><div class="progress-bar__fill" id="progressFill"></div></div>
+
+<!-- STEPPER -->
+<nav class="stepper">
+  <div class="step-item active" onclick="goToSlide(0)"><span class="step-num">1</span> Ipak Yo'li Ibtidosi</div>
+  <div class="step-item" onclick="goToSlide(1)"><span class="step-num">2</span> Amir Temur Islohoti</div>
+  <div class="step-item" onclick="goToSlide(2)"><span class="step-num">3</span> Samarqand Markazi</div>
+  <div class="step-item" onclick="goToSlide(3)"><span class="step-num">4</span> Temuriylar Renessansi</div>
+</nav>
+
+<!-- STAGE SLIDES -->
+<div class="stage" id="stage">
+
+  <!-- SLIDE 1: HISTORICAL ORIGINS -->
+  <section class="slide">
+    <div class="content-wrapper">
+      <div class="text-card">
+        <span class="tag-badge">1-Bosqich &bull; Tarixiy Ibtido (Antik Davr)</span>
+        <h2 class="slide-title">Ipak Yo'lining Shakllanish Tarixi</h2>
+        <p class="slide-text">
+          Miloddan avvalgi II asrdan boshlab Sharq va G'arb tsivilizatsiyalarini bog'lagan Buyuk Ipak yo'li O'rta Osiyo, xususan So'g'diyona va Baqtriya savdogarlarining sa'y-harakatlari bilan jahon magistraliga aylandi.
+        </p>
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-title">m.a. 138-yil — Chjan Tsyan Elchiligi</div>
+            <div class="timeline-desc">Xitoydan O'rta Osiyoga ilk diplomatik va savdo yo'li ochildi.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">So'g'diy Savdogarlar Hubi</div>
+            <div class="timeline-desc">Samarqand va Buxoro savdogarlari Xitoydan O'rta Yer dengizigacha bo'lgan karvonlarni boshqardi.</div>
+          </div>
+        </div>
+      </div>
+      <div class="illustration-box">
+        <svg class="hero-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <div class="illust-title">Trans-Yevroosiyo Karvon Yo'llari</div>
+        <div class="illust-sub">Dastlabki ipak, chinni, qimmatbaho toshlar va arg'umok otlar savdosi.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: AMIR TEMUR REFORMS -->
+  <section class="slide">
+    <div class="content-wrapper">
+      <div class="text-card">
+        <span class="tag-badge">2-Bosqich &bull; XIV-XV Asrlar Davri</span>
+        <h2 class="slide-title">Amir Temur Saltanatida Yo'l Xavfsizligi</h2>
+        <p class="slide-text">
+          Amir Temur Yevroosiyo savdo yo'llarini birlashtirib, karvonlar xavfsizligini ta'minlash bo'yicha qat'iy qonunlar joriy etdi. Saltanat hududida savdogarga yetkazilgan har qanday zarar davlat tomonidan qoplangan va aybdorlar qat'iy jazolangan.
+        </p>
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-title">Karvonlar Muhofazasi Qonuni</div>
+            <div class="timeline-desc">Har bir tuman va viloyat hokimi o'z hududidan o'tuvchi karvonlar daxlsizligiga javobgar edi.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">Yangi Savdo Magistrallari</div>
+            <div class="timeline-desc">Xitoy, Hindiston, Eron, Oltin O'rda va Yevropa elchilik magistrallari markazlashdi.</div>
+          </div>
+        </div>
+      </div>
+      <div class="illustration-box">
+        <svg class="hero-svg" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        <div class="illust-title">Tinchlik va Xavfsizlik Kafolati</div>
+        <div class="illust-sub">Amir Temur davrida bir qiz bolaning oltin patnis bilan Xitoydan O'rta Yer dengizigacha bexavotir o'ta olishi darajasidagi xavfsizlik ta'minlangan.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: SAMARKAND CAPITAL -->
+  <section class="slide">
+    <div class="content-wrapper">
+      <div class="text-card">
+        <span class="tag-badge">3-Bosqich &bull; Dunyo Markazi</span>
+        <h2 class="slide-title">Samarqand — Jahon Savdo va Madaniyat Poytaxti</h2>
+        <p class="slide-text">
+          Amir Temur Samarqandni Yevroosiyoning eng go'zal va qudratli shahriga aylantirdi. Xitoy, Hindiston, Yevropa va arab mamlakatlaridan kelgan eng mo''tabar savdogarlar va elchilar Samarqand bozorlarida jam bo'lishgan.
+        </p>
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-title">Ruy Gonsales de Klavixo Elchiligi (1404)</div>
+            <div class="timeline-desc">Kastiliya (Ispaniya) qiroli elchisi Samarqand karvon bozorlari va saroylari muhtashamligini yozib qoldirgan.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">Samarqand Qog'ozi va Ipak Ishlab Chiqarish</div>
+            <div class="timeline-desc">Dunyoda eng sifatli deb tan olingan Samarqand qog'ozi Ipak yo'li orqali butun dunyoga tarqalgan.</div>
+          </div>
+        </div>
+      </div>
+      <div class="illustration-box">
+        <svg class="hero-svg" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m4 10V11m-4 0h4"/></svg>
+        <div class="illust-title">Sharq va G'arb Uchrashuv Nuqtasi</div>
+        <div class="illust-sub">Registon, Bibi Xonim, Shohi Zinda va ulkan karvonsaroylar majmui.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: TIMURID RENAISSANCE -->
+  <section class="slide">
+    <div class="content-wrapper">
+      <div class="text-card">
+        <span class="tag-badge">4-Bosqich &bull; Ilm va Madaniyat</span>
+        <h2 class="slide-title">Temuriylar Renessansi va Ilmiy Almashinuv</h2>
+        <p class="slide-text">
+          Mirzo Ulug'bek, Shohrux va Zahiriddin Muhammad Bobur davrida Buyuk Ipak yo'li nafaqat mol almashtirish, balki astronomiya, matematika, me'morchilik va tasviriy san'at kabi ilmiy kashfiyotlar ko'prigi vazifasini o'tadi.
+        </p>
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-title">Ulug'bek Rasadxonasi va Ilm Transferi</div>
+            <div class="timeline-desc">Ziji Kurgoniydagiy 1018 ta yulduz jadvali Ipak yo me'morchilik va ilm yo'li orqali Yevropaga yetib bordi.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">Diplomatik Munosabatlar va Kitobat San'ati</div>
+            <div class="timeline-desc">Xitoyning Min sulolasi va Temuriylar o'rtasidagi doimiy elchilik hamda san'at almashinuvi.</div>
+          </div>
+        </div>
+      </div>
+      <div class="illustration-box">
+        <svg class="hero-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        <div class="illust-title">Jahon Siklining Oltin Davri</div>
+        <div class="illust-sub">Temuriylar saltanati davridagi madaniy renesans va ilmiy almashinuvlar.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <button class="btn-ctrl" onclick="prevSlide()">&larr;</button>
+  <button class="btn-ctrl" onclick="nextSlide()">&rarr;</button>
+</div>
+
+<script>
+var currentSlide = 0;
+var totalSlides = 4;
+
+function updateSlide() {
+  var stage = document.getElementById('stage');
+  stage.style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
+  
+  var progress = document.getElementById('progressFill');
+  progress.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+  
+  var steps = document.querySelectorAll('.step-item');
+  steps.forEach(function(step, idx) {
+    step.classList.toggle('active', idx === currentSlide);
+  });
+}
+
+function goToSlide(index) {
+  currentSlide = index;
+  updateSlide();
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) {
+    currentSlide++;
+    updateSlide();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    updateSlide();
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>

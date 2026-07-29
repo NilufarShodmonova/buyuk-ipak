@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>V. Ko'priklar (O'rta Osiyo) — Buyuk Ipak Yo'li</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy-0: #050b16;
+  --navy-1: #0a1526;
+  --navy-2: #12203a;
+  --gold: #c9973f;
+  --gold-hi: #f2dda8;
+  --gold-lt: #e6c383;
+  --gold-dim: rgba(201,151,63,.35);
+  --sand: #e9dcc4;
+  --ink: #e8eaf0;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Manrope', system-ui, sans-serif;
+  --shadow: 0 1.2rem 3rem rgba(0,0,0,.65);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; width:100%; overflow:hidden; background:var(--navy-0); color:var(--ink); font-family:var(--sans); user-select:none; }
+
+.bg {
+  position:fixed; inset:0; z-index:0;
+  background: radial-gradient(130% 90% at 50% 10%, #152848 0%, #0a1526 65%, #050b16 100%);
+}
+.bg__veil {
+  position:absolute; inset:0;
+  background: radial-gradient(90% 60% at 50% 40%, rgba(201,151,63,.1) 0%, transparent 80%),
+              linear-gradient(180deg, rgba(5,11,22,.5) 0%, rgba(5,11,22,.9) 100%);
+}
+
+/* ========== HEADER ========== */
+.header {
+  position:fixed; top:0; left:0; right:0; height:4.5rem; z-index:50;
+  display:flex; align-items:center; justify-content:space-between; padding:0 2rem;
+  background:rgba(10,21,38,.88); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--gold-dim);
+}
+.header__title { font-family:var(--serif); font-size:1.6rem; font-weight:700; color:var(--gold-hi); letter-spacing:.08em; text-transform:uppercase; }
+.btn-nav {
+  padding:.5rem 1.2rem; border:1px solid var(--gold-dim); border-radius:.6rem;
+  color:var(--sand); font-size:.9rem; text-transform:uppercase; letter-spacing:.1em;
+  background:rgba(201,151,63,.1); cursor:pointer; transition:all .3s ease;
+  display:flex; align-items:center; gap:.5rem; text-decoration:none;
+}
+.btn-nav:hover { background:var(--gold); color:var(--navy-0); border-color:var(--gold); }
+
+/* ========== PROGRESS BAR ========== */
+.progress-bar { position:fixed; top:4.5rem; left:0; right:0; height:4px; z-index:50; background:rgba(255,255,255,.1); }
+.progress-bar__fill { height:100%; width:25%; background:linear-gradient(90deg, var(--gold), var(--gold-hi)); transition:width .5s ease; }
+
+/* ========== STEPPER ========== */
+.stepper {
+  position:fixed; top:5.8rem; left:50%; transform:translateX(-50%); z-index:40;
+  display:flex; gap:1rem; background:rgba(10,21,38,.8); padding:.6rem 1.5rem;
+  border-radius:2rem; border:1px solid var(--gold-dim); backdrop-filter:blur(10px);
+}
+.step-item {
+  display:flex; align-items:center; gap:.5rem; font-size:.82rem; color:rgba(232,234,240,.6);
+  cursor:pointer; padding:.3rem .8rem; border-radius:1rem; transition:all .3s;
+}
+.step-item.active { color:var(--gold-hi); background:rgba(201,151,63,.2); border:1px solid var(--gold); }
+.step-num { width:1.3rem; height:1.3rem; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.75rem; }
+.step-item.active .step-num { background:var(--gold); color:var(--navy-0); }
+
+/* ========== STAGE & SLIDES ========== */
+.stage { position:fixed; inset:0; top:4.5rem; z-index:10; display:flex; transition:transform .6s cubic-bezier(.16,1,.3,1); }
+.slide {
+  min-width:100vw; height:calc(100vh - 4.5rem); padding:6rem 4rem 4rem;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  overflow-y:auto; position:relative;
+}
+
+/* ========== CONTENT CONTAINER ========== */
+.card-grid {
+  display:grid; grid-template-columns: 1fr 1fr; gap:3rem; max-width:1200px; width:100%;
+  align-items:center;
+}
+@media (max-width:900px) { .card-grid { grid-template-columns:1fr; } }
+
+.card-info {
+  background:rgba(18,32,58,.8); border:1px solid var(--gold-dim); border-radius:1.5rem;
+  padding:2.5rem; backdrop-filter:blur(16px); box-shadow:var(--shadow);
+  display:flex; flex-direction:column; gap:1.2rem;
+}
+.card-info__tag {
+  align-self:flex-start; font-size:.8rem; letter-spacing:.25em; text-transform:uppercase;
+  color:var(--gold); background:rgba(201,151,63,.15); padding:.3rem .8rem; border-radius:.4rem;
+  border:1px solid rgba(201,151,63,.3);
+}
+.card-info__title { font-family:var(--serif); font-size:2.8rem; line-height:1.15; color:var(--gold-hi); }
+.card-info__desc { font-size:1.05rem; line-height:1.7; color:var(--sand); opacity:.9; }
+.card-info__list { list-style:none; display:flex; flex-direction:column; gap:.8rem; margin-top:.5rem; }
+.card-info__list li { display:flex; align-items:flex-start; gap:.8rem; font-size:1rem; color:var(--ink); }
+.card-info__list li::before { content:"✦"; color:var(--gold); font-size:1.1rem; }
+
+.visual-box {
+  position:relative; width:100%; height:380px; border-radius:1.5rem; overflow:hidden;
+  border:1px solid var(--gold-dim); box-shadow:var(--shadow);
+  background:linear-gradient(135deg, rgba(201,151,63,.15), rgba(10,21,38,.9));
+  display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;
+}
+.visual-svg { width:120px; height:120px; stroke:var(--gold-hi); fill:none; stroke-width:1.4; filter:drop-shadow(0 0 15px rgba(201,151,63,.4)); }
+.visual-caption { margin-top:1.5rem; font-family:var(--serif); font-size:1.4rem; color:var(--gold-hi); }
+.visual-sub { font-size:.9rem; color:var(--sand); opacity:.75; margin-top:.4rem; max-width:85%; line-height:1.5; }
+
+/* ========== CONTROLS ========== */
+.controls {
+  position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); z-index:50;
+  display:flex; gap:2rem; align-items:center;
+}
+.btn-ctrl {
+  width:3.5rem; height:3.5rem; border-radius:50%; border:1px solid var(--gold-dim);
+  background:rgba(10,21,38,.8); color:var(--gold-hi); font-size:1.4rem;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:all .3s; backdrop-filter:blur(10px);
+}
+.btn-ctrl:hover { background:var(--gold); color:var(--navy-0); border-color:var(--gold); transform:scale(1.08); }
+</style>
+</head>
+<body>
+
+<div class="bg"><div class="bg__veil"></div></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header__title">V. Ko'priklar (O'rta Osiyo) — Buyuk Ipak Yo'li</div>
+  <div class="header__nav">
+    <a href="index.html" class="btn-nav">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
+      Bosh sahifa
+    </a>
+  </div>
+</header>
+
+<div class="progress-bar"><div class="progress-bar__fill" id="progressFill"></div></div>
+
+<!-- STEPPER -->
+<nav class="stepper">
+  <div class="step-item active" onclick="goToSlide(0)"><span class="step-num">1</span> Daryolar va Ko'priklar</div>
+  <div class="step-item" onclick="goToSlide(1)"><span class="step-num">2</span> Karmana Ko'prigi</div>
+  <div class="step-item" onclick="goToSlide(2)"><span class="step-num">3</span> Pul-i Sangin va Kechuvlar</div>
+  <div class="step-item" onclick="goToSlide(3)"><span class="step-num">4</span> Gumbazli Ravoq Muhandisligi</div>
+</nav>
+
+<!-- STAGE SLIDES -->
+<div class="stage" id="stage">
+
+  <!-- SLIDE 1: GENERAL BRIDGES -->
+  <section class="slide">
+    <div class="card-grid">
+      <div class="card-info">
+        <span class="card-info__tag">1-Bo'lim &bull; Daryo Kechuvlari va Infratuzilma</span>
+        <h2 class="card-info__title">1. O'rta Osiyoning Tarixiy Ko'priklari</h2>
+        <p class="card-info__desc">
+          Buyuk Ipak yo'lining O'rta Osiyo kesimidan o'tuvchi yirik daryolar (Amudaryo, Sirdaryo, Zarafshon, Surxondaryo, Murg'ob) ustida barpo etilgan ko'priklar karvonlar harakatida hal qiluvchi rol o'ynagan.
+        </p>
+        <ul class="card-info__list">
+          <li><b>Savdo bog'liqligi:</b> Daryolardan uzluksiz o'tish imkoniyati karvonlar va elchilik missiyalari vaqtini 3-4 baravarga qisqartirgan.</li>
+          <li><b>Pishgan g'isht va ganch:</b> Suv oqimining yemirish ta'siriga chidamli maxsus ganch va loy qorishmalaridan foydalanilgan.</li>
+          <li><b>Mavsumiy ko'priklar:</b> Bahorgi toshqin va yozgi suv sathiga moslashuvchan ravoqli inshootlar.</li>
+        </ul>
+      </div>
+      <div class="visual-box">
+        <svg class="visual-svg" viewBox="0 0 24 24"><path d="M4 19c4 0 4-3 8-3s4 3 8 3M4 15c4 0 4-3 8-3s4 3 8 3M2 9h20M7 9v6M17 9v6M12 9v6"/></svg>
+        <div class="visual-caption">G'ishtin Ravoqli Ko'priklar</div>
+        <div class="visual-sub">Zarafshon va Amudaryo bo'ylaridagi muhtasham ko'prik ansambllari.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: KARMANA BRIDGE -->
+  <section class="slide">
+    <div class="card-grid">
+      <div class="card-info">
+        <span class="card-info__tag">2-Bo'lim &bull; XVI Asr Me'moriy Shohäsari</span>
+        <h2 class="card-info__title">2. Karmana Ko'prigi</h2>
+        <p class="card-info__desc">
+          Zarafshon daryosi ustiga XVI asrda Abdullaxon II davrida qurilgan 16 ravoqli mashhur Karmana (Toshko'prik) obidasi O'rta Osiyo muhandisligining eng cho'qqisi hisoblanadi.
+        </p>
+        <ul class="card-info__list">
+          <li><b>16 ta ravoq:</b> Eni 6 metrdan ortiq bo'lib, bir vaqtning o'zida ikkita yuklangan karvon yonma-yon o'ta olgan.</li>
+          <li><b>Suvbo'g'ich ustunlar (Volnorez):</b> Daryo oqimi bosimini bo'lish uchun ponasimon ustun tayanchlari qurilgan.</li>
+          <li><b>Strategik bog'liqlik:</b> Buxoro va Samarqand o'rtasidagi asosiy magistral ko'prigi bo'lib xizmat qilgan.</li>
+        </ul>
+      </div>
+      <div class="visual-box">
+        <svg class="visual-svg" viewBox="0 0 24 24"><path d="M3 14c3-2 6-2 9 0s6 2 9 0M3 18c3-2 6-2 9 0s6 2 9 0M4 6h16v4H4zM8 10v4M16 10v4"/></svg>
+        <div class="visual-caption">Karmana (Abdullaxon) Ko'prigi</div>
+        <div class="visual-sub">Zarafshon daryosining jo'shqin suvini jilovlagan nodir muhandislik yodgorligi.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: PUL-I SANGIN -->
+  <section class="slide">
+    <div class="card-grid">
+      <div class="card-info">
+        <span class="card-info__tag">3-Bo'lim &bull; Tosh va Tog' Ko'priklari</span>
+        <h2 class="card-info__title">3. Pul-i Sangin va Tog' Kechuvlari</h2>
+        <p class="card-info__desc">
+          Pul-i Sangin ("Tosh ko'prik") — Vaxsh va Amudaryo tog'li daralaridan o'tuvchi eng tor va chuqur qoyalar oralig'iga qurilgan qadimiy tosh ravoqli ko'prikdir.
+        </p>
+        <ul class="card-info__list">
+          <li><b>Tosh va qoya tayanchlari:</b> Tabiiy granit qoyalarga mahkamlanib, ming yillar davomida toshqinlarga bardosh bergan.</li>
+          <li><b>Toshkent va Farg'ona ko me'morchiligi:</b> Chirchiq va Qoradaryo ustidagi g'ishtin ko'prik va yog'och osma kechuvlar.</li>
+          <li><b>Chorvachilik va Savdo:</b> Qishlov va yozlov karvonlari uchun yagona tog' darasi o'tish yo'li bo'lgan.</li>
+        </ul>
+      </div>
+      <div class="visual-box">
+        <svg class="visual-svg" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h14v-8h3L12 3zm0 13a2 2 0 100-4 2 2 0 000 4z"/></svg>
+        <div class="visual-caption">Pul-i Sangin va Daralar</div>
+        <div class="visual-sub">Tog'li dovonlar hamda daryo daralaridagi mustahkam tosh-ravoqli darvozalar.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: ENGINEERING ARCHITECTURE -->
+  <section class="slide">
+    <div class="card-grid">
+      <div class="card-info">
+        <span class="card-info__tag">4-Bo me me'morchiligi &bull; Muhandislik Sirlari</span>
+        <h2 class="card-info__title">4. Gumbazli Ravoq Muhandisligi</h2>
+        <p class="card-info__desc">
+          O'rta asr me'morlari ko'priklarni loyihalashda matematika, fizika va gidravlika qonunlarini mukammal qo'llashgan.
+        </p>
+        <ul class="card-info__list">
+          <li><b>Ponasimon g'isht terilishi:</b> Og'irlik kuchini yon tayanchlarga teng taqsimlovchi ark/ravoq formulalari.</li>
+          <li><b>Qorishma sirlari:</b> Qoyalardan olingan ohak, tuxum oqsili va ganch qorishmasi suv ostida yillar o'tgani sari mustahkamlanib borgan.</li>
+          <li><b>Umrboqiylik:</b> Ko'plab ko'priklar 400-500 yildan ortiq vaqt davomida karvonlar va mahalliy aholiga beg'araz xizmat qilgan.</li>
+        </ul>
+      </div>
+      <div class="visual-box">
+        <svg class="visual-svg" viewBox="0 0 24 24"><path d="M19 11H5m14 0a7 7 0 01-14 0m14 0v9H5v-9M12 3v4"/></svg>
+        <div class="visual-caption">Gidravlika va Ravoq Sirlari</div>
+        <div class="visual-sub">O'rta Osiyo ustalari yaratgan me'moriy va muhandislik durdonalari.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <button class="btn-ctrl" onclick="prevSlide()">&larr;</button>
+  <button class="btn-ctrl" onclick="nextSlide()">&rarr;</button>
+</div>
+
+<script>
+var currentSlide = 0;
+var totalSlides = 4;
+
+function updateSlide() {
+  var stage = document.getElementById('stage');
+  stage.style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
+  
+  var progress = document.getElementById('progressFill');
+  progress.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+  
+  var steps = document.querySelectorAll('.step-item');
+  steps.forEach(function(step, idx) {
+    step.classList.toggle('active', idx === currentSlide);
+  });
+}
+
+function goToSlide(index) {
+  currentSlide = index;
+  updateSlide();
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) {
+    currentSlide++;
+    updateSlide();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    updateSlide();
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>

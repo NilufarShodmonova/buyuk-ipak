@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080, initial-scale=1">
+<title>Temuriylar davrida Buyuk Ipak yo‘li — yo‘llar tarmog‘i va harakat tizimi</title>
+<style>
+:root{
+  --ti-gold:#c9973f;
+  --ti-gold-lt:#e3b25e;
+  --ti-gold-pale:#f0d9a8;
+  --ti-sand:#d8c29a;
+  --ti-bg:#0c1728;
+  --ti-bg2:#14243c;
+  --ti-surf:#16283f;
+  --ti-surf2:#1d3352;
+  --ti-text:#f5eedf;
+  --ti-dim:#a7b8cd;
+  --ti-line:rgba(201,151,63,.30);
+  --ti-line-s:rgba(201,151,63,.16);
+  --ti-east:#e3b25e;
+  --ti-west:#d8c29a;
+  --ti-south:#cf8158;
+  --ti-north:#93ac83;
+  --ti-trade:#e3b25e;
+  --ti-envoy:#7ba5d6;
+  --ti-courier:#d0533f;
+  --ti-ease:cubic-bezier(.22,.9,.3,1);
+  --ti-serif:"Cormorant Garamond","Palatino Linotype","Book Antiqua",Palatino,Georgia,"Times New Roman",serif;
+  --ti-sans:"Manrope","Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+html{overflow-x:hidden}
+body{
+  width:1080px;margin:0 auto;background:var(--ti-bg);color:var(--ti-text);
+  font-family:var(--ti-sans);font-size:19px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  user-select:none;
+}
+#ti-app{position:relative;overflow:visible}
+#ti-app::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, rgba(201,151,63,.13), transparent 62%),
+    radial-gradient(900px 900px at 110% 42%, rgba(30,64,110,.35), transparent 60%),
+    radial-gradient(800px 800px at -10% 78%, rgba(201,151,63,.07), transparent 60%);
+}
+#ti-app::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.05;
+  background-image:radial-gradient(rgba(245,238,223,.9) .5px, transparent .5px);
+  background-size:3px 3px;mix-blend-mode:overlay;
+}
+.ti-sec{position:relative;z-index:2;padding:96px 70px}
+.ti-sec + .ti-sec{border-top:1px solid var(--ti-line-s)}
+.ti-alt{background:linear-gradient(180deg,rgba(22,40,63,.55),rgba(12,23,40,0))}
+
+/* ---------- typography ---------- */
+h1,h2,h3,h4{margin:0;font-family:var(--ti-serif);font-weight:700;letter-spacing:.02em}
+.ti-num{
+  display:flex;align-items:center;gap:18px;margin-bottom:20px;
+  font-family:var(--ti-serif);font-size:22px;letter-spacing:.42em;color:var(--ti-gold);
+  text-transform:uppercase;
+}
+.ti-num i{font-style:normal;font-size:30px;letter-spacing:.18em}
+.ti-num span{flex:1;height:1px;background:linear-gradient(90deg,var(--ti-line),transparent)}
+h2.ti-h{font-size:56px;line-height:1.1;color:var(--ti-gold-pale);margin-bottom:14px}
+h3.ti-h3{font-size:34px;color:var(--ti-gold-lt);margin-bottom:10px}
+h4.ti-h4{font-size:25px;color:var(--ti-gold-pale);margin-bottom:6px}
+.ti-lead{font-size:23px;color:var(--ti-sand);max-width:900px;margin:0 0 34px}
+.ti-p{margin:0 0 16px;color:#e8e2d4}
+.ti-p b{color:var(--ti-gold-pale);font-weight:700}
+.ti-small{font-size:16px;color:var(--ti-dim);letter-spacing:.02em}
+.ti-kicker{
+  font-size:14px;letter-spacing:.34em;text-transform:uppercase;color:var(--ti-gold);
+  margin-bottom:10px;font-weight:700
+}
+
+/* ---------- decorative arch ---------- */
+.ti-arch{
+  width:64px;height:78px;border:1.5px solid var(--ti-line);
+  border-radius:32px 32px 6px 6px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,rgba(201,151,63,.12),rgba(201,151,63,0));
+  flex:0 0 auto;
+}
+.ti-dashline{
+  height:3px;margin:0;border:0;border-radius:2px;
+  background:repeating-linear-gradient(90deg,var(--ti-gold) 0 26px,transparent 26px 48px);
+  opacity:.5;
+}
+
+/* ---------- reveal ---------- */
+.ti-rv{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ti-ease),transform .8s var(--ti-ease)}
+.ti-rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.ti-rv{opacity:1;transform:none;transition:none}}
+
+/* ---------- hero ---------- */
+#ti-hero{
+  position:relative;min-height:1010px;padding:0;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;overflow:hidden;
+  border-bottom:1px solid var(--ti-line-s);
+}
+#ti-hero-map{position:absolute;inset:0;width:100%;height:100%;opacity:.42}
+#ti-hero .ti-hero-in{position:relative;z-index:3;padding:0 80px;width:100%}
+.ti-eyebrow{
+  font-size:15px;letter-spacing:.44em;text-transform:uppercase;color:var(--ti-gold);
+  margin-bottom:30px;font-weight:700
+}
+#ti-hero h1{
+  font-size:82px;line-height:1.03;color:var(--ti-gold-pale);
+  text-shadow:0 6px 40px rgba(0,0,0,.6);margin-bottom:22px;
+}
+#ti-hero h1 em{display:block;font-style:normal;font-size:60px;color:var(--ti-text);opacity:.94}
+.ti-sub{font-family:var(--ti-serif);font-size:31px;color:var(--ti-sand);margin-bottom:34px}
+.ti-hero-p{max-width:820px;margin:0 auto 44px;font-size:21px;color:#dcd6c8}
+.ti-hero-rule{width:220px;height:1px;background:linear-gradient(90deg,transparent,var(--ti-gold),transparent);margin:0 auto 34px}
+.ti-scroll{
+  display:inline-flex;flex-direction:column;align-items:center;gap:10px;
+  font-size:13px;letter-spacing:.3em;color:var(--ti-gold);text-transform:uppercase
+}
+.ti-scroll i{
+  width:1px;height:46px;background:linear-gradient(180deg,var(--ti-gold),transparent);
+  animation:ti-drop 2.2s var(--ti-ease) infinite
+}
+@keyframes ti-drop{0%{transform:scaleY(.2);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- map board ---------- */
+.ti-board{
+  position:relative;border:1.5px solid var(--ti-line);border-radius:20px;overflow:hidden;
+  background:
+    radial-gradient(700px 480px at 52% 46%, rgba(201,151,63,.09), transparent 70%),
+    linear-gradient(180deg,#101d31,#0b1524);
+  box-shadow:0 30px 70px rgba(0,0,0,.45), inset 0 0 90px rgba(0,0,0,.5);
+}
+.ti-board::after{
+  content:"";position:absolute;inset:10px;border:1px solid var(--ti-line-s);border-radius:12px;pointer-events:none
+}
+#ti-map{display:block;width:100%;height:auto}
+.ti-city{cursor:pointer}
+.ti-city-dot{fill:#0c1728;stroke:var(--ti-sand);stroke-width:2;transition:all .45s var(--ti-ease)}
+.ti-city.on .ti-city-dot{fill:var(--ti-gold-lt);stroke:var(--ti-gold-pale);r:9}
+.ti-city-lb{
+  font-family:var(--ti-sans);font-size:15px;font-weight:700;fill:#c8d3e0;letter-spacing:.06em;
+  transition:fill .45s var(--ti-ease);paint-order:stroke;stroke:rgba(9,17,29,.9);stroke-width:4px
+}
+.ti-city.on .ti-city-lb{fill:var(--ti-gold-pale)}
+.ti-hub .ti-city-lb{font-size:19px;fill:var(--ti-gold-pale)}
+.ti-route{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;opacity:.22;transition:opacity .55s var(--ti-ease),stroke-width .55s var(--ti-ease)}
+.ti-route.act{opacity:1;stroke-width:5.5;filter:drop-shadow(0 0 10px currentColor)}
+.ti-route.dim{opacity:.08}
+.ti-geo-riv{fill:none;stroke:#3d6f92;stroke-width:3;opacity:.55;stroke-linecap:round}
+.ti-geo-lab{font-family:var(--ti-serif);font-size:19px;fill:#7f93ab;letter-spacing:.3em;opacity:.7}
+.ti-geo-mtn{fill:none;stroke:#5d6f85;stroke-width:2.2;opacity:.6;stroke-linecap:round;stroke-linejoin:round}
+.ti-geo-sand{fill:#c9973f;opacity:.055}
+.ti-geo-sea{fill:#2b5878;opacity:.35}
+
+/* ---------- controls ---------- */
+.ti-ctl{display:flex;flex-wrap:wrap;gap:14px;margin:26px 0 0}
+.ti-btn{
+  display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 26px;
+  border:1.5px solid var(--ti-line);border-radius:14px;background:rgba(22,40,63,.6);
+  color:var(--ti-text);font-family:var(--ti-sans);font-size:18px;font-weight:700;
+  letter-spacing:.04em;cursor:pointer;transition:all .45s var(--ti-ease)
+}
+.ti-btn i{
+  width:12px;height:12px;border-radius:50%;background:currentColor;opacity:.85;flex:0 0 auto;
+  box-shadow:0 0 0 4px rgba(201,151,63,.12)
+}
+.ti-btn:hover{border-color:var(--ti-gold);background:rgba(29,51,82,.85);transform:translateY(-2px)}
+.ti-btn.on{background:linear-gradient(180deg,rgba(201,151,63,.28),rgba(201,151,63,.12));border-color:var(--ti-gold);color:var(--ti-gold-pale)}
+.ti-btn.ti-solid{background:linear-gradient(180deg,var(--ti-gold),#a97c2c);border-color:var(--ti-gold-lt);color:#160f04}
+.ti-btn.ti-solid i{background:#160f04}
+.ti-chip{
+  display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 20px;border-radius:24px;
+  border:1.5px solid var(--ti-line-s);background:rgba(22,40,63,.55);color:var(--ti-dim);
+  font-size:16px;font-weight:700;letter-spacing:.05em;cursor:pointer;transition:all .4s var(--ti-ease)
+}
+.ti-chip:hover{border-color:var(--ti-gold);color:var(--ti-text)}
+.ti-chip.on{background:rgba(201,151,63,.2);border-color:var(--ti-gold);color:var(--ti-gold-pale)}
+
+/* ---------- info panel ---------- */
+.ti-panel{
+  margin-top:26px;border:1.5px solid var(--ti-line);border-radius:18px;padding:30px 34px;
+  background:linear-gradient(180deg,rgba(29,51,82,.6),rgba(22,40,63,.35));
+  min-height:196px;position:relative;overflow:hidden
+}
+.ti-panel::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ti-accent,var(--ti-gold));opacity:.9
+}
+.ti-panel-h{display:flex;align-items:baseline;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+.ti-panel-h h3{font-size:32px;color:var(--ti-accent,var(--ti-gold-lt));font-family:var(--ti-serif);font-weight:700}
+.ti-panel-route{font-size:16px;letter-spacing:.12em;color:var(--ti-dim)}
+.ti-fade{animation:ti-fade .55s var(--ti-ease)}
+@keyframes ti-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- grids / cards ---------- */
+.ti-grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.ti-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.ti-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.ti-card{
+  border:1.5px solid var(--ti-line-s);border-radius:18px;padding:26px 26px 24px;
+  background:linear-gradient(180deg,rgba(22,40,63,.7),rgba(12,23,40,.45));
+  transition:all .45s var(--ti-ease)
+}
+.ti-card:hover{border-color:var(--ti-line);transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.ti-card p{margin:8px 0 0;font-size:17px;color:#d6d0c2;line-height:1.58}
+.ti-icon{width:52px;height:52px;margin-bottom:14px;display:block}
+.ti-icon path,.ti-icon circle,.ti-icon rect,.ti-icon line,.ti-icon polyline{stroke:var(--ti-gold-lt);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+<div id="ti-app">
+<style>
+/* ---------- journey stepper ---------- */
+.ti-jour{margin-top:26px;border:1.5px solid var(--ti-line-s);border-radius:18px;background:rgba(12,23,40,.5);padding:26px 30px}
+.ti-jour-track{position:relative;height:74px;margin:18px 0 10px}
+.ti-jour-line{position:absolute;left:0;right:0;top:36px;height:3px;background:repeating-linear-gradient(90deg,var(--ti-line) 0 14px,transparent 14px 28px)}
+.ti-jour-fill{position:absolute;left:0;top:35px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--ti-gold),var(--ti-gold-lt));width:0;transition:width .8s var(--ti-ease);box-shadow:0 0 14px rgba(227,178,94,.6)}
+.ti-jour-node{position:absolute;top:24px;width:28px;height:28px;margin-left:-14px;border-radius:50%;border:2px solid var(--ti-line);background:#0c1728;transition:all .5s var(--ti-ease);cursor:pointer}
+.ti-jour-node.on{border-color:var(--ti-gold-pale);background:var(--ti-gold);box-shadow:0 0 0 8px rgba(201,151,63,.16)}
+.ti-jour-node span{position:absolute;top:36px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:14px;letter-spacing:.06em;color:var(--ti-dim);font-weight:700}
+.ti-jour-node.on span{color:var(--ti-gold-pale)}
+.ti-jour-cam{position:absolute;top:-6px;width:64px;height:44px;margin-left:-32px;left:0;transition:left .8s var(--ti-ease)}
+.ti-jour-txt{min-height:96px;font-size:19px;color:#e2dccd}
+.ti-jour-txt b{color:var(--ti-gold-pale)}
+
+/* ---------- scene box (mountain / desert / gate / steppe) ---------- */
+.ti-scene{
+  position:relative;border:1.5px solid var(--ti-line);border-radius:18px;overflow:hidden;
+  background:linear-gradient(180deg,#0f1c2f,#0a1320);height:452px
+}
+.ti-scene svg{position:absolute;inset:0;width:100%;height:100%}
+.ti-scene-cap{
+  pointer-events:none;position:absolute;left:0;right:0;bottom:0;padding:20px 30px;font-size:18px;color:#e6e0d1;
+  background:linear-gradient(180deg,rgba(9,17,29,0),rgba(9,17,29,.92) 45%)
+}
+.ti-scene-cap b{color:var(--ti-gold-pale)}
+.ti-hot{cursor:pointer}
+.ti-hot circle.ring{fill:rgba(201,151,63,.14);stroke:var(--ti-gold);stroke-width:1.6;transition:all .45s var(--ti-ease)}
+.ti-hot:hover circle.ring,.ti-hot.on circle.ring{fill:rgba(201,151,63,.42);stroke:var(--ti-gold-pale)}
+.ti-hot text{font-size:16px;font-weight:700;fill:var(--ti-gold-pale);font-family:var(--ti-sans)}
+.ti-pulse{animation:ti-pulse 2.6s var(--ti-ease) infinite}
+@keyframes ti-pulse{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:1;transform:scale(1.14)}}
+
+/* ---------- race (envoys) ---------- */
+.ti-race{border:1.5px solid var(--ti-line-s);border-radius:18px;background:rgba(12,23,40,.5);padding:28px 30px;margin-top:24px}
+.ti-lane{position:relative;height:92px;border-bottom:1px dashed var(--ti-line-s)}
+.ti-lane:last-of-type{border-bottom:0}
+.ti-lane-name{position:absolute;left:0;top:8px;font-size:16px;font-weight:700;letter-spacing:.1em;color:var(--ti-dim)}
+.ti-lane-road{position:absolute;left:0;right:0;top:52px;height:4px;border-radius:2px;background:repeating-linear-gradient(90deg,currentColor 0 16px,transparent 16px 34px);opacity:.4}
+.ti-lane-fig{position:absolute;top:16px;left:0;width:76px;height:54px;transition:transform .06s linear}
+.ti-lane-val{position:absolute;right:0;top:8px;font-size:16px;font-weight:700;color:var(--ti-gold-pale);letter-spacing:.06em}
+
+/* ---------- infrastructure ---------- */
+.ti-infra{display:grid;grid-template-columns:340px 1fr;gap:26px;margin-top:26px}
+.ti-infra-list{display:flex;flex-direction:column;gap:10px}
+.ti-infra-b{
+  display:flex;align-items:center;gap:16px;height:66px;padding:0 20px;border-radius:14px;
+  border:1.5px solid var(--ti-line-s);background:rgba(22,40,63,.5);color:var(--ti-text);
+  font-size:18px;font-weight:700;cursor:pointer;transition:all .4s var(--ti-ease);text-align:left
+}
+.ti-infra-b:hover{border-color:var(--ti-gold);transform:translateX(4px)}
+.ti-infra-b.on{background:linear-gradient(90deg,rgba(201,151,63,.3),rgba(201,151,63,.08));border-color:var(--ti-gold);color:var(--ti-gold-pale)}
+.ti-infra-b svg{width:30px;height:30px;flex:0 0 auto}
+.ti-infra-b svg path,.ti-infra-b svg circle,.ti-infra-b svg rect,.ti-infra-b svg line{stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ti-infra-view{border:1.5px solid var(--ti-line);border-radius:18px;background:linear-gradient(180deg,rgba(29,51,82,.55),rgba(12,23,40,.4));padding:30px 34px;display:flex;gap:28px;align-items:flex-start}
+.ti-infra-art{width:250px;height:210px;flex:0 0 auto;border:1px solid var(--ti-line-s);border-radius:14px;background:rgba(9,17,29,.55)}
+.ti-infra-art svg{width:100%;height:100%}
+
+/* ---------- dangers ---------- */
+.ti-dan{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+.ti-dan-card{
+  border:1.5px solid var(--ti-line-s);border-radius:16px;padding:22px 24px;
+  background:rgba(22,40,63,.5);cursor:pointer;transition:all .45s var(--ti-ease);position:relative;overflow:hidden
+}
+.ti-dan-card.on{border-color:var(--ti-gold);background:linear-gradient(180deg,rgba(201,151,63,.18),rgba(22,40,63,.5))}
+.ti-dan-card h4{font-size:22px;margin-bottom:4px}
+.ti-dan-card p{margin:0;font-size:16px;color:#d3cdbf;max-height:0;opacity:0;transition:all .5s var(--ti-ease)}
+.ti-dan-card.on p{max-height:200px;opacity:1;margin-top:8px}
+
+/* ---------- final ---------- */
+#ti-final{text-align:center;padding:110px 70px 120px}
+.ti-quote{
+  font-family:var(--ti-serif);font-size:46px;line-height:1.25;color:var(--ti-gold-pale);
+  max-width:880px;margin:34px auto 0;position:relative
+}
+.ti-quote::before,.ti-quote::after{content:"";display:block;width:120px;height:1px;margin:26px auto;background:linear-gradient(90deg,transparent,var(--ti-gold),transparent)}
+.ti-final-list{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:44px}
+.ti-final-list div{border:1px solid var(--ti-line-s);border-radius:14px;padding:20px 14px;font-size:16px;color:#d9d3c5;background:rgba(22,40,63,.4)}
+
+/* ---------- sources ---------- */
+.ti-src-h{display:flex;align-items:center;gap:14px;margin:30px 0 14px}
+.ti-src-h b{font-family:var(--ti-serif);font-size:26px;color:var(--ti-gold-lt);letter-spacing:.04em}
+.ti-src-h span{flex:1;height:1px;background:var(--ti-line-s)}
+.ti-src{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ti-src div{border-left:2px solid var(--ti-line);padding:6px 0 6px 18px}
+.ti-src strong{display:block;font-size:19px;color:var(--ti-text)}
+.ti-src em{font-style:normal;font-size:16px;color:var(--ti-dim)}
+
+/* ---------- chrome ---------- */
+#ti-prog{position:fixed;top:0;left:0;height:4px;width:0;z-index:60;background:linear-gradient(90deg,var(--ti-gold),var(--ti-gold-lt));box-shadow:0 0 14px rgba(227,178,94,.7)}
+#ti-up{
+  position:fixed;right:32px;bottom:32px;width:74px;height:74px;border-radius:50%;z-index:60;
+  border:1.5px solid var(--ti-gold);background:rgba(12,23,40,.9);color:var(--ti-gold-pale);
+  font-size:26px;cursor:pointer;opacity:0;pointer-events:none;transition:all .5s var(--ti-ease)
+}
+#ti-up.on{opacity:1;pointer-events:auto}
+#ti-foot{position:relative;z-index:2;padding:34px 70px 46px;border-top:1px solid var(--ti-line-s);text-align:center}
+#ti-foot p{margin:0;font-size:15px;letter-spacing:.16em;color:#7d8ea3;text-transform:uppercase}
+
+/* ---------- parts & top navigation ---------- */
+.ti-part{display:none}
+.ti-part.on{display:block;animation:ti-fade .5s var(--ti-ease)}
+#ti-nav{
+  position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  gap:26px;padding:0 44px;height:100px;background:rgba(8,15,26,.95);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--ti-line);
+  box-shadow:0 14px 40px rgba(0,0,0,.45)
+}
+#ti-nav .ti-brand{
+  font-family:var(--ti-serif);font-size:17px;line-height:1.3;letter-spacing:.2em;
+  color:var(--ti-gold-pale);text-transform:uppercase;max-width:270px
+}
+#ti-nav .ti-brand b{display:block;font-size:13px;letter-spacing:.3em;color:var(--ti-gold);font-weight:700;margin-bottom:4px}
+.ti-tabs{display:flex;gap:12px}
+.ti-tab{
+  display:flex;align-items:center;gap:13px;height:64px;padding:0 22px;border-radius:14px;
+  border:1.5px solid var(--ti-line-s);background:rgba(22,40,63,.55);color:var(--ti-dim);
+  font-family:var(--ti-sans);font-size:17px;font-weight:700;letter-spacing:.03em;cursor:pointer;
+  transition:all .45s var(--ti-ease);white-space:nowrap
+}
+.ti-tab b{font-family:var(--ti-serif);font-size:23px;color:var(--ti-gold);letter-spacing:.08em;font-weight:700}
+.ti-tab:hover{border-color:var(--ti-gold);color:var(--ti-text);transform:translateY(-2px)}
+.ti-tab.on{background:linear-gradient(180deg,rgba(201,151,63,.3),rgba(201,151,63,.1));border-color:var(--ti-gold);color:var(--ti-gold-pale)}
+.ti-next{
+  position:relative;z-index:2;padding:74px 70px 96px;text-align:center;
+  border-top:1px solid var(--ti-line-s);
+  background:linear-gradient(180deg,rgba(12,23,40,0),rgba(22,40,63,.45))
+}
+.ti-next .ti-kicker{margin-bottom:16px}
+.ti-next h3{font-family:var(--ti-serif);font-size:38px;color:var(--ti-gold-pale);margin-bottom:24px}
+.ti-next .ti-btn{height:72px;padding:0 34px;font-size:19px}
+</style>
+
+<div id="ti-prog"></div>
+
+<header id="ti-nav">
+  <div class="ti-brand"><b>XIV–XV asrlar</b>Temuriylar davrida<br>Buyuk Ipak yo‘li</div>
+  <nav class="ti-tabs" id="ti-tabs">
+    <button class="ti-tab on" data-p="1"><b>1</b>Yo‘llar xaritasi</button>
+    <button class="ti-tab" data-p="2"><b>2</b>To‘rt yo‘l tarmog‘i</button>
+    <button class="ti-tab" data-p="3"><b>3</b>Harakat va infratuzilma</button>
+  </nav>
+</header>
+
+<div class="ti-part on" data-p="1">
+
+<!-- ======================= HERO ======================= -->
+<section id="ti-hero">
+  <svg id="ti-hero-map" viewBox="0 0 1080 1010" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <radialGradient id="tiHubGlow"><stop offset="0" stop-color="#e3b25e" stop-opacity=".7"/><stop offset="1" stop-color="#e3b25e" stop-opacity="0"/></radialGradient>
+    </defs>
+    <g stroke="#c9973f" fill="none" stroke-width="1.2" opacity=".5">
+      <circle cx="540" cy="505" r="130"/><circle cx="540" cy="505" r="210"/><circle cx="540" cy="505" r="300"/><circle cx="540" cy="505" r="400"/>
+    </g>
+    <g id="ti-hero-rays" stroke-linecap="round" fill="none" stroke-width="3">
+      <path class="hr" d="M540 505 L800 380 L1010 430" stroke="#e3b25e"/>
+      <path class="hr" d="M540 505 L300 470 L70 560" stroke="#d8c29a"/>
+      <path class="hr" d="M540 505 L560 720 L470 960" stroke="#cf8158"/>
+      <path class="hr" d="M540 505 L640 300 L560 60" stroke="#93ac83"/>
+    </g>
+    <circle cx="540" cy="505" r="120" fill="url(#tiHubGlow)"/>
+    <circle cx="540" cy="505" r="12" fill="#f0d9a8"/>
+    <circle cx="540" cy="505" r="26" fill="none" stroke="#e3b25e" stroke-width="1.6" opacity=".8"/>
+  </svg>
+  <div class="ti-hero-in">
+    <div class="ti-eyebrow">Buyuk Ipak yo‘li · XIV–XV asrlar</div>
+    <h1>TEMURIYLAR DAVRIDA<em>BUYUK IPAK YO‘LI</em></h1>
+    <div class="ti-sub">Samarqanddan tarqalgan tarixiy yo‘llar tarmog‘i</div>
+    <div class="ti-hero-rule"></div>
+    <p class="ti-hero-p">XIV–XV asrlarda Samarqand Sharq va G‘arbni, Shimol va Janubni bog‘lagan muhim markazlardan biri edi. Buyuk Ipak yo‘li yagona yo‘l emas, balki ko‘plab karvon yo‘llari, elchilik yo‘llari va davlat aloqalari tizimidan iborat edi.</p>
+    <div class="ti-scroll"><span>Pastga suring</span><i></i></div>
+  </div>
+</section>
+
+<!-- ======================= I. XARITA ======================= -->
+<section class="ti-sec ti-alt" id="ti-s1">
+  <div class="ti-rv">
+    <div class="ti-num"><i>I</i>Samarqand — yo‘llar markazi<span></span></div>
+    <h2 class="ti-h">Bitta yo‘l emas — yo‘llar tizimi</h2>
+    <p class="ti-lead">Buyuk Ipak yo‘li yagona chiziq bo‘lmagan. U markazi Samarqandda bo‘lgan ko‘p tarmoqli karvon, elchilik va davlat aloqalari tarmog‘i edi. Quyidagi xarita — zamonaviy avtomobil yo‘li emas, balki XIV–XV asr yo‘nalishlarining tarixiy rekonstruksiyasi.</p>
+  </div>
+
+  <div class="ti-rv ti-board">
+<svg id="ti-map" viewBox="0 0 1000 670" role="img" aria-label="Temuriylar davri yo‘llar xaritasi">
+<defs>
+<radialGradient id="tiGlowHub"><stop offset="0" stop-color="#e3b25e" stop-opacity=".55"/><stop offset="1" stop-color="#e3b25e" stop-opacity="0"/></radialGradient>
+<pattern id="tiSandPat" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.1" fill="#c9973f" opacity=".22"/><circle cx="9" cy="9" r="1.1" fill="#c9973f" opacity=".14"/></pattern>
+<g id="tiCamelG"><image href="data:image/png;base64,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" x="1" y="0" width="62" height="44" preserveAspectRatio="xMidYMid meet"/></g>
+<g id="tiRiderEnvoy"><g transform="translate(0,1.5) scale(0.4)">
+<path d="M44,46 C33,38 19,34 5,38 C15,41 26,47 32,53 C24,55 13,61 7,67 C19,63 33,57 44,56 Z" fill="#5a4030"/>
+<g stroke="#9b5a26" stroke-width="9" stroke-linecap="round" fill="none">
+<path d="M56,66 L36,82 L20,88"/><path d="M98,66 L116,82 L128,88"/></g>
+<circle cx="20" cy="88" r="4" fill="#4a3423"/><circle cx="128" cy="88" r="4" fill="#4a3423"/>
+<path d="M42,48 C50,36 74,31 100,39 L104,43 C112,33 124,23 132,17 L140,15 C150,17 158,25 157,31 C156,36 150,39 144,37 L138,33 C130,39 118,47 110,57 C112,65 110,73 104,75 L60,75 C50,75 44,69 42,61 Z" fill="#c47c3f"/>
+<path d="M46,50 C56,44 70,42 84,44 C78,54 70,62 61,74 L48,71 C42,65 42,56 46,50 Z" fill="#9b5a26" opacity=".3"/>
+<path d="M132,17 L126,12 L123,21 L117,18 L114,27 L108,26 L105,35 L99,36 L104,43 C112,33 124,23 132,17 Z" fill="#5a4030"/>
+<path d="M131,17 L128,7 L137,14 Z" fill="#c47c3f"/><path d="M137,14 L139,5 L144,15 Z" fill="#c47c3f"/>
+<ellipse cx="146" cy="25" rx="2.2" ry="2.8" fill="#2b2119"/>
+<ellipse cx="153.5" cy="33" rx="1.7" ry="1.4" fill="#2b2119" opacity=".65"/>
+<g stroke="#7a3b2e" stroke-width="1.8" fill="none" stroke-linecap="round">
+<path d="M147,21 L142,34"/><path d="M150,29 C146,31 142,32 139,31"/></g>
+<path d="M80,46 L84,60 L91,69" stroke="#365f5c" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+<path d="M88,66 L97,70 L95,75 L86,71 Z" fill="#2b2119"/>
+<path d="M92,25 C102,26 107,33 105,41 L99,53 L93,65 L79,63 C67,63 57,58 51,52 C61,54 71,52 77,46 L79,33 C81,27 86,24 92,25 Z" fill="#2f9c8e"/>
+<path d="M79,63 C67,63 57,58 51,52 C61,54 71,52 77,46 L80,56 Z" fill="#20776c"/>
+<path d="M99,32 C109,32 119,36 127,42 L124,48 C116,42 106,39 98,39 Z" fill="#2f9c8e"/>
+<circle cx="128" cy="45" r="3.6" fill="#f0c3a0"/>
+<path d="M129,44 C136,41 143,37 147,32" stroke="#7a3b2e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<circle cx="99" cy="20" r="7.5" fill="#f0c3a0"/>
+<path d="M92,19 C92,27 96,32 101,31 C105,29 106,23 105,19 C101,22 96,22 92,19 Z" fill="#2b2119"/>
+<path d="M87,16 C86,7 95,1 104,5 C110,8 111,16 108,19 L88,19 Z" fill="#e3b25e"/>
+<path d="M89,12 C80,10 71,14 66,21 C73,18 82,17 89,16 Z" fill="#e3b25e" opacity=".85"/>
+<g stroke="#c47c3f" stroke-width="9.5" stroke-linecap="round" fill="none">
+<path d="M62,68 L50,88 L44,99"/><path d="M104,68 L120,86 L124,99"/></g>
+<circle cx="44" cy="99" r="4.2" fill="#4a3423"/><circle cx="124" cy="99" r="4.2" fill="#4a3423"/>
+</g></g>
+<g id="tiRiderCourier"><g transform="translate(0,1.5) scale(0.4)">
+<path d="M44,46 C33,38 19,34 5,38 C15,41 26,47 32,53 C24,55 13,61 7,67 C19,63 33,57 44,56 Z" fill="#33241a"/>
+<g stroke="#5c3417" stroke-width="9" stroke-linecap="round" fill="none">
+<path d="M56,66 L36,82 L20,88"/><path d="M98,66 L116,82 L128,88"/></g>
+<circle cx="20" cy="88" r="4" fill="#4a3423"/><circle cx="128" cy="88" r="4" fill="#4a3423"/>
+<path d="M42,48 C50,36 74,31 100,39 L104,43 C112,33 124,23 132,17 L140,15 C150,17 158,25 157,31 C156,36 150,39 144,37 L138,33 C130,39 118,47 110,57 C112,65 110,73 104,75 L60,75 C50,75 44,69 42,61 Z" fill="#7d4a24"/>
+<path d="M46,50 C56,44 70,42 84,44 C78,54 70,62 61,74 L48,71 C42,65 42,56 46,50 Z" fill="#5c3417" opacity=".3"/>
+<path d="M132,17 L126,12 L123,21 L117,18 L114,27 L108,26 L105,35 L99,36 L104,43 C112,33 124,23 132,17 Z" fill="#33241a"/>
+<path d="M131,17 L128,7 L137,14 Z" fill="#7d4a24"/><path d="M137,14 L139,5 L144,15 Z" fill="#7d4a24"/>
+<ellipse cx="146" cy="25" rx="2.2" ry="2.8" fill="#2b2119"/>
+<ellipse cx="153.5" cy="33" rx="1.7" ry="1.4" fill="#2b2119" opacity=".65"/>
+<g stroke="#7a3b2e" stroke-width="1.8" fill="none" stroke-linecap="round">
+<path d="M147,21 L142,34"/><path d="M150,29 C146,31 142,32 139,31"/></g>
+<path d="M80,46 L84,60 L91,69" stroke="#5e3a34" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+<path d="M88,66 L97,70 L95,75 L86,71 Z" fill="#2b2119"/>
+<path d="M92,25 C102,26 107,33 105,41 L99,53 L93,65 L79,63 C67,63 57,58 51,52 C61,54 71,52 77,46 L79,33 C81,27 86,24 92,25 Z" fill="#e05340"/>
+<path d="M79,63 C67,63 57,58 51,52 C61,54 71,52 77,46 L80,56 Z" fill="#b13527"/>
+<path d="M99,32 C109,32 119,36 127,42 L124,48 C116,42 106,39 98,39 Z" fill="#e05340"/>
+<circle cx="128" cy="45" r="3.6" fill="#f0c3a0"/>
+<path d="M129,44 C136,41 143,37 147,32" stroke="#7a3b2e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<circle cx="99" cy="20" r="7.5" fill="#f0c3a0"/>
+<path d="M92,19 C92,27 96,32 101,31 C105,29 106,23 105,19 C101,22 96,22 92,19 Z" fill="#2b2119"/>
+<path d="M87,16 C86,7 95,1 104,5 C110,8 111,16 108,19 L88,19 Z" fill="#f0d9a8"/>
+<path d="M89,12 C80,10 71,14 66,21 C73,18 82,17 89,16 Z" fill="#f0d9a8" opacity=".85"/>
+<g stroke="#7d4a24" stroke-width="9.5" stroke-linecap="round" fill="none">
+<path d="M62,68 L50,88 L44,99"/><path d="M104,68 L120,86 L124,99"/></g>
+<circle cx="44" cy="99" r="4.2" fill="#4a3423"/><circle cx="124" cy="99" r="4.2" fill="#4a3423"/>
+</g></g>
+</defs>
+<g>
+<path class="ti-geo-sand" d="M395,215 Q480,175 585,190 Q640,235 600,285 Q505,330 430,300 Q380,265 395,215 Z"/>
+<path d="M395,215 Q480,175 585,190 Q640,235 600,285 Q505,330 430,300 Q380,265 395,215 Z" fill="url(#tiSandPat)"/>
+<path class="ti-geo-sand" d="M170,370 Q250,335 330,375 Q345,430 300,470 Q220,495 175,455 Q150,410 170,370 Z"/>
+<path d="M170,370 Q250,335 330,375 Q345,430 300,470 Q220,495 175,455 Q150,410 170,370 Z" fill="url(#tiSandPat)"/>
+<text class="ti-geo-lab" x="497" y="250" text-anchor="middle">QIZILQUM</text>
+<text class="ti-geo-lab" x="250" y="420" text-anchor="middle">QORAQUM</text>
+<text class="ti-geo-lab" x="500" y="60" text-anchor="middle" style="letter-spacing:.34em">DASHTI QIPCHOQ</text>
+</g>
+<ellipse class="ti-geo-sea" cx="196" cy="86" rx="62" ry="58"/>
+<text class="ti-geo-lab" x="196" y="92" text-anchor="middle" style="font-size:14px;letter-spacing:.18em;opacity:.85">OROL</text>
+<g>
+<path class="ti-geo-riv" d="M640,528 Q580,486 537,445 Q455,404 400,372 L363,354 Q315,318 285,262 Q252,200 205,132"/>
+<path class="ti-geo-riv" d="M845,300 Q745,300 647,296 Q612,278 598,240 Q589,204 585,170 Q518,132 450,118 Q330,100 232,94"/>
+<path class="ti-geo-riv" style="stroke-width:2.2;opacity:.45" d="M578,338 Q550,328 523,326 Q460,317 402,320 L344,336"/>
+<path class="ti-geo-riv" style="stroke-width:2.2;opacity:.45" d="M330,505 Q308,466 297,424"/>
+<text class="ti-geo-lab" x="330" y="286" style="font-size:15px;letter-spacing:.16em;fill:#5f88a6" transform="rotate(-38 330 286)">AMUDARYO</text>
+<text class="ti-geo-lab" x="690" y="286" style="font-size:15px;letter-spacing:.16em;fill:#5f88a6" transform="rotate(4 690 286)">SIRDARYO</text>
+</g>
+<g class="ti-geo-mtn">
+<path d="M675,260 l15,-13 l15,13 M712,268 l20,-17 l20,17 M758,276 l15,-22 l15,22 M795,260 l20,-13 l20,13 M842,268 l15,-17 l15,17 M879,276 l20,-22 l20,22 M925,260 l15,-13 l15,13"/>
+<path d="M684,353 l16,-14 l16,14 M721,362 l21,-19 l21,19 M769,371 l16,-24 l16,24 M806,353 l21,-14 l21,14 M854,362 l16,-19 l16,19"/>
+<path d="M547,385 l13,-11 l13,11 M583,392 l17,-15 l17,15 M627,399 l13,-19 l13,19 M663,385 l17,-11 l17,11"/>
+<path d="M172,461 l13,-11 l13,11 M203,468 l17,-15 l17,15 M242,475 l13,-19 l13,19 M273,461 l17,-11 l17,11 M312,468 l13,-15 l13,15"/>
+<path d="M415,508 l15,-13 l15,13 M447,516 l20,-17 l20,17 M488,524 l15,-22 l15,22 M520,508 l20,-13 l20,13 M562,516 l15,-17 l15,17 M594,524 l20,-22 l20,22 M635,508 l15,-13 l15,13"/>
+<path d="M589,208 l11,-9 l11,9 M631,214 l14,-13 l14,13 M679,220 l11,-16 l11,16"/>
+</g>
+<text class="ti-geo-lab" x="800" y="238" text-anchor="middle" style="font-size:15px;letter-spacing:.2em">TIAN-SHAN</text>
+<text class="ti-geo-lab" x="790" y="404" text-anchor="middle" style="font-size:15px;letter-spacing:.2em">POMIR</text>
+<text class="ti-geo-lab" x="545" y="556" text-anchor="middle" style="font-size:15px;letter-spacing:.2em">HINDUKUSH</text>
+<g fill="none" stroke-dasharray="8 10" stroke-width="3" opacity=".55" stroke-linecap="round">
+<path d="M946,335 L1000,353" stroke="#e3b25e"/>
+<path d="M138,495 L40,530" stroke="#d8c29a"/>
+<path d="M626,577 Q672,612 700,646" stroke="#cf8158"/>
+<path d="M298,586 L210,626" stroke="#cf8158"/>
+<path d="M500,90 L470,42" stroke="#93ac83"/>
+</g>
+<text class="ti-geo-lab" x="990" y="382" text-anchor="end" style="font-size:14px;letter-spacing:.14em;fill:#9a8256">Xitoy tomon</text>
+<text class="ti-geo-lab" x="34" y="556" text-anchor="start" style="font-size:14px;letter-spacing:.14em;fill:#9a8256">Eron · Yaqin Sharq</text>
+<text class="ti-geo-lab" x="706" y="662" text-anchor="end" style="font-size:14px;letter-spacing:.14em;fill:#9a8256">Hindiston tomon</text>
+<g id="ti-routes">
+<path class="ti-route" id="ti-r-south-b" data-r="south" style="color:var(--ti-south)" stroke="currentColor" d="M519,468 Q575,520 626,577"/>
+<path class="ti-route" id="ti-r-east" data-r="east" style="color:var(--ti-east)" stroke="currentColor" d="M523,326 Q585,300 647,296 Q715,282 775,271 L796,283 Q880,300 946,335"/>
+<path class="ti-route" id="ti-r-west" data-r="west" style="color:var(--ti-west)" stroke="currentColor" d="M523,326 Q463,318 402,320 L363,354 Q325,388 297,424 Q215,462 138,495"/>
+<path class="ti-route" id="ti-r-south" data-r="south" style="color:var(--ti-south)" stroke="currentColor" d="M523,326 L516,356 L524,397 Q532,420 537,445 L519,468 Q410,520 298,586"/>
+<path class="ti-route" id="ti-r-north" data-r="north" style="color:var(--ti-north)" stroke="currentColor" d="M523,326 Q545,314 563,303 Q600,275 629,246 Q628,220 627,196 Q606,182 585,170 Q540,130 500,90"/>
+</g>
+<g id="ti-mover" opacity="0"><g id="ti-mover-in" transform="translate(-28,-36) scale(.86)" style="color:#f0d9a8"><use href="#tiCamelG" id="ti-mover-use"/></g></g>
+<circle cx="523" cy="326" r="86" fill="url(#tiGlowHub)"/>
+<g id="ti-cities">
+<g class="ti-city ti-hub" data-r="east west south north" data-city="Samarqand">
+  <circle cx="523" cy="326" r="20" fill="none" stroke="#e3b25e" stroke-width="1.4" opacity=".55" class="ti-pulse" style="transform-origin:523px 326px"/>
+  <circle class="ti-city-dot" cx="523" cy="326" r="10" style="stroke-width:2.6"/>
+  <circle cx="523" cy="326" r="4" fill="#0c1728"/>
+  <text class="ti-city-lb" x="505" y="318" text-anchor="end">Samarqand</text>
+</g>
+<g class="ti-city" data-r="west" data-city="Buxoro">
+  <circle class="ti-city-dot" cx="402" cy="320" r="6.5"/>
+  <text class="ti-city-lb" x="402" y="302" text-anchor="middle">Buxoro</text>
+</g>
+<g class="ti-city" data-r="west" data-city="Amul">
+  <circle class="ti-city-dot" cx="363" cy="354" r="6.5"/>
+  <text class="ti-city-lb" x="363" y="380" text-anchor="middle">Amul</text>
+</g>
+<g class="ti-city" data-r="west" data-city="Marv">
+  <circle class="ti-city-dot" cx="297" cy="424" r="6.5"/>
+  <text class="ti-city-lb" x="283" y="430" text-anchor="end">Marv</text>
+</g>
+<g class="ti-city" data-r="west" data-city="Nishopur">
+  <circle class="ti-city-dot" cx="138" cy="495" r="6.5"/>
+  <text class="ti-city-lb" x="138" y="521" text-anchor="middle">Nishopur</text>
+</g>
+<g class="ti-city" data-r="east" data-city="Xo‘jand">
+  <circle class="ti-city-dot" cx="647" cy="296" r="6.5"/>
+  <text class="ti-city-lb" x="647" y="278" text-anchor="middle">Xo‘jand</text>
+</g>
+<g class="ti-city" data-r="east" data-city="Andijon">
+  <circle class="ti-city-dot" cx="775" cy="271" r="6.5"/>
+  <text class="ti-city-lb" x="775" y="253" text-anchor="middle">Andijon</text>
+</g>
+<g class="ti-city" data-r="east" data-city="O‘sh">
+  <circle class="ti-city-dot" cx="796" cy="283" r="6.5"/>
+  <text class="ti-city-lb" x="810" y="301" text-anchor="start">O‘sh</text>
+</g>
+<g class="ti-city" data-r="east" data-city="Qashqar">
+  <circle class="ti-city-dot" cx="946" cy="335" r="6.5"/>
+  <text class="ti-city-lb" x="930" y="359" text-anchor="end">Qashqar</text>
+</g>
+<g class="ti-city" data-r="south" data-city="Kesh">
+  <circle class="ti-city-dot" cx="516" cy="356" r="6.5"/>
+  <text class="ti-city-lb" x="502" y="362" text-anchor="end">Kesh</text>
+</g>
+<g class="ti-city" data-r="south" data-city="Termiz">
+  <circle class="ti-city-dot" cx="537" cy="445" r="6.5"/>
+  <text class="ti-city-lb" x="551" y="451" text-anchor="start">Termiz</text>
+</g>
+<g class="ti-city" data-r="south" data-city="Balx">
+  <circle class="ti-city-dot" cx="519" cy="468" r="6.5"/>
+  <text class="ti-city-lb" x="505" y="478" text-anchor="end">Balx</text>
+</g>
+<g class="ti-city" data-r="south" data-city="Hirot">
+  <circle class="ti-city-dot" cx="298" cy="586" r="6.5"/>
+  <text class="ti-city-lb" x="298" y="612" text-anchor="middle">Hirot</text>
+</g>
+<g class="ti-city" data-r="south" data-city="Kobul">
+  <circle class="ti-city-dot" cx="626" cy="577" r="6.5"/>
+  <text class="ti-city-lb" x="640" y="583" text-anchor="start">Kobul</text>
+</g>
+<g class="ti-city" data-r="north" data-city="Jizzax">
+  <circle class="ti-city-dot" cx="563" cy="303" r="6.5"/>
+  <text class="ti-city-lb" x="577" y="309" text-anchor="start">Jizzax</text>
+</g>
+<g class="ti-city" data-r="north" data-city="Toshkent">
+  <circle class="ti-city-dot" cx="629" cy="246" r="6.5"/>
+  <text class="ti-city-lb" x="643" y="252" text-anchor="start">Toshkent</text>
+</g>
+<g class="ti-city" data-r="north" data-city="Sayram">
+  <circle class="ti-city-dot" cx="627" cy="196" r="6.5"/>
+  <text class="ti-city-lb" x="641" y="202" text-anchor="start">Sayram</text>
+</g>
+<g class="ti-city" data-r="north" data-city="O‘tror">
+  <circle class="ti-city-dot" cx="585" cy="170" r="6.5"/>
+  <text class="ti-city-lb" x="571" y="176" text-anchor="end">O‘tror</text>
+</g>
+<g class="ti-city" data-r="south" data-city="Temir Darvoza">
+  <path class="ti-city-dot" d="M516,391 l8,-9 l8,9 l-4,10 l-8,0 Z" style="fill:#0c1728"/>
+  <text class="ti-city-lb" x="510" y="402" text-anchor="end">Temir Darvoza</text>
+</g>
+</g>
+</svg>
+  </div>
+
+  <div class="ti-rv ti-ctl" id="ti-route-btns">
+    <button class="ti-btn on" data-r="all"><i style="color:var(--ti-gold)"></i>Barcha tarmoqlar</button>
+    <button class="ti-btn" data-r="east"><i style="color:var(--ti-east)"></i>Sharqiy yo‘l</button>
+    <button class="ti-btn" data-r="west"><i style="color:var(--ti-west)"></i>G‘arbiy yo‘l</button>
+    <button class="ti-btn" data-r="south"><i style="color:var(--ti-south)"></i>Janubiy yo‘l</button>
+    <button class="ti-btn" data-r="north"><i style="color:var(--ti-north)"></i>Shimoliy yo‘l</button>
+    <button class="ti-btn ti-solid" id="ti-demo"><i></i>Avtomatik namoyish</button>
+  </div>
+
+  <div class="ti-rv ti-panel" id="ti-panel">
+    <div class="ti-panel-h">
+      <h3 id="ti-panel-t">Samarqand — to‘rt tomon markazi</h3>
+      <span class="ti-panel-route" id="ti-panel-r">SHARQ · G‘ARB · JANUB · SHIMOL</span>
+    </div>
+    <p class="ti-p" id="ti-panel-p">Samarqanddan to‘rt asosiy yo‘nalish tarqalgan: sharqda Farg‘ona vodiysi va Qashqar, g‘arbda Buxoro va Marv, janubda Kesh, Termiz va Balx, shimolda Toshkent vohasi va O‘tror. Tarmoqni tanlang — yo‘nalish yoritiladi va karvon harakati ko‘rsatiladi.</p>
+  </div>
+
+  <div class="ti-rv ti-jour" id="ti-jour">
+    <div class="ti-panel-h" style="margin-bottom:6px">
+      <h4 class="ti-h4">Yo‘l bo‘ylab sayohat</h4>
+      <span class="ti-panel-route" id="ti-jour-r">Tarmoqni tanlang</span>
+    </div>
+    <p class="ti-small" style="margin:0">Har bir bosqich alohida ko‘rsatiladi: qaysi shahar, qanday tabiat, qanday to‘xtash joyi.</p>
+    <div class="ti-jour-track" id="ti-jour-track">
+      <div class="ti-jour-line"></div>
+      <div class="ti-jour-fill" id="ti-jour-fill"></div>
+      <svg class="ti-jour-cam" id="ti-jour-cam" viewBox="0 0 64 44"><g style="color:var(--ti-gold-pale)"><use href="#tiCamelG"/></g></svg>
+    </div>
+    <p class="ti-jour-txt" id="ti-jour-txt">Yuqoridan tarmoqni tanlang, so‘ng «Boshlash» tugmasini bosing.</p>
+    <div class="ti-ctl" style="margin-top:8px">
+      <button class="ti-btn" id="ti-jour-prev"><i style="color:var(--ti-sand)"></i>Oldingi</button>
+      <button class="ti-btn ti-solid" id="ti-jour-next"><i></i>Boshlash</button>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="ti-next">
+  <div class="ti-kicker">2-qism</div>
+  <h3>To‘rt yo‘l tarmog‘i — sharq, g‘arb, janub, shimol</h3>
+  <button class="ti-btn ti-solid ti-goto" data-p="2"><i></i>Keyingi qism</button>
+</div>
+
+<div class="ti-part" data-p="2">
+
+<!-- ======================= SHARQIY YO‘L TARMOG‘I ======================= -->
+<section class="ti-sec">
+  <div class="ti-rv">
+    <div class="ti-num"><i>II</i>Sharqiy yo‘l tarmog‘i<span></span></div>
+    <h2 class="ti-h" style="color:var(--ti-east)">Samarqand → Qashqar</h2>
+    <div class="ti-ctl" style="margin:0 0 24px">
+      <span class="ti-chip on" style="border-color:var(--ti-east)">Samarqand</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-east)">Xo‘jand</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-east)">Farg‘ona vodiysi</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-east)">O‘sh</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-east)">Qashqar</span>
+    </div>
+    <p class="ti-lead">Sharqiy yo‘l Samarqandni Farg‘ona vodiysi va Qashqar orqali Sharqiy Turkiston bilan bog‘lagan. Bu tarmoq tog‘li hududlar, vohalar va o‘tish nuqtalari orqali karvon harakati uchun muhim bo‘lgan.</p>
+  </div>
+  <div class="ti-rv">
+    <h4 class="ti-h4" style="margin-bottom:14px">Tog‘ yo‘lidan o‘tish</h4>
+    <div class="ti-scene" data-scene="east">
+      <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="tiSkyM" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12253d"/><stop offset="1" stop-color="#0a1320"/></linearGradient></defs><rect width="900" height="420" fill="url(#tiSkyM)"/><circle cx="828" cy="64" r="28" fill="#f0d9a8" opacity=".16"/><g opacity=".28" fill="#2a3f5c"><path d="M0,300 L120,160 L210,250 L300,140 L420,300 Z"/><path d="M360,300 L470,120 L560,230 L640,150 L760,300 Z"/><path d="M660,300 L780,170 L900,300 Z"/></g><g opacity=".55" fill="#1b3047"><path d="M0,330 L150,200 L260,300 L360,210 L520,330 Z"/><path d="M440,330 L600,180 L700,270 L800,200 L900,330 Z"/></g><g fill="#f5eedf" opacity=".5"><path d="M150,200 l16,16 l-14,6 l-16,-8 Z"/><path d="M600,180 l18,18 l-16,7 l-18,-9 Z"/><path d="M470,120 l16,16 l-15,6 l-15,-8 Z"/><path d="M300,140 l15,15 l-14,6 l-14,-8 Z"/></g><path d="M0,392 Q150,352 260,378 Q380,404 520,352 Q650,306 900,286" fill="none" stroke="#c9973f" stroke-width="5" opacity=".55" stroke-linecap="round"/><path d="M0,392 Q150,352 260,378 Q380,404 520,352 Q650,306 900,286" fill="none" stroke="#f0d9a8" stroke-width="1.6" stroke-dasharray="10 14" opacity=".7"/><g fill="#0c1728" opacity=".85"><rect x="0" y="398" width="900" height="22"/></g><g id="tiMtnCam" transform="translate(150,338) scale(.8)" style="color:#f0d9a8"><use href="#tiCamelG"/></g>
+        <g class="ti-hot" data-cap='<b>Tor yo‘l.</b> Ba’zi joylarda so‘qmoq faqat bitta tuya o‘tadigan kenglikda bo‘lgan. Karvon bir qatorda, yetakchi ortidan yurgan.'><circle class="ring" cx="232" cy="352" r="24"/><circle cx="232" cy="352" r="4.5" fill="#f0d9a8"/><text x="232" y="316" text-anchor="middle">Tor yo‘l</text></g>
+        <g class="ti-hot" data-cap='<b>Dovon.</b> Baland o‘tish nuqtasi. Dovon oshish uchun ob-havo, yuk og‘irligi va kun uzunligi oldindan hisoblangan.'><circle class="ring" cx="470" cy="148" r="24"/><circle cx="470" cy="148" r="4.5" fill="#f0d9a8"/><text x="470" y="112" text-anchor="middle">Dovon</text></g>
+        <g class="ti-hot" data-cap='<b>Ob-havo.</b> Yozda ham qor va sovuq bo‘lishi mumkin edi. Qor yopilsa, karvon quyi bekatda kunlab kutib turgan.'><circle class="ring" cx="742" cy="110" r="24"/><circle cx="742" cy="110" r="4.5" fill="#f0d9a8"/><text x="742" y="74" text-anchor="middle">Ob-havo</text></g>
+      </svg>
+      <div class="ti-scene-cap">Tog‘ yo‘li — eng sekin, eng xavfli, lekin eng qisqa yo‘nalish edi. Nuqtalarni bosing.</div>
+    </div>
+  </div>
+  <div class="ti-rv ti-grid2" style="margin-top:26px;gap:34px;align-items:start">
+    <p class="ti-p" style="margin:0">Yo‘nalish vohadan vohaga o‘tib, tog‘ etaklari bo‘ylab davom etgan. Qashqardan keyin yo‘l Sharqiy Turkiston va Xitoy tomon uzaygan. Sharqdan kelgan savdogarlar, elchilar va qimmatbaho tovarlar ayni shu tarmoq orqali harakatlangan.</p>
+    <div><p class="ti-small" style="margin:0 0 12px">Xaritada tarmoq rangi: <b style="color:var(--ti-east)">Sharqiy yo‘l tarmog‘i</b></p><hr class="ti-dashline"></div>
+  </div>
+</section>
+
+<!-- ======================= G‘ARBIY YO‘L TARMOG‘I ======================= -->
+<section class="ti-sec ti-alt">
+  <div class="ti-rv">
+    <div class="ti-num"><i>III</i>G‘arbiy yo‘l tarmog‘i<span></span></div>
+    <h2 class="ti-h" style="color:var(--ti-west)">Samarqand → Marv → Eron tomon</h2>
+    <div class="ti-ctl" style="margin:0 0 24px">
+      <span class="ti-chip on" style="border-color:var(--ti-west)">Samarqand</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-west)">Buxoro</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-west)">Amul</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-west)">Marv</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-west)">Nishopur</span>
+    </div>
+    <p class="ti-lead">G‘arbiy yo‘l Zarafshon vodiysi, Buxoro vohasi va cho‘l oldi hududlari orqali Marvga, undan esa Eron tomon davom etgan. Bu yo‘l savdo, diplomatiya va davlatlararo aloqalarda muhim rol o‘ynagan.</p>
+  </div>
+  <div class="ti-rv">
+    <h4 class="ti-h4" style="margin-bottom:14px">Cho‘l yo‘li qanday ishlagan?</h4>
+    <div class="ti-scene" data-scene="west">
+      <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="tiSkyD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#132a44"/><stop offset="1" stop-color="#2a2418"/></linearGradient></defs><rect width="900" height="420" fill="url(#tiSkyD)"/><circle cx="770" cy="96" r="40" fill="#e3b25e" opacity=".22"/><circle cx="770" cy="96" r="18" fill="#f0d9a8" opacity=".5"/><g fill="#c9973f"><path d="M0,300 Q150,258 300,296 Q450,334 600,290 Q750,250 900,292 L900,420 L0,420 Z" opacity=".18"/><path d="M0,344 Q180,308 360,346 Q540,384 720,340 Q810,318 900,336 L900,420 L0,420 Z" opacity=".26"/></g><g stroke="#f0d9a8" opacity=".18" stroke-width="1.4" fill="none"><path d="M40,318 Q120,306 200,318"/><path d="M300,362 Q380,350 460,362"/><path d="M600,330 Q680,318 760,330"/></g><path d="M0,392 Q220,372 440,384 Q660,396 900,368" fill="none" stroke="#f0d9a8" stroke-width="1.6" stroke-dasharray="9 13" opacity=".55"/><g transform="translate(180,300)"><rect x="-26" y="0" width="52" height="34" rx="5" fill="#1b3047" stroke="#c9973f" stroke-width="1.6"/><path d="M-30,0 L30,0" stroke="#c9973f" stroke-width="2"/><path d="M-16,0 L0,-28 L16,0" fill="none" stroke="#c9973f" stroke-width="2"/><path d="M0,-28 L0,-10" stroke="#7ba5d6" stroke-width="1.6"/><rect x="-6" y="-12" width="12" height="10" fill="none" stroke="#7ba5d6" stroke-width="1.6"/></g><g transform="translate(450,296)"><path d="M-44,34 L-44,8 A44,40 0 0 1 44,8 L44,34 Z" fill="#1b3047" stroke="#c9973f" stroke-width="1.8"/><path d="M-16,34 L-16,14 A16,16 0 0 1 16,14 L16,34 Z" fill="#0c1728" stroke="#c9973f" stroke-width="1.4"/><circle cx="0" cy="-32" r="4" fill="#e3b25e"/></g><g transform="translate(700,318)"><path d="M-34,26 L-10,-18 L14,26 Z" fill="#1b3047" stroke="#c9973f" stroke-width="1.6"/><path d="M6,26 L26,-8 L46,26 Z" fill="#16283f" stroke="#c9973f" stroke-width="1.4"/><circle cx="-40" cy="22" r="7" fill="#e3b25e" opacity=".65"/></g><g transform="translate(320,336) scale(.78)" style="color:#f0d9a8"><use href="#tiCamelG"/></g>
+        <g class="ti-hot" data-cap='<b>Quduq.</b> Cho‘l yo‘lining asosiy tayanchi. Quduqlar orasidagi masofa bir kunlik yurishdan uzoq bo‘lmagan, aks holda yo‘nalish ishlamagan.'><circle class="ring" cx="180" cy="282" r="24"/><circle cx="180" cy="282" r="4.5" fill="#f0d9a8"/><text x="180" y="246" text-anchor="middle">Quduq</text></g>
+        <g class="ti-hot" data-cap='<b>Sardoba.</b> Yer osti suv omborisi. Gumbaz suvni quyoshdan saqlagan, bahorgi suv butun yozga yetgan.'><circle class="ring" cx="450" cy="258" r="24"/><circle cx="450" cy="258" r="4.5" fill="#f0d9a8"/><text x="450" y="222" text-anchor="middle">Sardoba</text></g>
+        <g class="ti-hot" data-cap='<b>Tunash joyi.</b> Karvon kunning eng issiq soatlarida to‘xtab, harakatni erta tong va kechga ko‘chirgan.'><circle class="ring" cx="712" cy="300" r="24"/><circle cx="712" cy="300" r="4.5" fill="#f0d9a8"/><text x="712" y="264" text-anchor="middle">Tunash joyi</text></g>
+      </svg>
+      <div class="ti-scene-cap">Cho‘lda yo‘lni suv belgilagan: quduqdan quduqqacha bo‘lgan masofa bir kunlik yurishga teng edi.</div>
+    </div>
+  </div>
+  <div class="ti-rv ti-grid2" style="margin-top:26px;gap:34px;align-items:start">
+    <p class="ti-p" style="margin:0">Amulda karvon Amudaryodan kechib o‘tgan — bu butun yo‘nalishning eng mas’uliyatli nuqtasi edi. Marvdan keyin yo‘l Nishopur orqali Eron va Yaqin Sharq yo‘nalishlariga ulangan.</p>
+    <div><p class="ti-small" style="margin:0 0 12px">Xaritada tarmoq rangi: <b style="color:var(--ti-west)">G‘arbiy yo‘l tarmog‘i</b></p><hr class="ti-dashline"></div>
+  </div>
+</section>
+
+<!-- ======================= JANUBIY YO‘L TARMOG‘I ======================= -->
+<section class="ti-sec">
+  <div class="ti-rv">
+    <div class="ti-num"><i>IV</i>Janubiy yo‘l tarmog‘i<span></span></div>
+    <h2 class="ti-h" style="color:var(--ti-south)">Samarqand → Balx → Hirot</h2>
+    <div class="ti-ctl" style="margin:0 0 24px">
+      <span class="ti-chip on" style="border-color:var(--ti-south)">Samarqand</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-south)">Kesh</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-south)">Temir Darvoza</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-south)">Termiz</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-south)">Balx</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-south)">Hirot</span>
+    </div>
+    <p class="ti-lead">Janubiy yo‘l Kesh va Temir Darvoza orqali Termiz, Balx va Hirotga olib borgan. Bu tarmoq Temuriylar davrida strategik jihatdan muhim bo‘lib, davlatning janubiy hududlari bilan aloqani ta’minlagan.</p>
+  </div>
+  <div class="ti-rv">
+    <h4 class="ti-h4" style="margin-bottom:14px">Temir Darvoza</h4>
+    <div class="ti-scene" data-scene="south">
+      <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="tiSkyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2138"/><stop offset="1" stop-color="#0a1320"/></linearGradient></defs><rect width="900" height="420" fill="url(#tiSkyG)"/><g fill="#16283f"><path d="M0,0 L330,0 L360,120 L330,220 L352,330 L300,420 L0,420 Z"/><path d="M900,0 L570,0 L544,130 L572,230 L548,340 L600,420 L900,420 Z"/></g><g fill="none" stroke="#2c4363" stroke-width="2" opacity=".8"><path d="M60,40 L200,120 L120,240 L240,340"/><path d="M840,60 L700,150 L790,260 L680,350"/></g><rect x="352" y="330" width="196" height="10" fill="#c9973f" opacity=".35"/><path d="M352,352 L548,352" stroke="#f0d9a8" stroke-width="1.6" stroke-dasharray="9 12" opacity=".6"/><g transform="translate(450,190)"><path d="M-72,150 L-72,26 A72,72 0 0 1 72,26 L72,150 Z" fill="#0c1728" stroke="#c9973f" stroke-width="2.4"/><path d="M-40,150 L-40,36 A40,40 0 0 1 40,36 L40,150 Z" fill="#050b14" stroke="#c9973f" stroke-width="1.6"/><path d="M-72,26 L72,26" stroke="#c9973f" stroke-width="1.4" opacity=".6"/><rect x="-84" y="150" width="168" height="12" fill="#c9973f" opacity=".5"/></g><g transform="translate(398,310) scale(.95)"><use href="#tiRiderEnvoy"/></g>
+        <g class="ti-hot" data-cap='<b>Tor darband.</b> Tabiiy tosh yo‘lak. Bu yerdan o‘tmasdan janubga chiqish deyarli imkonsiz bo‘lgan.'><circle class="ring" cx="300" cy="150" r="24"/><circle cx="300" cy="150" r="4.5" fill="#f0d9a8"/><text x="300" y="114" text-anchor="middle">Tor darband</text></g>
+        <g class="ti-hot" data-cap='<b>Nazorat nuqtasi.</b> Tor joy nazoratni osonlashtirgan: kim, qayerga va nima olib o‘tayotgani shu yerda belgilangan.'><circle class="ring" cx="450" cy="132" r="24"/><circle cx="450" cy="132" r="4.5" fill="#f0d9a8"/><text x="450" y="96" text-anchor="middle">Nazorat</text></g>
+        <g class="ti-hot" data-cap='<b>Yo‘l boji.</b> O‘tish nuqtalarida yig‘im olingan. Bu yo‘lni saqlash va qo‘riqlash xarajatlarini qoplagan.'><circle class="ring" cx="662" cy="296" r="24"/><circle cx="662" cy="296" r="4.5" fill="#f0d9a8"/><text x="662" y="260" text-anchor="middle">Yo‘l boji</text></g>
+      </svg>
+      <div class="ti-scene-cap">Tor tog‘ yo‘lagi — janubga chiqishning tabiiy darvozasi. Nuqtalarni bosing.</div>
+    </div>
+  </div>
+  <div class="ti-rv ti-grid2" style="margin-top:26px;gap:34px;align-items:start">
+    <p class="ti-p" style="margin:0">Yo‘l nafaqat savdo uchun xizmat qilgan: harbiy yurishlar, davlat topshiriqlari va elchilik safarlari ham shu yo‘nalishdan o‘tgan. Balxdan yo‘l Kobul va Hindiston tomonga ham tarmoqlangan.</p>
+    <div><p class="ti-small" style="margin:0 0 12px">Xaritada tarmoq rangi: <b style="color:var(--ti-south)">Janubiy yo‘l tarmog‘i</b></p><hr class="ti-dashline"></div>
+  </div>
+</section>
+
+<!-- ======================= SHIMOLIY YO‘L TARMOG‘I ======================= -->
+<section class="ti-sec ti-alt">
+  <div class="ti-rv">
+    <div class="ti-num"><i>V</i>Shimoliy yo‘l tarmog‘i<span></span></div>
+    <h2 class="ti-h" style="color:var(--ti-north)">Samarqand → O‘tror → Dashti Qipchoq</h2>
+    <div class="ti-ctl" style="margin:0 0 24px">
+      <span class="ti-chip on" style="border-color:var(--ti-north)">Samarqand</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-north)">Jizzax</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-north)">Toshkent vohasi</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-north)">Sayram</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-north)">O‘tror</span>
+      <span class="ti-chip" style="border-style:dashed;opacity:.55;padding:0 12px">→</span>
+      <span class="ti-chip on" style="border-color:var(--ti-north)">Dashti Qipchoq</span>
+    </div>
+    <p class="ti-lead">Shimoliy yo‘l Samarqandni Toshkent vohasi, Sayram va O‘tror orqali Dashti Qipchoq hududlari bilan bog‘lagan. Bu tarmoq shimoliy savdo va siyosiy aloqalar uchun katta ahamiyatga ega edi.</p>
+  </div>
+  <div class="ti-rv">
+    <h4 class="ti-h4" style="margin-bottom:14px">Dasht yo‘li</h4>
+    <div class="ti-scene" data-scene="north">
+      <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="tiSkyS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14283f"/><stop offset="1" stop-color="#101d2f"/></linearGradient></defs><rect width="900" height="420" fill="url(#tiSkyS)"/><g stroke="#f0d9a8" opacity=".12" fill="none" stroke-width="1.2"><path d="M0,80 Q220,58 440,80 Q660,102 900,72"/><path d="M0,128 Q240,108 480,130 Q700,150 900,124"/></g><path d="M0,300 Q220,286 440,300 Q660,314 900,296 L900,420 L0,420 Z" fill="#1b3047" opacity=".8"/><path d="M0,300 Q220,286 440,300 Q660,314 900,296" fill="none" stroke="#93ac83" stroke-width="2" opacity=".6"/><g stroke="#93ac83" opacity=".45" stroke-width="1.4" fill="none"><path d="M80,340 l4,-16 M92,342 l-3,-14 M300,362 l4,-16 M312,364 l-3,-14 M560,346 l4,-16 M572,348 l-3,-14 M760,372 l4,-16 M772,374 l-3,-14"/></g><path d="M0,384 Q240,366 480,380 Q700,392 900,362" fill="none" stroke="#f0d9a8" stroke-width="1.6" stroke-dasharray="9 13" opacity=".5"/><g transform="translate(690,286)"><path d="M-30,20 L-30,4 A30,22 0 0 1 30,4 L30,20 Z" fill="#16283f" stroke="#c9973f" stroke-width="1.5"/><path d="M6,20 L6,8 A22,16 0 0 1 50,8 L50,20 Z" fill="#12233a" stroke="#c9973f" stroke-width="1.3"/></g><g transform="translate(790,330)"><rect x="-30" y="0" width="60" height="26" fill="#16283f" stroke="#c9973f" stroke-width="1.4"/><path d="M-38,0 L0,-20 L38,0" fill="none" stroke="#c9973f" stroke-width="1.8"/></g><g id="tiSteppeRider" transform="translate(196,316) scale(1.05)"><use href="#tiRiderCourier"/></g>
+        <g class="ti-hot" data-cap='<b>Otliq harakat.</b> Ochiq tekislikda ot karvondan bir necha barobar tez yurgan. Shu bois shimoliy yo‘nalish xabar uzatish uchun qulay bo‘lgan.'><circle class="ring" cx="200" cy="270" r="24"/><circle cx="200" cy="270" r="4.5" fill="#f0d9a8"/><text x="200" y="234" text-anchor="middle">Otliq chopar</text></g>
+        <g class="ti-hot" data-cap='<b>Ochiq tekislik.</b> To‘siq yo‘q, lekin panoh ham yo‘q. Shamol, jazirama va sovuq to‘g‘ridan-to‘g‘ri ta’sir qilgan.'><circle class="ring" cx="470" cy="196" r="24"/><circle cx="470" cy="196" r="4.5" fill="#f0d9a8"/><text x="470" y="160" text-anchor="middle">Ochiq tekislik</text></g>
+        <g class="ti-hot" data-cap='<b>Bozor bekati.</b> Ko‘chmanchi dasht va o‘troq voha shu nuqtalarda uchrashgan: chorva, teri va jun — mato, don va idishga almashilgan.'><circle class="ring" cx="790" cy="300" r="24"/><circle cx="790" cy="300" r="4.5" fill="#f0d9a8"/><text x="790" y="264" text-anchor="middle">Bozor bekati</text></g>
+      </svg>
+      <div class="ti-scene-cap">Dashtda yo‘lni relyef emas, suv va yaylov belgilagan. Nuqtalarni bosing.</div>
+    </div>
+  </div>
+  <div class="ti-rv ti-grid2" style="margin-top:26px;gap:34px;align-items:start">
+    <p class="ti-p" style="margin:0">Ochiq tekisliklarda tuyadan ko‘ra ot ko‘proq ishlatilgan: dashtda tezlik va uzoq masofani tez bosib o‘tish ustun turgan. O‘tror Sirdaryo bo‘yidagi eng muhim chegara–savdo shaharlaridan biri bo‘lgan.</p>
+    <div><p class="ti-small" style="margin:0 0 12px">Xaritada tarmoq rangi: <b style="color:var(--ti-north)">Shimoliy yo‘l tarmog‘i</b></p><hr class="ti-dashline"></div>
+  </div>
+</section>
+</div>
+
+<div class="ti-next">
+  <div class="ti-kicker">3-qism</div>
+  <h3>Harakat, infratuzilma va yo‘ldagi xavflar</h3>
+  <button class="ti-btn ti-solid ti-goto" data-p="3"><i></i>Keyingi qism</button>
+</div>
+
+<div class="ti-part" data-p="3">
+
+<!-- ======================= VI. ELCHILAR VA CHOPARLAR ======================= -->
+<section class="ti-sec">
+  <div class="ti-rv">
+    <div class="ti-num"><i>VI</i>Elchilar va choparlar<span></span></div>
+    <h2 class="ti-h">Davlat aloqalari yo‘llari</h2>
+    <p class="ti-lead">Temuriylar davrida yo‘llar faqat savdogarlar uchun emas edi. Ular bo‘ylab elchilar, choparlar, davlat xabarchilari va harbiy buyruqlar ham harakatlangan.</p>
+  </div>
+  <div class="ti-rv ti-grid2" style="gap:26px;align-items:start">
+    <div>
+      <p class="ti-p">Yirik davlatni boshqarish uchun tezkor aloqa zarur edi. Asosiy yo‘llarda choparlar va davlat vakillari harakatlangan. Ayrim yo‘nalishlarda ot almashtirish, xabar yetkazish va yo‘l bo‘yidagi xizmat tizimi mavjud bo‘lgan.</p>
+      <p class="ti-p">Bir xil yo‘l uch xil tezlikda ishlagan: yuk ortilgan karvon sekin, elchilik safari o‘rtacha, yolg‘iz chopar esa eng tez harakatlangan. Shu sababli xabar tovardan ancha oldin yetib borgan.</p>
+      <hr class="ti-dashline" style="margin:22px 0">
+      <p class="ti-small">Ruy Gonsales de Klavixoning Samarqandga safar kundaligida yo‘l, bekatlar va davlat xabarchilari tizimi haqidagi bevosita tasvirlar saqlanib qolgan.</p>
+    </div>
+    <div class="ti-race">
+      <div class="ti-lane" style="color:var(--ti-trade)">
+        <div class="ti-lane-name">Savdo karvoni</div><div class="ti-lane-val" id="ti-v0">0%</div>
+        <div class="ti-lane-road"></div>
+        <svg class="ti-lane-fig" id="ti-f0" viewBox="0 0 64 44"><g style="color:#e3b25e"><use href="#tiCamelG"/></g></svg>
+      </div>
+      <div class="ti-lane" style="color:var(--ti-envoy)">
+        <div class="ti-lane-name">Elchilik safari</div><div class="ti-lane-val" id="ti-v1">0%</div>
+        <div class="ti-lane-road"></div>
+        <svg class="ti-lane-fig" id="ti-f1" viewBox="0 0 64 44"><use href="#tiRiderEnvoy"/></svg>
+      </div>
+      <div class="ti-lane" style="color:var(--ti-courier)">
+        <div class="ti-lane-name">Chopar</div><div class="ti-lane-val" id="ti-v2">0%</div>
+        <div class="ti-lane-road"></div>
+        <svg class="ti-lane-fig" id="ti-f2" viewBox="0 0 64 44"><use href="#tiRiderCourier"/></svg>
+      </div>
+      <div class="ti-ctl" style="margin-top:16px">
+        <button class="ti-btn ti-solid" id="ti-race-go"><i></i>Harakatni ko‘rsatish</button>
+      </div>
+      <p class="ti-small" style="margin:14px 0 0">Nisbiy tezlik — shartli ko‘rgazmali tasvir, aniq raqamlar emas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= VII. INFRATUZILMA ======================= -->
+<section class="ti-sec ti-alt">
+  <div class="ti-rv">
+    <div class="ti-num"><i>VII</i>Yo‘lni ishlatgan infratuzilma<span></span></div>
+    <h2 class="ti-h">Yo‘l — faqat iz emas edi</h2>
+    <p class="ti-lead">Karvon yo‘li quduqlar, tunash joylari, karvonsaroylar, kechuvlar, ko‘priklar va nazorat punktlari bilan ishlagan murakkab tizim edi. Ular bo‘lmasa yo‘nalish shunchaki ishlamagan.</p>
+  </div>
+  <div class="ti-rv ti-infra">
+    <div class="ti-infra-list" id="ti-infra-list">
+      <button class="ti-infra-b on" data-i="0"><svg viewBox="0 0 48 48"><path d="M4,20 h16 v-8 a4,4 0 0 1 8,0 v8 h16"/><path d="M4,20 v-6 M44,20 v-6"/></svg>Karvonsaroy</button>
+      <button class="ti-infra-b" data-i="1"><svg viewBox="0 0 48 48"><path d="M10,44 h28 v-18 h-28 z M24,26 v-14 M14,12 h20"/></svg>Quduq va sardoba</button>
+      <button class="ti-infra-b" data-i="2"><svg viewBox="0 0 48 48"><path d="M4,30 q10,-8 20,0 t20,0"/><path d="M4,40 q10,-8 20,0 t20,0"/><path d="M14,18 h20 l-4,8 h-12 z"/></svg>Daryo kechuvi</button>
+      <button class="ti-infra-b" data-i="3"><svg viewBox="0 0 48 48"><path d="M4,36 h40"/><path d="M10,36 a8,8 0 0 1 12,0 M26,36 a8,8 0 0 1 12,0"/><path d="M4,36 v8 M44,36 v8"/></svg>Ko‘prik</button>
+      <button class="ti-infra-b" data-i="4"><svg viewBox="0 0 48 48"><path d="M4,40 l14,-22 l10,14 l8,-10 l12,18 z"/><path d="M14,40 q10,-10 20,0"/></svg>Dovon</button>
+      <button class="ti-infra-b" data-i="5"><svg viewBox="0 0 48 48"><path d="M6,42 v-18 h36 v18"/><path d="M18,42 v-12 a6,6 0 0 1 12,0 v12"/><path d="M6,24 l6,-8 h24 l6,8"/></svg>Shahar darvozasi</button>
+      <button class="ti-infra-b" data-i="6"><svg viewBox="0 0 48 48"><path d="M6,20 l8,-8 h20 l8,8"/><path d="M10,20 v22 h28 v-22"/><path d="M18,42 v-12 h12 v12"/></svg>Bozor bekati</button>
+    </div>
+    <div class="ti-infra-view">
+      <div class="ti-infra-art"><svg viewBox="0 0 200 175" id="ti-infra-art"></svg></div>
+      <div style="flex:1">
+        <h4 class="ti-h4" id="ti-infra-t"></h4>
+        <p class="ti-p" id="ti-infra-p" style="font-size:19px"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= VIII. XAVFLAR ======================= -->
+<section class="ti-sec">
+  <div class="ti-rv">
+    <div class="ti-num"><i>VIII</i>Yo‘ldagi tabiiy sharoit va xavflar<span></span></div>
+    <h2 class="ti-h">Yo‘l har doim ham oson bo‘lmagan</h2>
+    <p class="ti-lead">Temuriylar davridagi safar bugungi yo‘ldek qulay bo‘lmagan. Har bir yo‘nalish o‘z tabiiy sharoiti va xavfiga ega edi. Shu sababli yo‘lni bilish, bekatlarni to‘g‘ri tanlash va karvonni to‘g‘ri boshqarish juda muhim bo‘lgan.</p>
+  </div>
+  <div class="ti-rv ti-dan" id="ti-dan">
+    <div class="ti-dan-card"><h4 class="ti-h4">Cho‘l va suvsizlik</h4><p>Suv nuqtasini o‘tkazib yuborish yoki quduqning qurishi butun karvon uchun halokatli bo‘lgan.</p></div>
+    <div class="ti-dan-card"><h4 class="ti-h4">Tog‘ dovonlari</h4><p>Baland o‘tish joylari faqat ma’lum fasllarda ochiq bo‘lgan; noto‘g‘ri vaqt tanlangani uchun yo‘l to‘xtab qolgan.</p></div>
+    <div class="ti-dan-card"><h4 class="ti-h4">Qor va sovuq</h4><p>Tog‘li hududlarda kutilmagan qor karvonni kunlab quyi bekatda ushlab turgan.</p></div>
+    <div class="ti-dan-card"><h4 class="ti-h4">Daryo kechuvlari</h4><p>Suv sathi ko‘tarilganda kechuv yopilgan; yuk va hayvon yo‘qotish xavfi eng yuqori bo‘lgan joy.</p></div>
+    <div class="ti-dan-card"><h4 class="ti-h4">Qum bo‘ronlari</h4><p>Bo‘ron izni ko‘mib yuborgan. Shu bois yo‘l belgilari, minoralar va tanish nuqtalar muhim ahamiyatga ega bo‘lgan.</p></div>
+    <div class="ti-dan-card"><h4 class="ti-h4">Qaroqchilar xavfi</h4><p>Aholi siyrak joylarda hujum xavfi ortgan. Karvon qo‘riqchi bilan yurgan, nazorat punktlari yo‘lni xavfsizlantirgan.</p></div>
+    <div class="ti-dan-card"><h4 class="ti-h4">Uzoq masofalar</h4><p>Safar oy va fasllar bilan o‘lchangan. Yo‘lni bilish, bekatni to‘g‘ri tanlash va karvonni boshqarish alohida kasb bo‘lgan.</p></div>
+  </div>
+  <p class="ti-rv ti-small" style="margin-top:22px">Kartochkani bosing — izoh ochiladi.</p>
+</section>
+
+<!-- ======================= IX. YAKUN ======================= -->
+<section class="ti-sec ti-alt" id="ti-final">
+  <div class="ti-rv">
+    <div class="ti-num" style="justify-content:center"><span style="max-width:120px"></span><i>IX</i>Yakun<span style="max-width:120px"></span></div>
+    <h2 class="ti-h" style="font-size:52px">Temuriylar davrida yo‘l — davlat tomiri edi</h2>
+    <p class="ti-lead" style="margin:0 auto 10px;text-align:center">Buyuk Ipak yo‘li ko‘p tarmoqli tarixiy harakat tizimi edi. Samarqand ushbu tizimning eng muhim markazlaridan biri bo‘lib, Sharq, G‘arb, Shimol va Janub yo‘nalishlarini bog‘lab turgan.</p>
+    <div class="ti-final-list">
+      <div>Savdoni rivojlantirdi</div>
+      <div>Davlat aloqalarini mustahkamladi</div>
+      <div>Elchi va xabarchilar harakatini ta’minladi</div>
+      <div>Shaharlar rivojiga xizmat qildi</div>
+      <div>Madaniy almashinuvni kuchaytirdi</div>
+    </div>
+    <blockquote class="ti-quote">Samarqand — shaharlar markazi emas,<br>yo‘llar markazi edi.</blockquote>
+  </div>
+</section>
+
+<!-- ======================= X. MANBALAR ======================= -->
+<section class="ti-sec">
+  <div class="ti-rv">
+    <div class="ti-num"><i>X</i>Manbalar<span></span></div>
+    <h2 class="ti-h" style="font-size:44px">Tarixiy asos</h2>
+    <div class="ti-src-h"><b>A. Birlamchi manbalar</b><span></span></div>
+    <div class="ti-src">
+      <div><strong>Ruy Gonsales de Klavixo</strong><em>Samarqandga safar kundaligi — yo‘nalish, bekatlar, yo‘l sharoiti va davlat aloqalari tasviri</em></div>
+      <div><strong>Sharaf ad-Din Ali Yazdiy</strong><em>«Zafarnoma» — davr siyosiy geografiyasi va yurish yo‘nalishlari</em></div>
+      <div><strong>Nizomiddin Shomiy</strong><em>«Zafarnoma» — voqealar, yo‘nalishlar va hududiy bog‘lanishlar</em></div>
+      <div><strong>Hofiz-i Abru</strong><em>Temuriylar davri geografik-hududiy tasavvurlari</em></div>
+    </div>
+    <div class="ti-src-h"><b>B. Ilmiy tadqiqotlar</b><span></span></div>
+    <div class="ti-src">
+      <div><strong>V. V. Bartold</strong><em>Turkiston tarixi, savdo yo‘llari va siyosiy geografiya bo‘yicha klassik tadqiqotlar</em></div>
+      <div><strong>B. Ahmedov</strong><em>Movarounnahr tarixi va tarixiy yo‘nalishlar</em></div>
+      <div><strong>A. Asqarov va O‘zbekiston tarixiga oid nashrlar</strong><em>Hududiy yo‘llar, qadimiy shaharlar va madaniy aloqalar</em></div>
+      <div><strong>UNESCO Silk Roads nashrlari</strong><em>Xalqaro ilmiy va kartografik asos</em></div>
+    </div>
+    <div class="ti-src-h"><b>C. Kartografik asoslar</b><span></span></div>
+    <div class="ti-src">
+      <div><strong>Tarixiy rekonstruksiya xaritalari</strong><em>Samarqand, Buxoro, Marv, Hirot, Balx, O‘tror, Qashqar orasidagi klassik yo‘nalishlar</em></div>
+      <div><strong>Tabiiy zonalar sxemalari</strong><em>Voha, daryo, dovon va cho‘l yo‘nalishlarining tarixiy holati</em></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer id="ti-foot">
+  <p>O‘zbekiston Respublikasi Transport vazirligi huzuridagi Avtomobil yo‘llari qo‘mitasining<br>Yo‘llar va yo‘l infratuzilmasi ekspozitsion-ta’limiy kompleksi</p>
+</footer>
+
+<button id="ti-up" aria-label="Yuqoriga">&#8963;</button>
+</div>
+<script>
+(function(){
+"use strict";
+
+/* ---------- reveal ---------- */
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+},{rootMargin:"0px 0px -12% 0px",threshold:.08});
+document.querySelectorAll(".ti-rv").forEach(function(n,i){ n.style.transitionDelay=(Math.min(i,4)*70)+"ms"; io.observe(n); });
+
+/* ---------- data ---------- */
+var ROUTE={
+ all:{t:"Samarqand — to‘rt tomon markazi",r:"SHARQ · G‘ARB · JANUB · SHIMOL",c:"var(--ti-gold-lt)",
+   p:"Samarqanddan to‘rt asosiy yo‘nalish tarqalgan: sharqda Farg‘ona vodiysi va Qashqar, g‘arbda Buxoro va Marv, janubda Kesh, Termiz va Balx, shimolda Toshkent vohasi va O‘tror. Tarmoqni tanlang — yo‘nalish yoritiladi va karvon harakati ko‘rsatiladi."},
+ east:{t:"Sharqiy yo‘l tarmog‘i",r:"SAMARQAND → XO‘JAND → O‘SH → QASHQAR",c:"var(--ti-east)",
+   p:"Sharqiy yo‘l Samarqandni Farg‘ona vodiysi va Qashqar orqali Sharqiy Turkiston bilan bog‘lagan. Bu tarmoq tog‘li hududlar, vohalar va o‘tish nuqtalari orqali karvon harakati uchun muhim bo‘lgan."},
+ west:{t:"G‘arbiy yo‘l tarmog‘i",r:"SAMARQAND → BUXORO → AMUL → MARV → NISHOPUR",c:"var(--ti-west)",
+   p:"G‘arbiy yo‘l Zarafshon vodiysi, Buxoro vohasi va cho‘l oldi hududlari orqali Marvga, undan esa Eron tomon davom etgan. Bu yo‘l savdo, diplomatiya va davlatlararo aloqalarda muhim rol o‘ynagan."},
+ south:{t:"Janubiy yo‘l tarmog‘i",r:"SAMARQAND → KESH → TERMIZ → BALX → HIROT",c:"var(--ti-south)",
+   p:"Janubiy yo‘l Kesh va Temir Darvoza orqali Termiz, Balx va Hirotga olib borgan. Bu tarmoq Temuriylar davrida strategik jihatdan muhim bo‘lib, davlatning janubiy hududlari bilan aloqani ta’minlagan."},
+ north:{t:"Shimoliy yo‘l tarmog‘i",r:"SAMARQAND → TOSHKENT → SAYRAM → O‘TROR",c:"var(--ti-north)",
+   p:"Shimoliy yo‘l Samarqandni Toshkent vohasi, Sayram va O‘tror orqali Dashti Qipchoq hududlari bilan bog‘lagan. Bu tarmoq shimoliy savdo va siyosiy aloqalar uchun katta ahamiyatga ega edi."}
+};
+
+var JOUR={
+ east:[["Samarqand","Karvon Samarqand bozorlarida yuk oladi va sharq tomonga yo‘l oladi."],
+       ["Xo‘jand","Yo‘l Zarafshon vodiysidan Sirdaryo bo‘yiga o‘tadi. Xo‘jand — vodiyga kirish nuqtasi."],
+       ["Farg‘ona vodiysi","Voha ichida bekatlar zich joylashgan: suv va oziq muammo emas, harakat tezlashadi."],
+       ["O‘sh","Tog‘ oldidagi oxirgi yirik bekat. Yuk qayta taqsimlanadi, tog‘ yo‘liga tayyorgarlik ko‘riladi."],
+       ["Qashqar","Dovonlar oshib o‘tilgach, yo‘l Sharqiy Turkiston tarmoqlariga qo‘shiladi."]],
+ west:[["Samarqand","Karvon g‘arbga — Zarafshon bo‘ylab quyi oqim tomon yo‘l oladi."],
+       ["Buxoro","Yirik savdo va bekat markazi. Yuk qismi shu yerda almashadi."],
+       ["Amul","Amudaryo kechuvi. Butun yo‘nalishning eng mas’uliyatli nuqtasi."],
+       ["Marv","Cho‘l ortidagi katta voha. Suv, ta’mirlash va yangi yo‘l tanlash joyi."],
+       ["Nishopur","Yo‘l Eron va Yaqin Sharq yo‘nalishlariga ulanadi."]],
+ south:[["Samarqand","Janubga yo‘l tog‘ oldi hududlari tomon boshlanadi."],
+       ["Kesh","Tog‘ oldidagi shahar — janubiy yo‘nalishning birinchi yirik bekati."],
+       ["Temir Darvoza","Tor tog‘ yo‘lagi. O‘tish nazorat ostida, karvon bir qatorda harakatlanadi."],
+       ["Termiz","Amudaryo bo‘yidagi kechuv va chegara shahri."],
+       ["Balx","Janubiy tarmoqlar tugunlaridan biri. Bu yerdan yo‘l Kobul tomon ham ajraladi."],
+       ["Hirot","Yirik markaz. Yo‘l g‘arbiy va janubiy tarmoqlar bilan qayta bog‘lanadi."]],
+ north:[["Samarqand","Shimolga yo‘l dasht tomon yo‘naladi."],
+       ["Jizzax","Tog‘ oralig‘idagi o‘tish yo‘lagi — shimolga chiqish nuqtasi."],
+       ["Toshkent vohasi","Sirdaryo bo‘yidagi yirik voha va bekat tuguni."],
+       ["Sayram","Shimoliy yo‘nalishdagi savdo bekati."],
+       ["O‘tror","Sirdaryo bo‘yidagi chegara–savdo shahri."],
+       ["Dashti Qipchoq","Yo‘l ochiq dasht yo‘nalishlariga chiqadi; harakat otlarda davom etadi."]]
+};
+
+/* ---------- map ---------- */
+var svg=document.getElementById("ti-map");
+var routes={}, mover=document.getElementById("ti-mover"), moverUse=document.getElementById("ti-mover-use");
+["east","west","south","north"].forEach(function(k){ routes[k]=[document.getElementById("ti-r-"+k)]; });
+routes.south.push(document.getElementById("ti-r-south-b"));
+Object.keys(routes).forEach(function(k){
+  routes[k].forEach(function(p){ var L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=0; p.dataset.len=L; });
+});
+var cities=Array.prototype.slice.call(document.querySelectorAll(".ti-city"));
+var cur="all", raf=null, demo=null;
+
+function stopMove(){ if(raf){cancelAnimationFrame(raf);raf=null;} mover.setAttribute("opacity","0"); }
+
+function draw(p){
+  var L=+p.dataset.len;
+  p.style.transition="none"; p.style.strokeDashoffset=L;
+  p.getBoundingClientRect();
+  p.style.transition="stroke-dashoffset 1.7s cubic-bezier(.22,.9,.3,1)";
+  p.style.strokeDashoffset=0;
+}
+
+function moveAlong(key){
+  stopMove();
+  var p=routes[key][0], L=+p.dataset.len, t0=null, dur=7000;
+  var list=cities.filter(function(c){ return c.dataset.r.indexOf(key)>-1; });
+  moverUse.setAttribute("href", key==="north" ? "#tiRiderCourier" : "#tiCamelG");
+  mover.setAttribute("opacity","1");
+  function step(ts){
+    if(t0===null) t0=ts;
+    var k=(ts-t0)/dur; if(k>1) k=k-Math.floor(k);
+    var pt=p.getPointAtLength(k*L);
+    mover.setAttribute("transform","translate("+pt.x+","+pt.y+")");
+    var n=Math.floor(k*list.length)+1;
+    list.forEach(function(c,i){ c.classList.toggle("on", i<n); });
+    raf=requestAnimationFrame(step);
+  }
+  raf=requestAnimationFrame(step);
+}
+
+function select(key,fromDemo){
+  cur=key;
+  if(!fromDemo && demo){ clearInterval(demo); demo=null; document.getElementById("ti-demo").classList.remove("on"); }
+  document.querySelectorAll("#ti-route-btns .ti-btn[data-r]").forEach(function(b){ b.classList.toggle("on", b.dataset.r===key); });
+  Object.keys(routes).forEach(function(k){
+    routes[k].forEach(function(p){
+      p.classList.remove("act","dim");
+      if(key==="all") return;
+      p.classList.add(k===key?"act":"dim");
+    });
+  });
+  cities.forEach(function(c){ c.classList.toggle("on", key==="all" ? false : false); });
+  var d=ROUTE[key], pn=document.getElementById("ti-panel");
+  pn.style.setProperty("--ti-accent", d.c);
+  document.getElementById("ti-panel-t").textContent=d.t;
+  document.getElementById("ti-panel-r").textContent=d.r;
+  var pp=document.getElementById("ti-panel-p"); pp.textContent=d.p;
+  pn.classList.remove("ti-fade"); void pn.offsetWidth; pn.classList.add("ti-fade");
+  if(key==="all"){
+    stopMove();
+    cities.forEach(function(c){ c.classList.toggle("on", c.classList.contains("ti-hub")); });
+    document.getElementById("ti-jour-r").textContent="Tarmoqni tanlang";
+    jKey=null; setJour(-1);
+  }else{
+    routes[key].forEach(draw);
+    moveAlong(key);
+    jKey=key; jI=-1; setJour(-1);
+    document.getElementById("ti-jour-r").textContent=ROUTE[key].r;
+  }
+}
+
+document.getElementById("ti-route-btns").addEventListener("click",function(e){
+  var b=e.target.closest(".ti-btn[data-r]"); if(b) select(b.dataset.r);
+});
+cities.forEach(function(c){
+  c.addEventListener("click",function(){ select(c.dataset.r.split(" ")[0]); 
+    document.getElementById("ti-panel").scrollIntoView({behavior:"smooth",block:"center"}); });
+});
+var demoOrder=["east","west","south","north","all"], di=0;
+document.getElementById("ti-demo").addEventListener("click",function(){
+  if(demo){ clearInterval(demo); demo=null; this.classList.remove("on"); return; }
+  this.classList.add("on"); di=0; select(demoOrder[di],true);
+  demo=setInterval(function(){ di=(di+1)%demoOrder.length; select(demoOrder[di],true); },8000);
+});
+
+/* ---------- journey stepper ---------- */
+var jKey=null, jI=-1;
+var jTrack=document.getElementById("ti-jour-track"),
+    jFill=document.getElementById("ti-jour-fill"),
+    jCam=document.getElementById("ti-jour-cam"),
+    jTxt=document.getElementById("ti-jour-txt"),
+    jNext=document.getElementById("ti-jour-next");
+
+function buildNodes(){
+  jTrack.querySelectorAll(".ti-jour-node").forEach(function(n){n.remove();});
+  if(!jKey) return;
+  var arr=JOUR[jKey];
+  arr.forEach(function(s,i){
+    var pc=arr.length===1?0:(i/(arr.length-1))*100;
+    var n=document.createElement("div");
+    n.className="ti-jour-node"; n.style.left=pc+"%";
+    n.innerHTML="<span>"+s[0]+"</span>";
+    n.addEventListener("click",function(){ setJour(i); });
+    jTrack.appendChild(n);
+  });
+}
+function setJour(i){
+  jI=i;
+  if(!jKey){
+    jFill.style.width="0"; jCam.style.left="0";
+    jTxt.innerHTML="Yuqoridan tarmoqni tanlang, so‘ng «Boshlash» tugmasini bosing.";
+    jNext.lastChild.nodeValue="Boshlash"; buildNodes(); return;
+  }
+  var arr=JOUR[jKey];
+  if(jTrack.querySelectorAll(".ti-jour-node").length!==arr.length) buildNodes();
+  var nodes=jTrack.querySelectorAll(".ti-jour-node");
+  if(i<0){
+    jFill.style.width="0"; jCam.style.left="0";
+    jTxt.innerHTML="Tarmoq tanlandi: <b>"+ROUTE[jKey].t+"</b>. «Boshlash» tugmasi bilan bosqichma-bosqich yuring.";
+    nodes.forEach(function(n){n.classList.remove("on");});
+    jNext.lastChild.nodeValue="Boshlash"; return;
+  }
+  var pc=arr.length===1?0:(i/(arr.length-1))*100;
+  jFill.style.width=pc+"%"; jCam.style.left=pc+"%";
+  nodes.forEach(function(n,k){ n.classList.toggle("on",k<=i); });
+  jTxt.innerHTML="<b>"+arr[i][0]+".</b> "+arr[i][1];
+  jNext.lastChild.nodeValue = (i>=arr.length-1) ? "Boshidan" : "Keyingi";
+}
+jNext.addEventListener("click",function(){
+  if(!jKey){ select("east"); setJour(0); return; }
+  var arr=JOUR[jKey];
+  setJour(jI>=arr.length-1 ? 0 : jI+1);
+});
+document.getElementById("ti-jour-prev").addEventListener("click",function(){
+  if(!jKey) return; setJour(jI<=0 ? 0 : jI-1);
+});
+
+/* ---------- scene hotspots ---------- */
+document.querySelectorAll(".ti-scene").forEach(function(sc){
+  var cap=sc.querySelector(".ti-scene-cap"), base=cap.innerHTML;
+  sc.querySelectorAll(".ti-hot").forEach(function(h){
+    h.addEventListener("click",function(){
+      var was=h.classList.contains("on");
+      sc.querySelectorAll(".ti-hot").forEach(function(x){x.classList.remove("on");});
+      if(was){ cap.innerHTML=base; return; }
+      h.classList.add("on"); cap.innerHTML=h.dataset.cap;
+    });
+  });
+});
+
+/* ---------- race ---------- */
+(function(){
+  var go=document.getElementById("ti-race-go"), speeds=[1,1.7,3.6], run=null;
+  function reset(){ for(var i=0;i<3;i++){ document.getElementById("ti-f"+i).style.transform="translateX(0)"; document.getElementById("ti-v"+i).textContent="0%"; } }
+  go.addEventListener("click",function(){
+    if(run){ cancelAnimationFrame(run); run=null; }
+    reset();
+    var lane=document.querySelector(".ti-lane"), W=lane.clientWidth-84, t0=null, dur=5200;
+    function step(ts){
+      if(t0===null)t0=ts;
+      var k=(ts-t0)/dur, done=0;
+      for(var i=0;i<3;i++){
+        var v=Math.min(1,k*speeds[i]);
+        document.getElementById("ti-f"+i).style.transform="translateX("+(v*W)+"px)";
+        document.getElementById("ti-v"+i).textContent=Math.round(v*100)+"%";
+        if(v>=1) done++;
+      }
+      if(done<3) run=requestAnimationFrame(step); else run=null;
+    }
+    run=requestAnimationFrame(step);
+  });
+})();
+
+/* ---------- infrastructure ---------- */
+(function(){
+  var DATA=[{"t": "Karvonsaroy", "art": "<g stroke=\"#e3b25e\" fill=\"none\" stroke-width=\"1.6\" stroke-linejoin=\"round\"><rect x=\"24\" y=\"34\" width=\"152\" height=\"108\" rx=\"4\"/><rect x=\"44\" y=\"54\" width=\"112\" height=\"68\" rx=\"3\" opacity=\".5\"/><path d=\"M84,142 v-24 a16,16 0 0 1 32,0 v24\"/><path d=\"M24,34 v-12 M176,34 v-12 M24,142 v12 M176,142 v12\"/><circle cx=\"24\" cy=\"16\" r=\"6\"/><circle cx=\"176\" cy=\"16\" r=\"6\"/><path d=\"M44,54 h112 M44,88 h20 M136,88 h20\"/></g><text x=\"100\" y=\"166\" text-anchor=\"middle\" fill=\"#8d9db1\" font-size=\"12\" font-family=\"sans-serif\" letter-spacing=\"2\">HOVLI · AYVON · DARVOZA</text>", "p": "Karvon uchun tunash, yuk saqlash va hayvonlarni dam oldirish joyi. Ichkarida hovli, atrofida hujralar va omborlar bo‘lgan. Karvonsaroy bir kunlik yurish oralig‘ida joylashtirilgan."}, {"t": "Quduq va sardoba", "art": "<g stroke=\"#e3b25e\" fill=\"none\" stroke-width=\"1.6\"><path d=\"M30,132 h60 v-30 h-60 z\"/><path d=\"M36,102 l24,-30 l24,30\"/><path d=\"M60,72 v18\"/><rect x=\"52\" y=\"88\" width=\"16\" height=\"14\"/><path d=\"M112,132 v-22 a34,30 0 0 1 68,0 v22 z\"/><path d=\"M134,132 v-14 a12,12 0 0 1 24,0 v14\"/><path d=\"M146,74 v-10\"/><path d=\"M112,132 h68\"/><path d=\"M120,110 q26,10 52,0\" opacity=\".45\" stroke=\"#7ba5d6\"/></g><text x=\"100\" y=\"160\" text-anchor=\"middle\" fill=\"#8d9db1\" font-size=\"12\" font-family=\"sans-serif\" letter-spacing=\"2\">QUDUQ · SARDOBA</text>", "p": "Suv yo‘lning asosiy sharti edi. Quduqlar oralig‘i yo‘nalishning haqiqiy uzunligini belgilagan, sardoba esa yer osti gumbazida suvni yozgacha saqlagan."}, {"t": "Daryo kechuvi", "art": "<g stroke=\"#7ba5d6\" fill=\"none\" stroke-width=\"1.6\" opacity=\".8\"><path d=\"M0,76 q26,-10 52,0 t52,0 t52,0 t52,0\"/><path d=\"M0,96 q26,-10 52,0 t52,0 t52,0 t52,0\"/><path d=\"M0,116 q26,-10 52,0 t52,0 t52,0 t52,0\"/></g><g stroke=\"#e3b25e\" fill=\"none\" stroke-width=\"1.6\"><path d=\"M64,84 h72 l-10,20 h-52 z\"/><path d=\"M76,84 v-12 M124,84 v-12\"/><path d=\"M70,72 h60\"/><path d=\"M20,52 h36 M144,128 h36\"/></g><text x=\"100\" y=\"156\" text-anchor=\"middle\" fill=\"#8d9db1\" font-size=\"12\" font-family=\"sans-serif\" letter-spacing=\"2\">KECHUV · SOL · QAYIQ</text>", "p": "Daryodan o‘tish yo‘lning eng xavfli qismi bo‘lgan. Kechuv joyi, sol va qayiqchilar tizimi mavjud bo‘lib, suv sathi ko‘tarilganda karvon kunlab kutgan."}, {"t": "Ko‘prik", "art": "<g stroke=\"#e3b25e\" fill=\"none\" stroke-width=\"1.6\"><path d=\"M16,84 h168\"/><path d=\"M16,84 v34 M184,84 v34\"/><path d=\"M34,118 a30,30 0 0 1 46,0 M120,118 a30,30 0 0 1 46,0\"/><path d=\"M100,84 v34\"/><path d=\"M16,76 h168\" opacity=\".5\"/><path d=\"M16,70 v-10 M60,70 v-10 M140,70 v-10 M184,70 v-10\"/></g><g stroke=\"#7ba5d6\" fill=\"none\" stroke-width=\"1.4\" opacity=\".6\"><path d=\"M0,140 q26,-8 52,0 t52,0 t52,0 t52,0\"/></g><text x=\"100\" y=\"164\" text-anchor=\"middle\" fill=\"#8d9db1\" font-size=\"12\" font-family=\"sans-serif\" letter-spacing=\"2\">TOSH · G‘ISHT · YOG‘OCH</text>", "p": "Ko‘prik yo‘lni yil davomida ishlaydigan qilgan. U karvon o‘tishini tezlashtirgan va daryo toshgan paytda ham harakatni to‘xtatmagan."}, {"t": "Dovon", "art": "<g stroke=\"#e3b25e\" fill=\"none\" stroke-width=\"1.6\" stroke-linejoin=\"round\"><path d=\"M8,130 L60,44 L92,92 L120,58 L192,130 Z\"/><path d=\"M60,44 l10,12 l-9,5 l-10,-6 z\" fill=\"#e3b25e\" opacity=\".35\"/><path d=\"M120,58 l9,11 l-8,4 l-9,-5 z\" fill=\"#e3b25e\" opacity=\".35\"/><path d=\"M18,126 q40,-24 74,-34 q34,-10 82,26\" stroke-dasharray=\"7 8\"/></g><text x=\"100\" y=\"156\" text-anchor=\"middle\" fill=\"#8d9db1\" font-size=\"12\" font-family=\"sans-serif\" letter-spacing=\"2\">O‘TISH NUQTASI</text>", "p": "Dovon — tog‘ tizmasidan o‘tishning yagona qulay joyi. Dovon oshish vaqti yil fasliga bog‘liq bo‘lgan va karvon yo‘lini shu nuqta belgilagan."}, {"t": "Shahar darvozasi", "art": "<g stroke=\"#e3b25e\" fill=\"none\" stroke-width=\"1.6\"><path d=\"M12,136 v-56 h176 v56\"/><path d=\"M12,80 h176\" opacity=\".5\"/><path d=\"M70,136 v-34 a30,30 0 0 1 60,0 v34\"/><path d=\"M36,80 v-26 h28 v26 M136,80 v-26 h28 v26\"/><path d=\"M30,54 l20,-16 l20,16 M130,54 l20,-16 l20,16\"/><path d=\"M12,136 h176\"/><path d=\"M88,136 v-24 M112,136 v-24\" opacity=\".4\"/></g><text x=\"100\" y=\"160\" text-anchor=\"middle\" fill=\"#8d9db1\" font-size=\"12\" font-family=\"sans-serif\" letter-spacing=\"2\">KIRISH NAZORATI</text>", "p": "Darvoza — shaharga kirish va nazorat nuqtasi. Bu yerda yuk qayd etilgan, yig‘im olingan va karvon shahar ichidagi bekatga yo‘naltirilgan."}, {"t": "Bozor bekati", "art": "<g stroke=\"#e3b25e\" fill=\"none\" stroke-width=\"1.6\"><path d=\"M20,70 l16,-16 h128 l16,16 z\"/><path d=\"M36,70 v56 M100,70 v56 M164,70 v56\"/><path d=\"M20,126 h160\"/><path d=\"M48,126 v-20 h40 v20 M112,126 v-20 h40 v20\"/><path d=\"M20,88 h160\" opacity=\".35\"/><circle cx=\"68\" cy=\"96\" r=\"5\"/><circle cx=\"132\" cy=\"96\" r=\"5\"/></g><text x=\"100\" y=\"156\" text-anchor=\"middle\" fill=\"#8d9db1\" font-size=\"12\" font-family=\"sans-serif\" letter-spacing=\"2\">SAVDO · ALMASHUV</text>", "p": "Yirik bekatlarda bozor ishlagan: mahalliy mahsulot uzoq yo‘l tovariga almashilgan. Ayrim tovarlar butun yo‘lni bosib o‘tmagan — ular bekatdan bekatga qo‘ldan qo‘lga o‘tgan."}];
+  var art=document.getElementById("ti-infra-art"),
+      t=document.getElementById("ti-infra-t"), p=document.getElementById("ti-infra-p");
+  function show(i){
+    var d=DATA[i]; if(!d) return;
+    art.innerHTML=d.art; t.textContent=d.t; p.textContent=d.p;
+    art.parentNode.classList.remove("ti-fade"); void art.offsetWidth; art.parentNode.classList.add("ti-fade");
+  }
+  document.getElementById("ti-infra-list").addEventListener("click",function(e){
+    var b=e.target.closest(".ti-infra-b"); if(!b) return;
+    this.querySelectorAll(".ti-infra-b").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on"); show(+b.dataset.i);
+  });
+  show(0);
+})();
+
+/* ---------- dangers ---------- */
+document.getElementById("ti-dan").addEventListener("click",function(e){
+  var c=e.target.closest(".ti-dan-card"); if(!c) return;
+  c.classList.toggle("on");
+});
+
+/* ---------- chrome ---------- */
+(function(){
+  var pr=document.getElementById("ti-prog"), up=document.getElementById("ti-up");
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    pr.style.width=(h>0?(window.scrollY/h)*100:0)+"%";
+    up.classList.toggle("on", window.scrollY>1200);
+  }
+  window.addEventListener("scroll",onScroll,{passive:true});
+  up.addEventListener("click",function(){ window.scrollTo({top:0,behavior:"smooth"}); });
+  onScroll();
+})();
+(function(){
+  function fit(){ var w=window.innerWidth; document.body.style.zoom=(w<1080)?(w/1080):""; }
+  window.addEventListener("resize",fit); fit();
+})();
+
+
+/* ---------- qismlar (parts) ---------- */
+(function(){
+  var parts=document.querySelectorAll(".ti-part"), tabs=document.getElementById("ti-tabs");
+  function go(n){
+    n=String(n);
+    parts.forEach(function(p){ p.classList.toggle("on", p.dataset.p===n); });
+    tabs.querySelectorAll(".ti-tab").forEach(function(t){ t.classList.toggle("on", t.dataset.p===n); });
+    window.scrollTo(0,0);
+    if(n!=="1"){
+      if(demo){ clearInterval(demo); demo=null; document.getElementById("ti-demo").classList.remove("on"); }
+      stopMove();
+    }else if(cur!=="all"){ moveAlong(cur); }
+    requestAnimationFrame(function(){
+      document.querySelectorAll(".ti-part.on .ti-rv").forEach(function(el){
+        if(el.getBoundingClientRect().top < window.innerHeight*0.95) el.classList.add("in");
+      });
+    });
+  }
+  tabs.addEventListener("click",function(e){ var t=e.target.closest(".ti-tab"); if(t) go(t.dataset.p); });
+  document.querySelectorAll(".ti-goto").forEach(function(b){
+    b.addEventListener("click",function(){ go(b.dataset.p); });
+  });
+})();
+
+select("all");
+})();
+</script>
+</body>
+</html>
