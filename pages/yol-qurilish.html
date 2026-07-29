@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="uz" class="road-tech-host">
 <head>
+<script>
+/* ══════════ TIL KOʻPRIGI — index.html'da tanlangan til ══════════
+   Til ?lang= parametridan yoki localStorage'dan olinadi va sahifa
+   skriptlari oʻqishidan oldin oʻrnatiladi.                          */
+(function(){
+  var KEY='bipLang', OK={uz:1,ru:1,en:1}, url=null, q=null;
+  try{ url=new URL(window.location.href); q=url.searchParams.get('lang'); }catch(e){}
+  if(!OK[q]){ q=null; try{ q=window.localStorage.getItem(KEY); }catch(e){} }
+  var L=OK[q]?q:'uz';
+  window.BIP_LANG=L;
+  document.documentElement.lang=L;
+  try{ window.localStorage.setItem(KEY,L); }catch(e){}
+  /* URL'ga ?lang= qoʻshamiz — sahifa skriptlari location.search'dan oʻqiydi */
+  if(url && url.searchParams.get('lang')!==L){
+    try{ url.searchParams.set('lang',L);
+         window.history.replaceState(null,'',url.toString()); }catch(e){}
+  }
+  function save(l){
+    if(!OK[l]) return;
+    window.BIP_LANG=l;
+    document.documentElement.lang=l;
+    try{ window.localStorage.setItem(KEY,l); }catch(e){}
+    var back='../index.html?lang='+l+'#tp-menu';
+    var links=document.querySelectorAll('.bip-home, a.tp-tool-icon[href*="index.html"]');
+    for(var i=0;i<links.length;i++) links[i].setAttribute('href',back);
+    var bb=document.getElementById('tp-back-fixed-generic');
+    if(bb) bb.setAttribute('onclick',"window.location.href='"+back+"';");
+    try{ document.dispatchEvent(new CustomEvent('bip:lang',{detail:l})); }catch(e){}
+  }
+  window.BIP_SET_LANG=save;
+  document.addEventListener('DOMContentLoaded',function(){
+    save(window.BIP_LANG);
+    /* sahifadagi til tugmalari bosilsa — tanlovni eslab qolamiz */
+    document.addEventListener('click',function(e){
+      var t=(e.target&&e.target.closest)?e.target.closest('[data-lang]'):null;
+      if(t) save(t.getAttribute('data-lang'));
+    },true);
+  });
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yo'l qurilish texnologiyasi — interaktiv taqdimot</title>
@@ -1220,6 +1260,23 @@ document.querySelectorAll('.tp-tool-btn[data-lang]').forEach(function(btn) {
     if (pill) pill.click();
   };
 });
+</script>
+
+<script>
+/* index.html'dan kelgan tilni sahifa tarjimasiga qoʻllaymiz */
+(function(){
+  var L = window.BIP_LANG || 'uz';
+  if (L === 'uz') return;
+  function go(){
+    var btn = document.querySelector('.tp-tool-btn[data-lang="' + L + '"]');
+    if (btn) { btn.click(); return; }
+    var chip = document.querySelector('.road-tech-chip[data-lang="' + L + '"]');
+    if (chip) chip.click();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', go);
+  } else { go(); }
+})();
 </script>
 
 <!-- bind_lang_script_injected -->

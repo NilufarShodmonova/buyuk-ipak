@@ -568,9 +568,31 @@ en:{
     });
   }
 
+  /* --- язык: чтение / сохранение выбора --- */
+  function bipReadLang(){
+    var l = null;
+    try { l = new URLSearchParams(window.location.search).get('lang'); } catch(e){}
+    if (l !== 'uz' && l !== 'ru' && l !== 'en') {
+      l = null;
+      try { l = window.localStorage.getItem('bipLang'); } catch(e){}
+    }
+    return (l === 'uz' || l === 'ru' || l === 'en') ? l : null;
+  }
+  function bipSaveLang(l){
+    try { window.localStorage.setItem('bipLang', l); } catch(e){}
+  }
+  /* добавляет ?lang= к ссылке раздела, сохраняя #hash */
+  function withLang(href){
+    var hash = '', i = href.indexOf('#');
+    if (i !== -1) { hash = href.slice(i); href = href.slice(0, i); }
+    href += (href.indexOf('?') === -1 ? '?' : '&') + 'lang=' + lang;
+    return href + hash;
+  }
+
   function setLang(l){
     lang = l;
     document.documentElement.lang = l;
+    bipSaveLang(l);
     renderMenu();
   }
 
@@ -593,7 +615,7 @@ en:{
     if (!card) return;
     var href = card.getAttribute('data-href');
     if (href) {
-      window.location.href = href;
+      window.location.href = withLang(href);
     }
   });
 
@@ -613,6 +635,10 @@ en:{
   document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
   document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
   document.addEventListener('dblclick', function(e){ e.preventDefault(); });
+
+  var bipSaved = bipReadLang();
+  if (bipSaved) { lang = bipSaved; document.documentElement.lang = bipSaved; }
+  bipSaveLang(lang);
 
   renderMenu();
   resetIdle();
