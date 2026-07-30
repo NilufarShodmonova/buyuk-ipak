@@ -352,19 +352,20 @@ h4.ti-h4{font-size:25px;color:var(--ti-gold-pale);margin-bottom:6px}
 .ti-part{display:none}
 .ti-part.on{display:block;animation:ti-fade .5s var(--ti-ease)}
 #ti-nav{
-  position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:flex-start;
   gap:26px;padding:0 44px;height:100px;background:rgba(8,15,26,.95);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--ti-line);
   box-shadow:0 14px 40px rgba(0,0,0,.45)
 }
-#ti-nav .ti-brandwrap{display:flex;align-items:center;gap:18px;flex:0 0 auto}
+#ti-nav .ti-brandwrap{display:flex;align-items:center;justify-content:flex-start;gap:18px;
+  width:50%;max-width:50%;flex:0 1 50%}
 #ti-nav .ti-logo{height:60px;width:auto;flex:0 0 auto;object-fit:contain;filter:drop-shadow(0 4px 14px rgba(0,0,0,.65))}
 #ti-nav .ti-brand{
-  font-family:var(--ti-serif);font-size:17px;line-height:1.3;letter-spacing:.2em;
-  color:var(--ti-gold-pale);text-transform:uppercase;max-width:270px
+  font-family:var(--ti-serif);font-size:20.4px;line-height:1.3;letter-spacing:.2em;
+  color:var(--ti-gold-pale);text-transform:uppercase;max-width:324px
 }
-#ti-nav .ti-brand b{display:block;font-size:13px;letter-spacing:.3em;color:var(--ti-gold);font-weight:700;margin-bottom:4px}
+#ti-nav .ti-brand b{display:block;font-size:15.6px;letter-spacing:.3em;color:var(--ti-gold);font-weight:700;margin-bottom:4px}
 .ti-next{
   position:relative;z-index:2;padding:74px 70px 96px;text-align:center;
   border-top:1px solid var(--ti-line-s);
