@@ -2722,5 +2722,17 @@ body.silk-road-host{
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
   <span>Bosh menyu</span>
 </a>
+<script>
+/* «Bosh menyu» yozuvi tanlangan tilga moslashadi (belgi oʻzgarmaydi) */
+(function(){
+  var L=(window.BIP_LANG==='ru'||window.BIP_LANG==='en')?window.BIP_LANG:'uz';
+  var T={uz:'Bosh menyu',ru:'Главное меню',en:'Main menu'};
+  function set(){
+    var sp=document.querySelector('.bip-home span');
+    if(sp) sp.textContent=T[L];
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',set); else set();
+})();
+</script>
 </body>
 </html>
