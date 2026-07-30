@@ -42,7 +42,54 @@
 })();
 </script>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=1080, height=1920, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<!-- ══════════ INFOKIOSK: 1080×1920 va zoom bloklangan ══════════ -->
+<style>
+html,body{
+  /* ikki barmoq bilan kattalashtirish oʻchirilgan, aylantirish ishlaydi */
+  touch-action:pan-x pan-y;
+  -ms-touch-action:pan-x pan-y;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  overscroll-behavior:none;
+  -webkit-tap-highlight-color:transparent;
+}
+</style>
+<script>
+/* ══ ekranni kattalashtirish/kichraytirishni butunlay bloklaymiz ══ */
+(function(){
+  var stop=function(e){ e.preventDefault(); };
+  /* Safari / iOS pinch */
+  ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+    document.addEventListener(ev, stop, {passive:false});
+  });
+  /* trackpad va Ctrl+g'ildirak bilan zoom */
+  window.addEventListener('wheel', function(e){
+    if(e.ctrlKey || e.metaKey) e.preventDefault();
+  }, {passive:false});
+  /* ikki va undan ortiq barmoq — pinch */
+  document.addEventListener('touchmove', function(e){
+    if(e.touches && e.touches.length > 1) e.preventDefault();
+  }, {passive:false});
+  document.addEventListener('touchstart', function(e){
+    if(e.touches && e.touches.length > 1) e.preventDefault();
+  }, {passive:false});
+  /* ikki marta tez bosish bilan zoom — faqat ayni bir joyga bosilganda bloklanadi,
+     shunda turli tugmalarga ketma-ket tez bosish ishlashda davom etadi */
+  var last=0, lx=0, ly=0;
+  document.addEventListener('touchend', function(e){
+    var t=e.changedTouches && e.changedTouches[0];
+    var now=Date.now(), x=t?t.clientX:0, y=t?t.clientY:0;
+    if(now-last<=350 && Math.abs(x-lx)<32 && Math.abs(y-ly)<32) e.preventDefault();
+    last=now; lx=x; ly=y;
+  }, {passive:false});
+  document.addEventListener('dblclick', stop, {passive:false});
+  /* klaviatura: Ctrl/Cmd + "+" / "-" / "0" */
+  window.addEventListener('keydown', function(e){
+    if((e.ctrlKey||e.metaKey) && ['+','-','=','0','_'].indexOf(e.key)!==-1) e.preventDefault();
+  }, {passive:false});
+})();
+</script>
 <title>Buyuk Ipak yo‘li — interaktiv taqdimot</title>
 
 <!-- Asosiy faylda ishlatilgan aynan o‘sha shriftlar (Google Fonts) -->
