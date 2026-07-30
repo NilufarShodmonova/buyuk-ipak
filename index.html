@@ -182,8 +182,8 @@ body.tp-mode-inner .tp-bg__veil{
   width:19rem;height:15.5rem;
   max-width:calc(33vw - 2rem);
   flex:0 1 auto;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  gap:.5rem;padding-bottom:2.4rem;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;padding-bottom:0;
   background:linear-gradient(180deg,rgba(16,31,56,.62),rgba(8,15,28,.82));
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   border:1px solid var(--tp-line);
@@ -201,10 +201,7 @@ body.tp-mode-inner .tp-bg__veil{
   font-family:var(--tp-display);
   font-size:3.9rem;letter-spacing:.14em;
   color:var(--tp-gold-hi);
-  margin-top:auto;padding-top:3.2rem;
 }
-.tp-lang__name{font-size:1.42rem;letter-spacing:.3em;text-transform:uppercase;color:var(--tp-text-dim)}
-.tp-lang__flagline{width:5rem;height:1px;background:var(--tp-line);margin:.9rem 0 .2rem}
 
 @media (orientation:landscape){
   #tp-splash{padding:1.5rem 4rem 2.5rem}
@@ -218,9 +215,8 @@ body.tp-mode-inner .tp-bg__veil{
   .tp-splash__bot{gap:1.4rem;padding-top:.8rem}
   .tp-choose{font-size:1.24rem}
   .tp-langs{gap:2.4rem;flex-wrap:nowrap}
-  .tp-lang{width:16.5rem;height:12.6rem;border-radius:8.2rem 8.2rem 1.2rem 1.2rem;padding-bottom:1.9rem}
-  .tp-lang__code{font-size:3.3rem;padding-top:2.4rem}
-  .tp-lang__name{font-size:1.24rem}
+  .tp-lang{width:16.5rem;height:12.6rem;border-radius:8.2rem 8.2rem 1.2rem 1.2rem;padding-bottom:0}
+  .tp-lang__code{font-size:3.3rem}
 }
 
 
@@ -282,6 +278,11 @@ body.tp-mode-inner .tp-bg__veil{
   gap:2.4rem;padding:2.2rem 3.6rem 1.5rem;min-height:0;
   overflow-y:auto;
 }
+/* sahifa ichida 100px boʻsh joy — faqat menyu ekranida, titul ekranga tegmaydi */
+#tp-menu .tp-menu__body{
+  padding-top:calc(2.2rem + 100px);
+  padding-bottom:calc(1.5rem + 100px);
+}
 .tp-menu__title{
   font-family:var(--tp-display);
   font-size:3.5rem;letter-spacing:.24em;text-transform:uppercase;
@@ -307,7 +308,7 @@ body.tp-mode-inner .tp-bg__veil{
 .tp-card{
   position:relative;overflow:hidden;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:1.5rem;padding:3.4rem 1.6rem;
+  gap:1.5rem;padding:3.4rem 3.4rem;
   min-height:25rem;
   background:linear-gradient(170deg,rgba(22,41,74,.86) 0%,rgba(11,21,38,.92) 100%);
   border:1px solid var(--tp-line);border-radius:1.4rem;
@@ -345,8 +346,10 @@ body.tp-mode-inner .tp-bg__veil{
 .tp-card__title{
   font-family:var(--tp-display);
   max-width:100%;
-  font-size:1.74rem;line-height:1.35;letter-spacing:.09em;
+  padding:0 .4rem;
+  font-size:1.52rem;line-height:1.4;letter-spacing:.08em;
   color:var(--tp-gold-hi);text-transform:uppercase;
+  overflow-wrap:break-word;
 }
 
 /* ============ АНИМАЦИИ ============ */
@@ -362,7 +365,7 @@ body.tp-mode-inner .tp-bg__veil{
 @media (min-width: 2500px) {
   html { font-size: clamp(24px, calc(0.65vw + 0.65vh), 42px); }
   .tp-grid { max-width: 220rem; gap: 3.2rem; }
-  .tp-card { min-height: 32rem; padding: 4.5rem 2.5rem; }
+  .tp-card { min-height: 32rem; padding: 4.5rem 4.2rem; }
   .tp-menu__body { gap: 3.5rem; padding-top: 3rem; }
   .tp-menu__footer { padding-bottom: 3rem; }
 }
@@ -399,18 +402,12 @@ body.tp-mode-inner .tp-bg__veil{
     <div class="tp-langs">
       <button class="tp-lang" data-lang="uz">
         <span class="tp-lang__code">UZ</span>
-        <span class="tp-lang__flagline"></span>
-        <span class="tp-lang__name">O‘ZBEKCHA</span>
       </button>
       <button class="tp-lang" data-lang="ru">
         <span class="tp-lang__code">RU</span>
-        <span class="tp-lang__flagline"></span>
-        <span class="tp-lang__name">RUSSKIY</span>
       </button>
       <button class="tp-lang" data-lang="en">
         <span class="tp-lang__code">EN</span>
-        <span class="tp-lang__flagline"></span>
-        <span class="tp-lang__name">ENGLISH</span>
       </button>
     </div>
   </div>
