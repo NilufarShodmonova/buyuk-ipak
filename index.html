@@ -279,7 +279,10 @@ body.tp-mode-inner .tp-bg__veil{
   overflow-y:auto;
 }
 /* sahifa ichida 100px boʻsh joy — faqat menyu ekranida, titul ekranga tegmaydi */
+/* sarlavha yuqorida, boʻlim kartalari pastda — til va bosh sahifa tugmalari ustida */
 #tp-menu .tp-menu__body{
+  justify-content:space-between;
+  gap:5rem;
   padding-top:calc(2.2rem + 100px);
   padding-bottom:calc(1.5rem + 100px);
 }
@@ -366,7 +369,7 @@ body.tp-mode-inner .tp-bg__veil{
   html { font-size: clamp(24px, calc(0.65vw + 0.65vh), 42px); }
   .tp-grid { max-width: 220rem; gap: 3.2rem; }
   .tp-card { min-height: 32rem; padding: 4.5rem 4.2rem; }
-  .tp-menu__body { gap: 3.5rem; padding-top: 3rem; }
+  #tp-menu .tp-menu__body { gap: 6rem; padding-top: calc(3rem + 100px); }
   .tp-menu__footer { padding-bottom: 3rem; }
 }
 
