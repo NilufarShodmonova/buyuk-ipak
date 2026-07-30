@@ -617,11 +617,12 @@ var GAL=[
 <style>
 .bip-back{appearance:none;cursor:pointer;font:inherit;font-size:15px;font-weight:500;
   letter-spacing:.26em;text-transform:uppercase;white-space:nowrap;
-  display:inline-flex;align-items:center;gap:12px;padding:14px 30px;border-radius:999px;
+  display:none;align-items:center;gap:12px;padding:14px 30px;border-radius:999px;
   color:#F0DFB4;background:rgba(11,21,38,.92);border:1px solid rgba(212,175,110,.55);
   -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
   box-shadow:0 10px 30px rgba(0,0,0,.75),0 0 24px rgba(216,178,108,.25);
   transition:background .25s,border-color .25s,transform .25s}
+.bip-back.on{display:inline-flex}
 .bip-back:hover{background:rgba(216,178,108,.22);border-color:#D8B26C;transform:translateY(-2px)}
 .bip-back:active{transform:scale(.97)}
 .bip-back svg{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;fill:none;
@@ -778,10 +779,15 @@ window.BIP_I18N = {"el": {"m1": {"ru": "Наследие", "en": "Legacy"}, "m2"
 <script>
 /* «Orqaga» — sahifani boshlangʻich holatiga qaytaradi */
 (function(){
-  var b=document.getElementById('bipBack'); if(!b) return;
+  var b=document.getElementById('bipBack'), lb=document.getElementById('yiLb');
+  if(!b || !lb) return;
+  /* tugma faqat rasm ochilganda koʻrinadi */
+  function sync(){ b.classList.toggle('on', lb.classList.contains('on')); }
+  new MutationObserver(sync).observe(lb,{attributes:true,attributeFilter:['class']});
+  sync();
   b.addEventListener('click',function(){
-    var lb=document.getElementById('yiLb');
-    if(lb){ lb.classList.remove('on'); var im=document.getElementById('yiLbImg'); if(im) im.src=''; }
+    lb.classList.remove('on');
+    var im=document.getElementById('yiLbImg'); if(im) im.src='';
     /* rasmlar qatoriga qaytamiz — ekran oʻrtasida */
     var gal=document.getElementById('yiGal');
     if(gal && gal.scrollIntoView) gal.scrollIntoView({behavior:'smooth',block:'center'});
