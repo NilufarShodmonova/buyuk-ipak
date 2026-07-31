@@ -1440,5 +1440,50 @@ window.BIP_I18N = {"el": {"t1": {"ru": "<b>XIV–XV века</b>Великий �
   else start();
 })();
 </script>
+<!-- ══════════ TUGMA BOSILGANDA OVOZ ══════════
+     Ovoz Web Audio API orqali shu yerda sintez qilinadi — birorta audio
+     fayl yoki tashqi manba yuklanmaydi, shuning uchun internetsiz ham
+     ishlaydi. AudioContext faqat birinchi bosishdan keyin yaratiladi.
+     Oʻchirish uchun manzilga ?sound=off qoʻshiladi.                       -->
+<script>
+(function(){
+  if(window.BIP_TAP) return;                 /* ikki marta ulanib qolmasin */
+  var AC=null, ON=true;
+  try{ ON = new URLSearchParams(location.search).get('sound')!=='off'; }catch(e){}
+  function ctx(){
+    if(!ON) return null;
+    if(!AC){
+      var C=window.AudioContext||window.webkitAudioContext;
+      if(!C){ ON=false; return null; }
+      try{ AC=new C(); }catch(e){ ON=false; return null; }
+    }
+    if(AC.state==='suspended'){ try{ AC.resume(); }catch(e){} }
+    return AC;
+  }
+  /* qisqa, yumshoq «tiq» — 880 Hz dan 540 Hz gacha tushadi */
+  function tap(){
+    var c=ctx(); if(!c) return;
+    var t=c.currentTime, o=c.createOscillator(), g=c.createGain();
+    o.type='triangle';
+    o.frequency.setValueAtTime(880,t);
+    o.frequency.exponentialRampToValueAtTime(540,t+0.07);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(0.045,t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0005,t+0.10);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.12);
+  }
+  window.BIP_TAP=tap;
+  var SEL='a[href],button,[role="button"],input,select,textarea,label,summary,'+
+          '.tp-card,.tp-pill,.tp-lang,[data-lang],[onclick]';
+  function hit(e){
+    var t=e&&e.target;
+    if(t && t.closest && t.closest(SEL)) tap();
+  }
+  if('onpointerdown' in window) document.addEventListener('pointerdown',hit,true);
+  else { document.addEventListener('touchstart',hit,true);
+         document.addEventListener('mousedown',hit,true); }
+})();
+</script>
 </body>
 </html>
