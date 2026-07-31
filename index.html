@@ -14,6 +14,16 @@ html,body{
   overscroll-behavior:none;
   -webkit-tap-highlight-color:transparent;
 }
+/* ══ aylantirish paneli (scrollbar) koʻrinmaydi — aylantirish ishlaydi ══ */
+html,body,*{
+  scrollbar-width:none;        /* Firefox */
+  -ms-overflow-style:none;     /* eski Edge / IE */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar{          /* Chrome, Safari, Edge */
+  width:0; height:0; display:none;
+}
 </style>
 <script>
 /* ══ ekranni kattalashtirish/kichraytirishni butunlay bloklaymiz ══ */
@@ -431,7 +441,7 @@ body.tp-mode-inner .tp-bg__veil{
 <body>
 
 <div class="tp-bg">
-  <img class="tp-bg__img" src="pages/silk_road_bg.jpg" alt="Buyuk Ipak Yo'li">
+  <img class="tp-bg__img" src="pages/rasmlar/quality_img.jpeg" alt="Buyuk Ipak Yo'li">
   <div class="tp-bg__veil"></div>
   <div class="tp-bg__grain"></div>
 </div>

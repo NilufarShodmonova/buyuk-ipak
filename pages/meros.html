@@ -54,6 +54,16 @@ html,body{
   overscroll-behavior:none;
   -webkit-tap-highlight-color:transparent;
 }
+/* ══ aylantirish paneli (scrollbar) koʻrinmaydi — aylantirish ishlaydi ══ */
+html,body,*{
+  scrollbar-width:none;        /* Firefox */
+  -ms-overflow-style:none;     /* eski Edge / IE */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar{          /* Chrome, Safari, Edge */
+  width:0; height:0; display:none;
+}
 </style>
 <script>
 /* ══ ekranni kattalashtirish/kichraytirishni butunlay bloklaymiz ══ */
