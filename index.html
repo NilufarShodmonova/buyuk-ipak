@@ -415,7 +415,11 @@ body.tp-mode-inner .tp-bg__veil{
   padding:0 .4rem;
   font-size:1.22rem;line-height:1.42;letter-spacing:.07em;
   color:var(--tp-gold-hi);text-transform:uppercase;
-  overflow-wrap:break-word;
+  /* soʻzlar boʻlinmaydi — faqat soʻzlar orasidan yangi qatorga oʻtadi */
+  overflow-wrap:normal;
+  word-break:keep-all;
+  hyphens:none; -webkit-hyphens:none;
+  text-wrap:balance;
 }
 
 /* ============ АНИМАЦИИ ============ */
@@ -629,6 +633,9 @@ en:{
     $$('.tp-pill').forEach(function(p){
       p.classList.toggle('is-on', p.getAttribute('data-lang') === lang);
     });
+
+    if (window.requestAnimationFrame) requestAnimationFrame(fitCardTitles);
+    else fitCardTitles();
   }
 
   /* --- язык: чтение / сохранение выбора --- */
@@ -650,6 +657,20 @@ en:{
     if (i !== -1) { hash = href.slice(i); href = href.slice(0, i); }
     href += (href.indexOf('?') === -1 ? '?' : '&') + 'lang=' + lang;
     return href + hash;
+  }
+
+
+  /* --- сжать заголовок, если слово не влезает (вместо переноса внутри слова) --- */
+  function fitCardTitles(){
+    $$('.tp-card__title').forEach(function(el){
+      el.style.fontSize = '';
+      var guard = 0;
+      while (el.scrollWidth > el.clientWidth + 1 && guard++ < 16){
+        var cur = parseFloat(window.getComputedStyle(el).fontSize);
+        if (cur <= 11) break;
+        el.style.fontSize = (cur - 0.6) + 'px';
+      }
+    });
   }
 
   function setLang(l){
