@@ -362,6 +362,8 @@ body.tp-mode-inner .tp-bg__veil{
 .tp-grid{
   display:grid;grid-template-columns:repeat(6,1fr);gap:2.4rem;
   width:100%;max-width:100rem;
+  /* barcha qatorlar bir xil balandlikda — kartalar teng boʻladi */
+  grid-auto-rows:1fr;
 }
 .tp-grid .tp-card{grid-column:span 2}
 .tp-grid .tp-card:nth-child(4){grid-column:2 / span 2}
@@ -373,8 +375,10 @@ body.tp-mode-inner .tp-bg__veil{
 
 .tp-card{
   position:relative;overflow:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:1.2rem;padding:2.7rem 1.5rem;
+  /* ustidan tekislanadi: sarlavha necha qator boʻlishidan qatʼi nazar
+     barcha kartalarda arka bir xil balandlikda turadi */
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:1.2rem;padding:3.2rem 1.5rem 2.7rem;
   min-height:20rem;
   background:linear-gradient(170deg,rgba(22,41,74,.86) 0%,rgba(11,21,38,.92) 100%);
   border:1px solid var(--tp-line);border-radius:1.4rem;
@@ -465,7 +469,6 @@ body.tp-mode-inner .tp-bg__veil{
   <div class="tp-splash__mid">
     <div class="tp-hero__sup">QADIMIY</div>
     <div class="tp-hero" style="text-align: center;">BUYUK IPAK YO‘LI</div>
-    <div class="tp-hero__sub">EKSPOZITSIYASI</div>
   </div>
 
   <div class="tp-splash__bot">
