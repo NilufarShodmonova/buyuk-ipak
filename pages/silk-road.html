@@ -2839,5 +2839,36 @@ body.silk-road-host{
          document.addEventListener('mousedown',hit,true); }
 })();
 </script>
+<!-- ══════════ 5 DAQIQA HARAKATSIZLIK — BOSH EKRANGA QAYTISH ══════════
+     Telefon qulfi kabi: ekranga 5 daqiqa davomida tegilmasa, sahifa
+     index.html dagi til tanlash (splash) ekraniga qaytadi. Har qanday
+     teginish, bosish, aylantirish yoki tugma bosilishi hisobni noldan
+     boshlaydi. Tanlangan til saqlanadi.                                  -->
+<script>
+(function(){
+  if(window.BIP_IDLE) return;                 /* ikki marta ulanib qolmasin */
+  var MS = 300000, timer = null;              /* 5 daqiqa */
+  function lang(){
+    var L = null;
+    try{ L = window.localStorage.getItem('bipLang'); }catch(e){}
+    if(L!=='uz' && L!=='ru' && L!=='en') L = window.BIP_LANG;
+    return (L==='uz'||L==='ru'||L==='en') ? L : 'uz';
+  }
+  function home(){
+    try{ window.location.replace('../index.html?lang='+lang()+'#tp-splash'); }
+    catch(e){ window.location.href='../index.html#tp-splash'; }
+  }
+  function reset(){ clearTimeout(timer); timer = setTimeout(home, MS); }
+  ['pointerdown','touchstart','touchmove','mousedown','keydown','wheel','scroll','click']
+    .forEach(function(ev){
+      window.addEventListener(ev, reset, {passive:true, capture:true});
+    });
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) clearTimeout(timer); else reset();
+  });
+  window.BIP_IDLE = reset;                    /* kerak boʻlsa qoʻlda yangilash */
+  reset();
+})();
+</script>
 </body>
 </html>
