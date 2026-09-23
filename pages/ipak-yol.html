@@ -174,7 +174,7 @@ body{font-family:"Manrope","Segoe UI",Helvetica,Arial,sans-serif;color:#f5eedf;u
 .sl.on .vis.contain img{animation:soft 1.5s var(--e) both}
 /* qoraytirish qatlami kadrdan 1px chetga chiqadi — brauzer masshtabi
    kasr sonli boʻlganda oʻng va past chetda ingichka yoriq qolmasin */
-.scrim{position:absolute;inset:-1px;pointer-events:none;
+.scrim{position:absolute;inset:-2px;pointer-events:none;
  background:linear-gradient(180deg,rgba(7,13,24,.62) 0%,rgba(7,13,24,.10) 22%,rgba(7,13,24,.52) 56%,rgba(7,13,24,.96) 100%)}
 
 /* ---------- подписи ---------- */
@@ -381,7 +381,7 @@ body.light #dots i.on{background:#a97c2c}
 .num{position:absolute;inset:0;overflow:hidden;background:#0a1320}
 .num img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 .sl.on .num img{animation:kb-in 17s linear both}
-.num .veil{position:absolute;inset:-1px;background:
+.num .veil{position:absolute;inset:-2px;background:
  linear-gradient(180deg,rgba(7,13,24,.80) 0%,rgba(7,13,24,.30) 26%,rgba(7,13,24,.72) 58%,rgba(7,13,24,.97) 100%)}
 .num .big{position:absolute;left:0;right:0;top:16vh;text-align:center;z-index:3}
 .num .big b{display:block;font-family:var(--serif);font-weight:700;line-height:.86;
@@ -599,6 +599,14 @@ body.light .navb{ background:rgba(255,252,244,.72); border-color:rgba(90,70,40,.
 <!-- ══ barcha sahifalarda bir xil header (index.html namunasi) ══ -->
 <link rel="stylesheet" href="header-unified.css">
 <script defer src="header-unified.js"></script>
+<style>
+/* Bu sahifada sarlavha position:fixed — uni 100vw bilan emas, toʻgʻridan-toʻgʻri
+   chap va oʻng chetga bogʻlaymiz. 100vw yaxlitlanishi oʻng tomonda 1–2px yoriq
+   qoldirar edi; left/right bilan bunday xato boʻlmaydi.                        */
+header.silk-road-header{
+  left:0; right:0; width:auto; max-width:none; margin-left:0; margin-right:0;
+}
+</style>
 </head>
 <body>
 
