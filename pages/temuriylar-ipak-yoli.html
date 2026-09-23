@@ -304,6 +304,9 @@ h4.ti-h4{font-size:25px;color:var(--ti-gold-pale);margin-bottom:6px}
 .ti-icon{width:52px;height:52px;margin-bottom:14px;display:block}
 .ti-icon path,.ti-icon circle,.ti-icon rect,.ti-icon line,.ti-icon polyline{stroke:var(--ti-gold-lt);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 </style>
+<!-- ══ barcha sahifalarda bir xil header (index.html namunasi) ══ -->
+<link rel="stylesheet" href="header-unified.css">
+<script defer src="header-unified.js"></script>
 </head>
 <body>
 <div id="ti-app">
@@ -1266,10 +1269,6 @@ document.getElementById("ti-dan").addEventListener("click",function(e){
   window.addEventListener("scroll",onScroll,{passive:true});
   up.addEventListener("click",function(){ window.scrollTo({top:0,behavior:"smooth"}); });
   onScroll();
-})();
-(function(){
-  function fit(){ var w=window.innerWidth; document.body.style.zoom=(w<1080)?(w/1080):""; }
-  window.addEventListener("resize",fit); fit();
 })();
 
 

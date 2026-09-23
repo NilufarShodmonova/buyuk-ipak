@@ -473,6 +473,9 @@ p.yi-p b{color:var(--yi-gold-l);font-weight:400}
 .yi-fdetail p b{color:var(--yi-gold-l);font-weight:400}
 
 </style>
+<!-- ══ barcha sahifalarda bir xil header (index.html namunasi) ══ -->
+<link rel="stylesheet" href="header-unified.css">
+<script defer src="header-unified.js"></script>
 </head>
 <body>
 <div id="yi-app">
@@ -480,8 +483,10 @@ p.yi-p b{color:var(--yi-gold-l);font-weight:400}
 <!-- ══════════ YUQORI PANEL ══════════ -->
 <header class="yi-top">
   <img class="yi-mark" src="rasmlar/logo.png" alt="Logo">
-  <h1 data-i18n="i1">Yoʻl infratuzilmasi</h1>
-  <div data-i18n="i2" class="yi-sub">II bo&#8217;lim &nbsp;·&nbsp; Buyuk Ipak yo&#8217;li ekspozitsiyasi</div>
+  <div class="yi-brandwrap">
+    <div data-i18n="i2" class="yi-sub">II bo&#8217;lim &nbsp;·&nbsp; Buyuk Ipak yo&#8217;li ekspozitsiyasi</div>
+    <h1 data-i18n="i1">Yoʻl infratuzilmasi</h1>
+  </div>
   <div class="yi-prog" id="yiProg"></div>
 </header>
 
@@ -1700,13 +1705,6 @@ var GAL=[
   window.addEventListener("scroll",onScroll,{passive:true});
   up.addEventListener("click",function(){ window.scrollTo({top:0,behavior:"smooth"}); });
   onScroll();
-})();
-(function(){
-  function fit(){
-    var w=window.innerWidth;
-    document.body.style.zoom = (w<1080) ? (w/1080) : "";
-  }
-  window.addEventListener("resize",fit); fit();
 })();
 
 

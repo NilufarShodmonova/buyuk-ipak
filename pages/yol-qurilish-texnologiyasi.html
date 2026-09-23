@@ -303,6 +303,9 @@ h4.yq-h4{font-size:25px;color:var(--yq-gold-pale);margin-bottom:6px}
 .yq-icon{width:52px;height:52px;margin-bottom:14px;display:block}
 .yq-icon path,.yq-icon circle,.yq-icon rect,.yq-icon line,.yq-icon polyline{stroke:var(--yq-gold-lt);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 </style>
+<!-- ══ barcha sahifalarda bir xil header (index.html namunasi) ══ -->
+<link rel="stylesheet" href="header-unified.css">
+<script defer src="header-unified.js"></script>
 </head>
 <body>
 <div id="yq-app">
@@ -857,8 +860,6 @@ document.getElementById("yq-xul").addEventListener("click",function(e){
   up.addEventListener("click",function(){ window.scrollTo({top:0,behavior:"smooth"}); });
   onScroll();
 })();
-(function(){ function fit(){ var w=window.innerWidth; document.body.style.zoom=(w<1080)?(w/1080):""; }
-  window.addEventListener("resize",fit); fit(); })();
 })();
 </script>
 
