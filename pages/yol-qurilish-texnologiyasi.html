@@ -867,13 +867,13 @@ document.getElementById("yq-xul").addEventListener("click",function(e){
 <!-- ══════════ SAHIFA ICHIDA 100px BOʻSH JOY (header tegmaydi) ══════════ -->
 <style>
 #yq-app #yq-hero{padding-top:100px}
-#yq-app{padding-bottom:100px}
+#yq-app{padding-bottom:calc(var(--bs,6vh) + 100px)}
 </style>
 
 <!-- ══════════ BOSH MENYUGA QAYTISH ══════════ -->
 <style>
 .bip-bar{position:fixed;left:50%;transform:translateX(-50%);
-  bottom:calc(28px + env(safe-area-inset-bottom,0px));z-index:150;
+  bottom:calc(var(--bs,6vh) + env(safe-area-inset-bottom,0px));z-index:150;
   display:flex;align-items:center;gap:10px}
 .bip-home{
   display:inline-flex;align-items:center;gap:12px;

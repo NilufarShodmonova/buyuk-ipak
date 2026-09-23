@@ -7,6 +7,7 @@
    qayta hisoblanadi — natijada balandlik hamma joyda bir xil chiqadi.
    ══════════════════════════════════════════════════════════════════ */
 :root{
+  --bs:6vh;                                 /* ekran pastidagi boʻsh joy — 6% */
   --hdr-u:calc(0.55vw + 0.55vh);            /* index.html ning 1rem i */
   /* 2u yuqori + 2u past padding + logo balandligi (5.4u × 456/480) */
   --hdr-h:calc(9.13 * var(--hdr-u) + 1px);

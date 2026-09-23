@@ -1273,7 +1273,7 @@ drawHero(); resetGame(); renderAll();
 <!-- FIXED BOTTOM CENTER TOOLBAR (BACK, UZ/RU/EN, HOME) -->
 <style>
 .tp-fixed-tools {
-  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 9999;
+  position: fixed; bottom: var(--bs,6vh); left: 50%; transform: translateX(-50%); z-index: 9999;
   display: flex; align-items: center; justify-content: center; gap: 1.4rem;
   padding: 0.8rem 2rem; background: rgba(11, 21, 38, 0.92);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -1350,7 +1350,7 @@ document.querySelectorAll('.tp-tool-btn[data-lang]').forEach(function(btn) {
 <!-- ══════════ SAHIFA ICHIDA 100px BOʻSH JOY (header tegmaydi) ══════════ -->
 <style>
 #road-tech-page .road-tech-hero{padding-top:calc(clamp(40px,6vw,86px) + 100px)}
-#road-tech-page{padding-bottom:100px}
+#road-tech-page{padding-bottom:calc(var(--bs,6vh) + 100px)}
 </style>
 <!-- ══════════ TUGMA BOSILGANDA OVOZ ══════════
      Ovoz Web Audio API orqali shu yerda sintez qilinadi — birorta audio
