@@ -382,8 +382,10 @@ body.light #dots i.on{background:#a97c2c}
 .num img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 .sl.on .num img{animation:kb-in 17s linear both}
 .num .veil{position:absolute;inset:-2px;background:
- linear-gradient(180deg,rgba(7,13,24,.80) 0%,rgba(7,13,24,.30) 26%,rgba(7,13,24,.72) 58%,rgba(7,13,24,.97) 100%)}
-.num .big{position:absolute;left:0;right:0;top:16vh;text-align:center;z-index:3}
+ linear-gradient(180deg,rgba(7,13,24,.80) 0%,rgba(7,13,24,.32) 12%,rgba(7,13,24,.74) 25%,rgba(7,13,24,.92) 42%,rgba(7,13,24,.97) 100%)}
+/* katta raqam — ekranning ustki choragida markazda (matn 25% dan boshlanadi) */
+.num .big{position:absolute;left:0;right:0;top:0;height:25%;z-index:3;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .num .big b{display:block;font-family:var(--serif);font-weight:700;line-height:.86;
  color:var(--gp);text-shadow:0 1.2vh 5vh rgba(0,0,0,.75)}
 .num .big span{display:block;margin-top:1.4vh;letter-spacing:.42em;text-transform:uppercase;
@@ -405,9 +407,8 @@ body.light #dots i.on{background:#a97c2c}
  border-radius:0;border:0;box-shadow:none}
 /* затемнение и текстовый блок — ровно нижние 55% высоты слайда */
 .vis.portal + .scrim{background:linear-gradient(180deg,
- rgba(7,13,24,.34) 0%,rgba(7,13,24,.08) 22%,rgba(7,13,24,.30) 40%,
- rgba(7,13,24,.74) 48%,rgba(7,13,24,.92) 62%,rgba(7,13,24,.97) 100%)}
-.vis.portal ~ .cap{top:50%;bottom:0;display:flex;flex-direction:column;justify-content:flex-start;padding-top:3.5vh}
+ rgba(7,13,24,.34) 0%,rgba(7,13,24,.08) 10%,rgba(7,13,24,.30) 17%,
+ rgba(7,13,24,.74) 25%,rgba(7,13,24,.92) 42%,rgba(7,13,24,.97) 100%)}
 .sl.on .vis.portal img{animation:portalin 1.4s var(--e) both}
 /* faqat shaffoflik: surat har doim kadrni toʻliq egallaydi —
    ilgari boshlangʻich holat scale(.975) edi va chetlarda boʻsh joy qolardi */
@@ -498,7 +499,7 @@ body.light #dots i.on{background:#a97c2c}
 }
 
 @media (max-aspect-ratio: 1/1){
-  .num .big b{font-size:clamp(90px,26vw,300px)}
+  .num .big b{font-size:clamp(80px,13vh,260px)}
   .num .big span{font-size:clamp(13px,2.2vw,26px)}
   .num .cap{padding:0 8vw 10vh}
   .num .cap h2{font-size:clamp(26px,5vw,56px)}
@@ -509,9 +510,8 @@ body.light #dots i.on{background:#a97c2c}
 }
 @media (min-aspect-ratio: 1/1){
   .road{display:none}
-  .num .big b{font-size:clamp(80px,13vw,210px)}
+  .num .big b{font-size:clamp(60px,12vh,180px)}
   .num .big span{font-size:clamp(12px,1.1vw,20px)}
-  .num .big{top:14vh}
   .vis.portal img{left:0;top:0;width:100%;height:100%;margin-left:0;border-radius:0}
 }
 
@@ -549,7 +549,8 @@ body.light #dots i.on{background:#a97c2c}
 #deck{ top:var(--hh); }
 #cnt{ top:calc(var(--hh) + 16px) }
 #dots{ bottom:calc(var(--bs,6vh) + var(--bh) + 8px) }
-.cr{ bottom:calc(var(--bs,6vh) + var(--bh) + 30px) }
+/* manba yozuvi nuqtali indikator ustida turadi — ilgari ular ustma-ust tushardi */
+.cr{ bottom:calc(var(--bs,6vh) + var(--bh) + 52px) }
 
 /* slayd matni pastdagi boshqaruvlar (nuqtalar, tugmalar) ostiga tushmaydi */
 :root{ --bfree:calc(var(--bs,6vh) + var(--bh) + 46px) }
@@ -560,19 +561,17 @@ body.light #dots i.on{background:#a97c2c}
 .lst,.cmp,#src{ padding-bottom:var(--bfree) }
 .ix{ padding-bottom:var(--bfree) }
 
-/* ── tanlangan slaydlarda matn ekranning pastki yarmida ────────────
-   Hisoblagichdagi raqamlar: 3, 4, 5, 7, 8, 19, 20, 22, 23, 25, 26, 28, 30, 42.
-   Surat/chizma — ustki 50%, sarlavha va matn — pastki 50%.            */
-.sl[data-i="2"] .cap,.sl[data-i="6"] .cap,.sl[data-i="18"] .cap,.sl[data-i="19"] .cap,.sl[data-i="41"] .cap{
-  top:50%; bottom:0; display:flex; flex-direction:column;
+/* ── matn bloki ekranning 25% idan boshlanadi ──────────────────────
+   Surat yoki chizma — ustki chorak, sarlavha va matn — oʻrtadan yuqorida
+   boshlanib pastga qarab yoziladi. Barcha slaydlarda bir xil.          */
+.cap,.num .cap{
+  top:25%; bottom:0; display:flex; flex-direction:column;
   justify-content:flex-start; padding-top:3.5vh;
 }
-/* chizmali slaydlarda ustun oddiy oqimda: chizma balandligi aniq yarim ekran */
-.sl[data-i="3"] .fig .art,.sl[data-i="4"] .fig .art,.sl[data-i="7"] .fig .art,.sl[data-i="21"] .fig .art,.sl[data-i="22"] .fig .art,.sl[data-i="24"] .fig .art,.sl[data-i="25"] .fig .art,.sl[data-i="27"] .fig .art,.sl[data-i="29"] .fig .art{
-  flex:0 0 calc(50% + var(--bfree) / 2); min-height:0; padding-bottom:0;
-}
-.sl[data-i="3"] .fig .art svg,.sl[data-i="4"] .fig .art svg,.sl[data-i="7"] .fig .art svg,.sl[data-i="21"] .fig .art svg,.sl[data-i="22"] .fig .art svg,.sl[data-i="24"] .fig .art svg,.sl[data-i="25"] .fig .art svg,.sl[data-i="27"] .fig .art svg,.sl[data-i="29"] .fig .art svg{ width:100%; height:100%; max-width:100%; max-height:100% }
-.sl[data-i="3"] .fig .cap,.sl[data-i="4"] .fig .cap,.sl[data-i="7"] .fig .cap,.sl[data-i="21"] .fig .cap,.sl[data-i="22"] .fig .cap,.sl[data-i="24"] .fig .cap,.sl[data-i="25"] .fig .cap,.sl[data-i="27"] .fig .cap,.sl[data-i="29"] .fig .cap{ flex:1 1 auto; padding-top:3vh }
+/* chizmali slaydlarda ustun oddiy oqimda: chizma balandligi aynan chorak ekran */
+.fig .art{ flex:0 0 calc(25% + var(--bfree) / 4); min-height:0; padding-bottom:0 }
+.fig .art svg{ width:100%; height:100%; max-width:100%; max-height:100% }
+.fig .cap{ flex:1 1 auto; padding-top:3vh }
 
 /* slaydlarni varaqlash tugmalari — «oldingi» chapda, «keyingi» oʻngda */
 #arrows{
@@ -957,7 +956,7 @@ var TR=window.BIP_T||function(s){return s;};
 var lastAct=Date.now();
 var sl=[].slice.call(document.querySelectorAll('.sl')), n=sl.length, i=0;
 var bar=document.createElement('div'), cnt=document.getElementById('cnt'); /* yuqoridagi progress chizigʻi olib tashlandi */
-var dots=document.getElementById('dots'), playing=true, tid=null, t0=0, left=0;
+var dots=document.getElementById('dots'), playing=false, tid=null, t0=0, left=0; /* avtomatik oʻtish yoʻq */
 var PI='<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
 var PL='<path d="M8 5l11 7-11 7z"/>';
 
@@ -1073,19 +1072,10 @@ document.getElementById('prev').addEventListener('click',function(e){
 document.getElementById('next').addEventListener('click',function(e){
   e.stopPropagation(); nav(i+1);
 });
-/* «play» tugmasi olib tashlangani uchun pauza vaqtinchalik: 60 soniya
-   harakatsizlikdan soʻng namoyish oʻzi davom etadi (infokiosk uchun) */
-function markAct(){ lastAct=Date.now(); }
-['click','touchstart','keydown'].forEach(function(ev){
-  document.addEventListener(ev, markAct, true);
-});
-setInterval(function(){
-  if(!playing && Date.now()-lastAct >= 60000) resume();
-}, 4000);
 addEventListener('keydown',function(e){
   if(e.key==='ArrowRight'||e.key==='PageDown'){nav(i+1);}
   if(e.key==='ArrowLeft'||e.key==='PageUp'){nav(i-1);}
-  if(e.key===' '){e.preventDefault(); sndTap(); playing?pause():resume();}
+  if(e.key===' '){e.preventDefault(); sndTap(); nav(i+1);}  /* probel — keyingi slayd */
   if(e.key==='Home'){nav(0);} if(e.key==='End'){nav(n-1);}
 });
 var x0=null;
