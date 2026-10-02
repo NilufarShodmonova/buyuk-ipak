@@ -1078,5 +1078,24 @@ window.BIP_I18N = {"el": {"q1": {"ru": "<b>Средняя Азия</b>Техно
   reset();
 })();
 </script>
+
+<!-- ══════════ EKRANGA MOSLASH ══════════
+     Sahifa 1080px enida loyihalangan. Ekran shundan tor boʻlsa (masalan
+     sensorli monitorning brauzer oynasi), sahifa chapga surilib, oʻng
+     tomoni kesilib qolardi. Quyida u butunlay sigʻadigan qilib
+     kichraytiriladi — eni aynan ekran eniga teng boʻladi.
+     1080px va undan keng ekranda hech narsa oʻzgarmaydi.            -->
+<script>
+(function(){
+  var W = 1080;
+  function fit(){
+    var k = window.innerWidth / W;
+    document.body.style.zoom = (k < 1) ? k : '';
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
+})();
+</script>
 </body>
 </html>
