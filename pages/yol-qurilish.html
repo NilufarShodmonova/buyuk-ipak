@@ -1210,7 +1210,7 @@ function drawDay(){
 function cutStrip(cols){ return `<div class="road-tech-cut2">${cols.map(c=>`<i class="road-tech-cut2-l" style="background:${c}"></i>`).join('')}</div>`; }
 function drawCards(){
   $('#road-tech-route-cards').innerHTML=RT_ROUTE.map((x,i)=>`
-    <div class="road-tech-card"><div class="road-tech-card-no">${String(i+1).padStart(2,'0')}</div>
+    <div class="road-tech-card"><div class="road-tech-card-no">${i+1}</div>
       <h3 class="road-tech-card-title">${x.n[lang]}</h3>
       <div class="road-tech-card-sub">${x.s[lang]}</div>
       <p class="road-tech-card-text">${x.d[lang]}</p></div>`).join('');
